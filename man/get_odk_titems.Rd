@@ -4,7 +4,7 @@
 \alias{get_odk_titems}
 \title{Transform list of ODK sheets into data.table of text items}
 \usage{
-get_odk_titems(list, cols = c("label", "hint", "constraint message"))
+get_odk_titems(list, cols = c("label", "hint", "constraint_message"))
 }
 \arguments{
 \item{list}{List of sheets (as produced by \link[r2.tms]{get_odk_wsheet}that contain text items}

@@ -12,6 +12,8 @@ get_odk_wsheet <- function(
   wsid="", #MAIN WORKSHEET ID
   sheets=c("survey","choices") #DEFAULT SHEETS TO READ
 ) {
+  #TODO: MAKE WARNING IF SOMEONE USES WHITESPACE INSTEAD OF UNDERSCORE FOR constraint message
+
   #TODO: ASSERT INPUT. CHECK IF wsid IS gs4 CONFORM (gs4 has util function)
   #TODO: DONT RELY ON stats PACKAGE FOR SETNAMES. OVERALL BETTER WAY TO NAME LISTS? SIMPLY PLACE NAMES IN CHARACTER VECTOR THEN LAPPY?
   #GET METDATA FOR USE LATER ON
@@ -43,13 +45,17 @@ get_odk_wsheet <- function(
 #' @return data.table of text items along with identifier of chronological order and instrument
 #' @export
 #'
-get_odk_titems <- function(list, cols=c("label","hint", "constraint message")){
+get_odk_titems <- function(list, cols=c("label","hint", "constraint_message")){
   #CHECK INPUT
   assertthat::assert_that(is.list(list))
 
   #ITERATE OVER ALL ELEMENTS IN WORKSHEET LIST
   rbindlist(
     lapply(seq(1,length(list)), \(element) {
+
+      #HARMONIZE NAMES (REMOVE WHITESPACE TO UNDERSCORE)
+      setnames(wsheets[[element]],names(wsheets[[element]]),stringr::str_replace_all(names(wsheets[[element]]),"\\s","_"))
+
       #CHECK WHICH COLS ARE IN THERE. SUBSET ONLY THOSE WHICH ACTUALLY EXIST
       cols.keep <- cols[cols %in% names(list[[element]])]
       dt <- list[[element]][,.SD,.SDcols=cols.keep]
