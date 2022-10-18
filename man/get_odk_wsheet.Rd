@@ -4,12 +4,12 @@
 \alias{get_odk_wsheet}
 \title{Pull data from ODK Google Sheet}
 \usage{
-get_odk_wsheet(wsid = "", sheets = c("survey", "choices"))
+get_odk_wsheet(gs = "", sheets = c("survey", "choices"))
 }
 \arguments{
-\item{wsid}{Identifier of a Google Work Sheet}
+\item{gs}{Identifier of a Google Sheet, see \code{\link[googlesheets4:sheets_id]{googlesheets4::sheets_id()}}}
 
-\item{sheets}{Character vector of sheets to be read on `wisid`}
+\item{sheets}{Character vector of sheets to be read from \code{gs}}
 }
 \value{
 List of data.tables which are the respective sheets of worksheet

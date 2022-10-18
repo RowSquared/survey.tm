@@ -2,8 +2,8 @@
 #'
 #' @importFrom stringr str_to_lower str_remove_all
 #'
-cleanup.text.item <- function(dt,regex=" ") {
-  dt[,value.unique:=stringr::str_to_lower(stringr::str_remove_all(value,regex))]
+cleanup.text.item <- function(dt, regex = " ") {
+  dt[, value.unique := stringr::str_to_lower(stringr::str_remove_all(value, regex))]
 }
 
 
@@ -14,6 +14,6 @@ cleanup.text.item <- function(dt,regex=" ") {
 #'
 
 is.char.named.vector <- function(vec) {
-  is.vector(vec)  & is.character(vec) &  !is.null(names(vec)) &
+  is.vector(vec) & is.character(vec) & !is.null(names(vec)) &
     !any(is.na(names(vec)))
 }

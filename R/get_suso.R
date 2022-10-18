@@ -1,5 +1,5 @@
 
-#' Read SurSol Translation File
+#' Get SurSol Translation File
 #'
 #' @param qxid Id of Questionnaire in SuSo Designer
 #' @param user SuSo User Name
@@ -9,52 +9,62 @@
 #' @importFrom httr GET authenticate
 #' @importFrom readxl excel_sheets
 #' @import data.table
-get_sursol_titems_byqx <- function(qxid=NULL,
-                                   user="",
-                                   password="",
-                                   sheets=NULL,
-                                   types=c("Title","Instruction","OptionTitle","ValidationMessage",
-                                           "SpecialValue")) {
-  #TODO: ASSERT INPUT
-  #TODO: MAKE PROPER ERROR MESSAGES IF NOT 200/201 RETURN.
+get_sursol_titems_byqx <- function(qxid = NULL,
+                                   user = "",
+                                   password = "",
+                                   sheets = NULL,
+                                   types = c(
+                                     "Title", "Instruction", "OptionTitle", "ValidationMessage",
+                                     "SpecialValue"
+                                   )) {
+  # TODO: ASSERT INPUT
+  # TODO: MAKE PROPER ERROR MESSAGES IF NOT 200/201 RETURN.
 
-  #BUILD URL
-  url <- paste0("https://designer.mysurvey.solutions/translations/",qxid,"/template")
+  # BUILD URL
+  url <- paste0("https://designer.mysurvey.solutions/translations/", qxid, "/template")
 
-  #GET THE TRANSLATION FILE
-  request <- httr::GET(url=url,
-                       httr::authenticate(user,
-                                    password))
-  #WRITE TO TEMPFILE
-  tmp.file <- tempfile(fileext = '.xlsx')
+  # GET THE TRANSLATION FILE
+  request <- httr::GET(
+    url = url,
+    httr::authenticate(
+      user,
+      password
+    )
+  )
+  # WRITE TO TEMPFILE
+  tmp.file <- tempfile(fileext = ".xlsx")
   writeBin(request$content, tmp.file)
 
-  #IDENTIFY ALL SHEETS
+  # IDENTIFY ALL SHEETS
   sheets.file <- readxl::excel_sheets(tmp.file)
   if (!is.null(sheets)) {
-    #TODO: CHECK IF SHEETS INDICATED ARE ACTUALLY IN THE NAMES
-
+    # TODO: CHECK IF SHEETS INDICATED ARE ACTUALLY IN THE NAMES
   }
 
-  #READ ALL SHEETS INTO ONE DT- ONLY COLS OF INTEREST
+  # READ ALL SHEETS INTO ONE DT- ONLY COLS OF INTEREST
   dt <- data.table::rbindlist(
-    lapply(sheets.file,\(sheet) {
-      data.table::as.data.table(readxl::read_excel(path=tmp.file,
-                               sheet=sheet))[,Type:=as.character(Type)][Type %chin% types | is.na(Type),
-                                                                        .(type=Type,
-                                                                          value=`Original text`)]
+    lapply(sheets.file, \(sheet) {
+      data.table::as.data.table(readxl::read_excel(
+        path = tmp.file,
+        sheet = sheet
+      ))[, Type := as.character(Type)][
+        Type %chin% types | is.na(Type),
+        .(
+          type = Type,
+          value = `Original text`
+        )
+      ]
+    })
+  )
 
-    }))
-
-  #CREATE UNIQUE VALUE
+  # CREATE UNIQUE VALUE
   cleanup.text.item(dt)
 
-  #GET ROW IDENTIFIER
-  dt[,seq.id:=1:.N]
+  # GET ROW IDENTIFIER
+  dt[, seq.id := 1:.N]
 
 
   return(dt)
-
 }
 
 
@@ -77,57 +87,61 @@ get_sursol_titems_byqx <- function(qxid=NULL,
 #' @return Data table of unique text items in instrument(s)
 #' @export
 #'
-get_sursol_titems <- function(questionnaires=NULL,
-                              user="",
-                              password="",
-                              sheets=NULL,
-                              types=c("Title","Instruction","OptionTitle","ValidationMessage",
-                                      "SpecialValue")) {
+get_sursol_titems <- function(questionnaires = NULL,
+                              user = "",
+                              password = "",
+                              sheets = NULL,
+                              types = c(
+                                "Title", "Instruction", "OptionTitle", "ValidationMessage",
+                                "SpecialValue"
+                              )) {
 
-  #TODO: ASSERT THAT NAMED CHARACTER VECTOR
-  assertthat::assert_that(is.char.named.vector(questionnaires),msg="questionnaires is not named character vector")
+  # TODO: ASSERT THAT NAMED CHARACTER VECTOR
+  assertthat::assert_that(is.char.named.vector(questionnaires), msg = "questionnaires is not named character vector")
 
-  #GET ALL QUESTIONNAIRE ITEMS AND ALL SHEETS IN ONE DT
-  dt <-  rbindlist(lapply(questionnaires,\(x) {
-    get_sursol_titems_byqx(qxid=x,
-                           user=user,
-                           password=password,
-                           sheets=sheets,
-                           types=types)[,instrt:=names(questionnaires)[questionnaires %in% x]]
+  # GET ALL QUESTIONNAIRE ITEMS AND ALL SHEETS IN ONE DT
+  dt <- rbindlist(lapply(questionnaires, \(x) {
+    get_sursol_titems_byqx(
+      qxid = x,
+      user = user,
+      password = password,
+      sheets = sheets,
+      types = types
+    )[, instrt := names(questionnaires)[questionnaires %in% x]]
   }))
 
-  #COLLAPSE
-  #TODO: PUT INTO FUNCTION AS REUSED FOR ODK
-  #KEEP UNIQUE: FIRST BY INSTRUMENT; VARIABLE AND VALUE TO AVOID HAVING MULTIPLE "label, label, label"
-  #ALWAYS ACCOUNT FOR SEQUENTIAL ID
+  # COLLAPSE
+  # TODO: PUT INTO FUNCTION AS REUSED FOR ODK
+  # KEEP UNIQUE: FIRST BY INSTRUMENT; VARIABLE AND VALUE TO AVOID HAVING MULTIPLE "label, label, label"
+  # ALWAYS ACCOUNT FOR SEQUENTIAL ID
   dt <- dt[
-    ,.(
-      seq.id=seq.id[c(1)],
-      value=value[c(1)]
+    , .(
+      seq.id = seq.id[c(1)],
+      value = value[c(1)]
     ),
-    by=.(instrt,type,value.unique)]
-  #NOW BY TYPE AND VALUE
+    by = .(instrt, type, value.unique)
+  ]
+  # NOW BY TYPE AND VALUE
   dt <- dt[
-    ,.(
-      seq.id=seq.id[c(1)],
-      instrt=paste(instrt,collapse="\n"),
-      value=value[c(1)]
+    , .(
+      seq.id = seq.id[c(1)],
+      instrt = paste(instrt, collapse = "\n"),
+      value = value[c(1)]
     ),
-    by=.(type,value.unique)]
+    by = .(type, value.unique)
+  ]
 
-  #NOW BY UNIQUE VALUE, WITH VARIABLE COLLAPSED
-  setorder(dt,value.unique,seq.id)
-  dt <- dt[,.(
-    seq.id=seq.id[c(1)],
-    instrt=instrt[c(1)],
-    type=paste(type,collapse="\n"),
-    value=value[c(1)]
-  ),by=.(value.unique)]
-  setorder(dt,seq.id)
-  #REMOVE SEQ ID HERE
-  dt[,seq.id:=NULL]
+  # NOW BY UNIQUE VALUE, WITH VARIABLE COLLAPSED
+  setorder(dt, value.unique, seq.id)
+  dt <- dt[, .(
+    seq.id = seq.id[c(1)],
+    instrt = instrt[c(1)],
+    type = paste(type, collapse = "\n"),
+    value = value[c(1)]
+  ), by = .(value.unique)]
+  setorder(dt, seq.id)
+  # REMOVE SEQ ID HERE
+  dt[, seq.id := NULL]
 
   return(dt)
-
 }
-

@@ -2,18 +2,18 @@
 % Please edit documentation in R/get_odk.R
 \name{get_odk_titems}
 \alias{get_odk_titems}
-\title{Transform list of ODK sheets into data.table of text items}
+\title{Transform list of ODK sheets into data.table of text items that shall be translated}
 \usage{
 get_odk_titems(list, cols = c("label", "hint", "constraint_message"))
 }
 \arguments{
 \item{list}{List of sheets (as produced by \link[r2.tms]{get_odk_wsheet}that contain text items}
 
-\item{cols}{Columns to keep for translation item}
+\item{cols}{Columns on sheet(s) to keep for translation item}
 }
 \value{
 data.table of text items along with identifier of chronological order and instrument
 }
 \description{
-Transform list of ODK sheets into data.table of text items
+Transform list of ODK sheets into data.table of text items that shall be translated
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_suso.R
 \name{get_sursol_titems_byqx}
 \alias{get_sursol_titems_byqx}
-\title{Read SurSol Translation File}
+\title{Get SurSol Translation File}
 \usage{
 get_sursol_titems_byqx(
   qxid = NULL,
@@ -24,5 +24,5 @@ get_sursol_titems_byqx(
 \item{types}{Which type of text items to keep}
 }
 \description{
-Read SurSol Translation File
+Get SurSol Translation File
 }
