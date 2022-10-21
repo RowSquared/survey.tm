@@ -96,8 +96,12 @@ get_sursol_titems <- function(questionnaires = NULL,
                                 "SpecialValue"
                               )) {
 
-  # TODO: ASSERT THAT NAMED CHARACTER VECTOR
-  assertthat::assert_that(is.char.named.vector(questionnaires), msg = "questionnaires is not named character vector")
+  #Check input
+  types <- match.arg(types,several.ok = T)
+
+  #TODO: ASSERT QUESTIONNAIRE IDs CORREC
+  assertthat::assert_that(is.char.named.vector(questionnaires),
+                          msg = "questionnaires is not named character vector")
 
   # GET ALL QUESTIONNAIRE ITEMS AND ALL SHEETS IN ONE DT
   dt <- rbindlist(lapply(questionnaires, \(x) {
@@ -110,38 +114,8 @@ get_sursol_titems <- function(questionnaires = NULL,
     )[, instrt := names(questionnaires)[questionnaires %in% x]]
   }))
 
-  # COLLAPSE
-  # TODO: PUT INTO FUNCTION AS REUSED FOR ODK
-  # KEEP UNIQUE: FIRST BY INSTRUMENT; VARIABLE AND VALUE TO AVOID HAVING MULTIPLE "label, label, label"
-  # ALWAYS ACCOUNT FOR SEQUENTIAL ID
-  dt <- dt[
-    , .(
-      seq.id = seq.id[c(1)],
-      value = value[c(1)]
-    ),
-    by = .(instrt, type, value.unique)
-  ]
-  # NOW BY TYPE AND VALUE
-  dt <- dt[
-    , .(
-      seq.id = seq.id[c(1)],
-      instrt = paste(instrt, collapse = "\n"),
-      value = value[c(1)]
-    ),
-    by = .(type, value.unique)
-  ]
 
-  # NOW BY UNIQUE VALUE, WITH VARIABLE COLLAPSED
-  setorder(dt, value.unique, seq.id)
-  dt <- dt[, .(
-    seq.id = seq.id[c(1)],
-    instrt = instrt[c(1)],
-    type = paste(type, collapse = "\n"),
-    value = value[c(1)]
-  ), by = .(value.unique)]
-  setorder(dt, seq.id)
-  # REMOVE SEQ ID HERE
-  dt[, seq.id := NULL]
+  dt <- collapse_titems(dt)
 
   return(dt)
 }
