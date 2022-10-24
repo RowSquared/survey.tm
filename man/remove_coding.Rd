@@ -9,7 +9,7 @@ remove_coding(dt, pattern = "", collapse = TRUE)
 \arguments{
 \item{dt}{Data table of questionnaire text items returned by either \code{\link[=parse_odk_titems]{parse_odk_titems()}} or \code{\link[=get_sursol_titems]{get_sursol_titems()}}}
 
-\item{pattern}{Regular expression that matches}
+\item{pattern}{Regular expression that matches question coding}
 
 \item{collapse}{boolean to indicate if after removing question coding, the set of translation items should be scanned for/collapsed to unique items}
 }

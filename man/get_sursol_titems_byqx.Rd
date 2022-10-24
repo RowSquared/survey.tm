@@ -15,9 +15,9 @@ get_sursol_titems_byqx(
 \arguments{
 \item{qxid}{Id of Questionnaire in SuSo Designer}
 
-\item{user}{SuSo User Name}
+\item{user}{SuSo Designer User Name}
 
-\item{password}{SuSo Password}
+\item{password}{SuSo Designer Password}
 
 \item{sheets}{Sheets from Translation to read. Default all}
 

@@ -15,9 +15,9 @@ get_sursol_titems(
 \arguments{
 \item{questionnaires}{Named character vector of instruments to source. Elements must be id of questionnaire. Name is the Title of Questionnaire.}
 
-\item{user}{SuSo User Name}
+\item{user}{SuSo Designer User Name}
 
-\item{password}{SuSo Password}
+\item{password}{SuSo Designer Password}
 
 \item{sheets}{Sheets from Translation to read. Default all}
 

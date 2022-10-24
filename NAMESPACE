@@ -2,6 +2,7 @@
 
 export(add_deepl_translation)
 export(add_translation_odk)
+export(create_suso_file)
 export(get_odk_titems)
 export(get_odk_wsheet)
 export(get_sursol_titems)

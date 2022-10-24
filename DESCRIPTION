@@ -22,4 +22,5 @@ Imports:
     httr,
     readxl,
     stats,
-    stringr
+    stringr,
+    writexl

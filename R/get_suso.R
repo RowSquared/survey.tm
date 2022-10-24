@@ -2,8 +2,8 @@
 #' Get SurSol Translation File
 #'
 #' @param qxid Id of Questionnaire in SuSo Designer
-#' @param user SuSo User Name
-#' @param password SuSo Password
+#' @param user SuSo Designer User Name
+#' @param password SuSo Designer Password
 #' @param sheets Sheets from Translation to read. Default all
 #' @param types Which type of text items to keep
 #' @importFrom httr GET authenticate
@@ -31,15 +31,24 @@ get_sursol_titems_byqx <- function(qxid = NULL,
       password
     )
   )
+  #Check response
+  if (request$status_code!= 200) {
+    stop(
+      paste0(
+        "Survey Solutions returned status code ",  request$status_code,  " when trying to download the instrument.\nCheck the User, Password and questionnaire paramaters provided.")
+    )
+  }
+
   # WRITE TO TEMPFILE
   tmp.file <- tempfile(fileext = ".xlsx")
   writeBin(request$content, tmp.file)
 
   # IDENTIFY ALL SHEETS
   sheets.file <- readxl::excel_sheets(tmp.file)
-  if (!is.null(sheets)) {
-    # TODO: CHECK IF SHEETS INDICATED ARE ACTUALLY IN THE NAMES
-  }
+  # Check if user supplied sheet is actually in the sheets
+  if (!is.null(sheets)) assertthat::assert_that(all(sheets %in% sheets.file),msg=
+                              paste(paste(sheets[!sheets %in% sheets.file],sep=","),"is not a sheet in Designer Template file",questionnaire))
+
 
   # READ ALL SHEETS INTO ONE DT- ONLY COLS OF INTEREST
   dt <- data.table::rbindlist(
@@ -74,8 +83,8 @@ get_sursol_titems_byqx <- function(qxid = NULL,
 #' Read SurSol Translation File
 #'
 #' @param questionnaires Named character vector of instruments to source. Elements must be id of questionnaire. Name is the Title of Questionnaire.
-#' @param user SuSo User Name
-#' @param password SuSo Password
+#' @param user SuSo Designer User Name
+#' @param password SuSo Designer Password
 #' @param sheets Sheets from Translation to read. Default all
 #' @param types Which type of text items to keep
 #'

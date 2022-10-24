@@ -3,7 +3,7 @@
 #' Remove the (question) coding of a text item (usually 'Question') from set of translations
 #'
 #' @param dt  Data table of questionnaire text items returned by either [parse_odk_titems()] or [get_sursol_titems()]
-#' @param pattern Regular expression that matches
+#' @param pattern Regular expression that matches question coding
 #' @param collapse boolean to indicate if after removing question coding, the set of translation items should be scanned for/collapsed to unique items
 #'
 #' @return dt

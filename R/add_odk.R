@@ -62,10 +62,12 @@ add_translation_odk <- function(trans.list = list(),
       qx.sheet[, value.unique := stringr::str_to_lower(stringr::str_remove_all(get(col), " "))]
 
       # ADD TRANSLATION TO DT
-      # FIRST GET TRANSLATION FILE TO BE MERGED
-      trans.merge.dt <- transsheet[Status %chin% c("DeepL", "reviewed", "translated"), .(value.unique, Translation)]
-
-      qx.sheet <- merge(qx.sheet, trans.merge.dt, by = "value.unique", all.x = T)
+      qx.sheet <- merge(
+        #The current QX Sheet
+        qx.sheet,
+        #The translation sheet, subset by status user supplied
+        transsheet[Status %chin% c("DeepL", "reviewed", "translated"), .(value.unique, Translation)]
+                        , by = "value.unique", all.x = T)
       #EITHER CREATE OR UPDATE TRANSLATION COL
       qx.sheet[,c(trans.col):=Translation][,"Translation":=NULL]
 
