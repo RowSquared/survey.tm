@@ -91,7 +91,7 @@ parse_odk_titems <- function(dt) {
   )
 
   # CLEANUP - REMOVE ONLY PROPER WHITESPACE TO NOT REMOVE TABS AND NEWLINES
-  cleanup.text.item(dt)
+  create.unique.var(dt)
 
   # COLLAPSE
   dt <- collapse_titems(dt)

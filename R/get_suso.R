@@ -58,7 +58,7 @@ get_sursol_titems_byqx <- function(qxid = NULL,
   )
 
   # CREATE UNIQUE VALUE
-  cleanup.text.item(dt)
+  create.unique.var(dt)
 
   # GET ROW IDENTIFIER
   dt[, seq.id := 1:.N]

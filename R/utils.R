@@ -2,8 +2,8 @@
 #'
 #' @importFrom stringr str_to_lower str_remove_all
 #'
-cleanup.text.item <- function(dt, regex = " ") {
-  dt[, value.unique := stringr::str_to_lower(stringr::str_remove_all(value, regex))]
+create.unique.var <- function(dt, regex = " ",col="value") {
+  dt[, value.unique := stringr::str_to_lower(stringr::str_remove_all(get(col), regex))]
 }
 
 
