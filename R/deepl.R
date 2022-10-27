@@ -51,7 +51,7 @@ add_deepl_translation_dt <- function(dt,
 
 
   # QUERY FOR MISSING TRANSLATIONS
-  dt[, Status := as.character(Status)][is.na(Translation), Status := "DeepL"]
+  dt[, Status := as.character(Status)][is.na(Translation), Status := "Machine"]
   dt[, Translation := as.character(Translation)]
   dt[is.na(Translation), Translation :=
     deeplr::translate2(
