@@ -108,9 +108,11 @@ get_sursol_titems <- function(questionnaires = NULL,
   #Check input
   types <- match.arg(types,several.ok = T)
 
-  #TODO: ASSERT QUESTIONNAIRE IDs CORREC
   assertthat::assert_that(is.char.named.vector(questionnaires),
-                          msg = "questionnaires is not named character vector")
+                          msg = "questionnaires is not named character vector. Use Instrument Name for each element")
+
+  assertthat::assert_that(all(nchar(questionnaires)==32),msg="Questionnaire IDs must be 32 alpha-numeric identifier")
+
 
   # GET ALL QUESTIONNAIRE ITEMS AND ALL SHEETS IN ONE DT
   dt <- rbindlist(lapply(questionnaires, \(x) {

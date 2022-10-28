@@ -7,13 +7,16 @@
 add_gl_translation(
   trans.list = list(),
   target_languages = NULL,
-  source_lang = "English"
+  source_lang = "English",
+  auth = Sys.getenv("GL_AUTH")
 )
 }
 \arguments{
 \item{trans.list}{List of translations as returned by \code{\link[=get_translations]{get_translations()}} or \code{\link[=update_translations]{update_translations()}}}
 
 \item{source_lang}{Source language, that is in which language questionnaire was designed. Default 'English'}
+
+\item{auth}{Location of service account credential json file. Default in environment variable 'GL_AUTH'. For more details see  \code{vignette("setup", package = "googleLanguageR")}}
 
 \item{languages}{Languages to be queried. By default uses names of \code{trans.list}}
 }

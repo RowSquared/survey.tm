@@ -13,7 +13,8 @@ Roxygen: list(markdown = TRUE)
 Suggests: 
     deeplr,
     googleLanguageR,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    rvest
 Config/testthat/edition: 3
 Imports: 
     assertthat,
@@ -24,3 +25,5 @@ Imports:
     stats,
     stringr,
     writexl
+Depends: 
+    R (>= 2.10)

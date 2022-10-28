@@ -8,14 +8,18 @@ create.unique.var <- function(dt, regex = " ",col="value") {
 
 
 
+
+
 #' Check if named vector of character type
 #'
 #' @importFrom stringr str_to_lower str_remove_all
 #'
 
 is.char.named.vector <- function(vec) {
-  is.vector(vec) & is.character(vec) & !is.null(names(vec)) &
-    !any(is.na(names(vec)))
+  check <- is.vector(vec) & is.character(vec) & !is.null(names(vec)) &
+    !any(is.na(names(vec))) & !any(names(vec) %in% "")
+
+  return(check)
 }
 
 

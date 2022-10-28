@@ -14,11 +14,11 @@ add_deepl_translation(
 \arguments{
 \item{trans.list}{List of translations as returned by \code{\link[=get_translations]{get_translations()}} or \code{\link[=update_translations]{update_translations()}}}
 
+\item{target_languages}{Languages to be queried. By default uses names of \code{trans.list}}
+
 \item{source_lang}{Source language, that is in which language questionnaire was designed. Default 'English'}
 
 \item{API_key}{Authentication Key for DeepL API}
-
-\item{languages}{Languages to be queried. By default uses names of \code{trans.list}}
 }
 \value{
 List of translations

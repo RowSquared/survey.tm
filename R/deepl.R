@@ -77,9 +77,11 @@ add_deepl_translation_dt <- function(dt,
 #' Query DeepL translation for text items in list of translations that are NA
 #'
 #' @param trans.list List of translations as returned by [get_translations()] or [update_translations()]
-#' @param languages Languages to be queried. By default uses names of `trans.list`
+#' @param target_languages  Languages to be queried. By default uses names of `trans.list`
 #' @param source_lang Source language, that is in which language questionnaire was designed. Default 'English'
 #' @param API_key Authentication Key for DeepL API
+#'
+#' @importFrom  deeplr available_languages2 translate2
 #'
 #' @return List of translations
 #' @export
@@ -88,6 +90,7 @@ add_deepl_translation <- function(trans.list = list(),
                                   target_languages = NULL,
                                   source_lang = "English",
                                   API_key = NULL) {
+  #TODO: HAVE USER DECIDE IF FREE OR PAID API!
   # IF LANGUAGES NOT SPECIFIED, ASSUME ALL LANGUAGES IN LIST
   if (is.null(target_languages)) target_languages <- names(trans.list)
   assertthat::assert_that(all(target_languages %in% names(trans.list)), msg = paste(
