@@ -22,12 +22,26 @@ TBC.
 
 ## Installation
 
-You can install the development version of r2.tms like so:
+You can install the development version of r2.tms through
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+devtools::install_github("petbrueck/r2.tms")
 ```
 
-## Example
+## Usage
 
-TBD
+### Set up
+
+Before working with one or more questionnaires, you need to get a Google Worksheet that will server as the "Translation Master Sheet". 
+
+To this end
+
+```  {r setup, eval=FALSE}
+#Optional: Indicate to `googlesheets4` which mail you will use. Avoids selecting pre-authorised account manually. 
+googlesheets4::gs4_auth(email = "your.email@address.com")
+#Set up sheet
+setup_tsheet(
+    name.ssheet="Project X: Translation Sheet",
+    translation.languages=c("German","French")
+)
+```

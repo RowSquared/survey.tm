@@ -65,7 +65,6 @@ update_translation_lement <- function(curr.trans,
 update_translation <- function(curr.trans = list(),
                                new.items = data.table()) {
   #TODO: NEW ITEMS ARE NOW AT END OF DATA TABLE. CHANGE TO SEQUENTIAL ORDER?
-  #TODO: Flag that it is named in ISO standard
   assertthat::assert_that(is.list(curr.trans))
   assertthat::assert_that(is.data.table(new.items))
 
