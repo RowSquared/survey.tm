@@ -85,8 +85,8 @@ add_suso_sheet <- function(file = "",
 #'
 #' Based on list of translations and Survey Solutions Questionnaire ID, this function will create a .xlsx file on your hard-drive which can be used to be uploaded to the Survey Solutions Designer.
 #'
-#' @param translation.list List of translations created by `get_translations()` or `update_translation()`
-#' @param translation Character. Which element of `translation.list` to be used
+#' @param trans.list List. Translations created by `get_translations()` or `update_translation()`
+#' @param translation Character. Which element of `trans.list` to be used
 #' @param questionnaire Character. Questionnaire ID within Survey Solutions Designer. Usually 32 character id. Can be found in URL when opening the questionnaire: `https://designer.mysurvey.solutions/questionnaire/details/XXXXXXXXXX`
 #' @param user Character. SuSo Designer User Name
 #' @param password Character. SuSo Designer Password
@@ -96,7 +96,7 @@ add_suso_sheet <- function(file = "",
 #'
 #' @export
 #'
-create_suso_file <- function(translation.list = list(),
+create_suso_file <- function(trans.list = list(),
                              translation = stop("'translation' must be specified"),
                              questionnaire = stop("'questionnaire' must be specified"),
                              user = stop("'user' must be specified"),
@@ -114,7 +114,7 @@ create_suso_file <- function(translation.list = list(),
   # TODO: CHECK IF ALL ITEMS HAVE NOW TRANSLATION. IF NOT, MAYBE FLAG THAT PATTERN IS NOT SUPPLIED?
 
   # Translation list and Translation
-  assertthat::assert_that(translation %in% names(translation.list),
+  assertthat::assert_that(translation %in% names(trans.list),
     msg = paste(translation, "is not an element in transl.list")
   )
   # Translation
@@ -170,7 +170,7 @@ create_suso_file <- function(translation.list = list(),
     .x = sheets,
     .f = ~ add_suso_sheet(
       file = tmp.file,
-      translation.file = translation.list[[translation]],
+      translation.file = trans.list[[translation]],
       sheet = .x,
       pattern = pattern
     )

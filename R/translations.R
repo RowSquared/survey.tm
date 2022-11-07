@@ -38,7 +38,7 @@ get_translations <- function(gs = "",
 #' Update translation for one element in list
 #'
 #' @inheritParams  update_translation
-update_translation_lement <- function(curr.trans,
+update_translation_lelement <- function(curr.trans,
                                       new.items) {
   dt <- rbindlist(list(
     # TAKE CURRENT TRANSLATION SHEET ITEMS AND COMPARE AGAINST MASTER TRANSLATION ITEMS.
@@ -83,7 +83,7 @@ update_translation <- function(curr.trans = list(),
   translations <- names(curr.trans)
   updated.trans.sheets <- purrr::map(
     .x = translations,
-    .f = ~ update_translation_lement(
+    .f = ~ update_translation_lelement(
       curr.trans = curr.trans[[.x]],
       new.items = new.items
     )

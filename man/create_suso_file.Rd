@@ -5,7 +5,7 @@
 \title{Create Survey Solutions Translation file for upload}
 \usage{
 create_suso_file(
-  translation.list = list(),
+  trans.list = list(),
   translation = stop("'translation' must be specified"),
   questionnaire = stop("'questionnaire' must be specified"),
   user = stop("'user' must be specified"),
@@ -16,9 +16,9 @@ create_suso_file(
 )
 }
 \arguments{
-\item{translation.list}{List of translations created by \code{get_translations()} or \code{update_translation()}}
+\item{trans.list}{List. Translations created by \code{get_translations()} or \code{update_translation()}}
 
-\item{translation}{Character. Which element of \code{translation.list} to be used}
+\item{translation}{Character. Which element of \code{trans.list} to be used}
 
 \item{questionnaire}{Character. Questionnaire ID within Survey Solutions Designer. Usually 32 character id. Can be found in URL when opening the questionnaire: \verb{https://designer.mysurvey.solutions/questionnaire/details/XXXXXXXXXX}}
 
