@@ -8,15 +8,23 @@
 #'
 get_translations <- function(gs = "",
                              sheets = NULL) {
-  # TODO: IF SHeets Defined, check if actually exists
+
+  #Check Sheets
+  sheets.gs <- googlesheets4::gs4_get(gs)$sheets$name
+  # Check if user supplied sheet is actually in the sheets
+  if (!is.null(sheets)) assertthat::assert_that(all(sheets %in% sheets.gs),msg=
+                                                  paste(paste(sheets[!sheets %in% sheets.gs],sep=","),"is not a sheet in Google Sheet"))
+
   # Define sheets. By default all sheets found in google sheet
-  if (is.null(sheets)) sheets <- googlesheets4::gs4_get(gs)$sheets$name
+  if (is.null(sheets)) sheets <- sheets.gs
 
   list <- purrr::map(
     .x = sheets,
     .f = ~ data.table::as.data.table(
       googlesheets4::read_sheet(gs,
-        sheet = .x
+        sheet = .x,
+        range="A:G",
+        col_types = "ccccccc"
       )
     )
   )
@@ -45,6 +53,9 @@ update_translation_lement <- function(curr.trans,
       )
     ]
   ), fill = TRUE)
+
+  #Set Status to "to translate" if NA
+  dt[is.na(Translation),Status:="to translate"]
 
   return(dt)
 }

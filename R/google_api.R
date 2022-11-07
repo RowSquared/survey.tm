@@ -39,8 +39,7 @@ add_gl_translate_dt <- function(dt,
   message(paste(nrow(dt[is.na(Translation)]), "text items", paste0("(up to ", format(char.to.request, big.mark = ","), " characters)"), "will be queried for target language", paste0("'", target_lang, "'")))
 
   # QUERY FOR MISSING TRANSLATIONS
-  dt[, Status := as.character(Status)][is.na(Translation), Status := "Machine"]
-  dt[, Translation := as.character(Translation)]
+  dt[is.na(Translation), Status := "Machine"]
   dt[is.na(Translation), Translation :=
     suppressWarnings(googleLanguageR::gl_translate(
       Text_Item,

@@ -56,7 +56,7 @@ get_sursol_titems_byqx <- function(qxid = NULL,
       data.table::as.data.table(readxl::read_excel(
         path = tmp.file,
         sheet = sheet
-      ))[, Type := as.character(Type)][
+      ))[
         Type %chin% types | is.na(Type),
         .(
           type = Type,
