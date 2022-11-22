@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_suso.R
 \name{get_sursol_titems}
 \alias{get_sursol_titems}
-\title{Read SurSol Translation File}
+\title{Get unique Text Items of questionnaire(s) from Survey Solutions}
 \usage{
 get_sursol_titems(
   questionnaires = NULL,
@@ -27,5 +27,5 @@ get_sursol_titems(
 Data table of unique text items in instrument(s)
 }
 \description{
-Read SurSol Translation File
+Get unique Text Items of questionnaire(s) from Survey Solutions
 }

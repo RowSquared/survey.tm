@@ -18,7 +18,8 @@ add_deepl_translation(
 
 \item{source_lang}{Source language, that is in which language questionnaire was designed. Default 'English'}
 
-\item{API_key}{Authentication Key for DeepL API}
+\item{API_key}{Authentication Key for DeepL API
+#'}
 }
 \value{
 List of translations

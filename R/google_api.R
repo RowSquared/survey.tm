@@ -53,16 +53,15 @@ add_gl_translate_dt <- function(dt,
 
 
 
-# TODO: ACTUALLY HERE ONLY THOSE WHICH ARE NOT IN PARTICULAR STATUS?
 
 #' Query Google Translate API for text items in list of translations that are NA
+#'
 #'
 #' @param trans.list List of translations as returned by [get_translations()] or [update_translations()]
 #' @param languages Languages to be queried. By default uses names of `trans.list`
 #' @param source_lang Source language, that is in which language questionnaire was designed. Default 'English'
 #' @param auth Location of service account credential json file. Default in environment variable 'GL_AUTH'. For more details see  \code{vignette("setup", package = "googleLanguageR")}
 
-#' @importFrom  googleLanguageR gl_translate_languages gl_translate
 #' @return List of translations
 #' @export
 #'
@@ -70,6 +69,8 @@ add_gl_translation <- function(trans.list = list(),
                                target_languages = NULL,
                                source_lang = "English",
                                auth = Sys.getenv("GL_AUTH")) {
+  # TODO: ACTUALLY HERE ONLY THOSE WHICH ARE NOT IN PARTICULAR STATUS?
+
   # IF LANGUAGES NOT SPECIFIED, ASSUME ALL LANGUAGES IN LIST
   if (is.null(target_languages)) target_languages <- names(trans.list)
   assertthat::assert_that(all(target_languages %in% names(trans.list)), msg = paste(

@@ -1,6 +1,10 @@
 
 
-#' Remove the (question) coding of a text item (usually 'Question') from set of translations
+#' Remove the question coding of a text item
+#'
+#' Identifies and removes supplied string pattern in dt to get rid of Question Coding.
+#' Can be used to reduce workload for Translators as one does not need to include Question Coding in Translation (which reduces likelihood of typos/mistakes) and
+#' can further collapse data table by removing potential duplicate text items for which only question coding differs
 #'
 #' @param dt  Data table of questionnaire text items returned by either [parse_odk_titems()] or [get_sursol_titems()]
 #' @param pattern Regular expression that matches question coding

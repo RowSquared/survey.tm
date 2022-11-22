@@ -2,7 +2,7 @@
 % Please edit documentation in R/question_coding.R
 \name{remove_coding}
 \alias{remove_coding}
-\title{Remove the (question) coding of a text item (usually 'Question') from set of translations}
+\title{Remove the question coding of a text item}
 \usage{
 remove_coding(dt, pattern = "", collapse = TRUE)
 }
@@ -17,5 +17,7 @@ remove_coding(dt, pattern = "", collapse = TRUE)
 dt
 }
 \description{
-Remove the (question) coding of a text item (usually 'Question') from set of translations
+Identifies and removes supplied string pattern in dt to get rid of Question Coding.
+Can be used to reduce workload for Translators as one does not need to include Question Coding in Translation (which reduces likelihood of typos/mistakes) and
+can further collapse data table by removing potential duplicate text items for which only question coding differs
 }

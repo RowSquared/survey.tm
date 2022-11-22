@@ -2,8 +2,7 @@
 % Please edit documentation in R/check_software_mismatch.R
 \name{identify_sw_issues}
 \alias{identify_sw_issues}
-\title{Identifies software-related mismatches between 'Text_Item' and 'Translation'
-Updates column 'Status' and leaves a 'Comment/Note' that explains which issue is identified.}
+\title{Identifies software-related mismatches between 'Text_Item' and 'Translation'}
 \usage{
 identify_sw_issues(trans.list = list(), pattern = "\%[a-zA-Z0-9_]+\%")
 }
@@ -18,6 +17,5 @@ identify_sw_issues(trans.list = list(), pattern = "\%[a-zA-Z0-9_]+\%")
 List of translations as supplied by user, with software mismatches flagged
 }
 \description{
-Identifies software-related mismatches between 'Text_Item' and 'Translation'
 Updates column 'Status' and leaves a 'Comment/Note' that explains which issue is identified.
 }

@@ -16,6 +16,7 @@ get_sw_issues_dt <- function(dt,
            .(orig=stringr::str_extract_all(Text_Item,pattern),
              trans=stringr::str_extract_all(Translation,pattern)
            ),by=.(value.unique)]
+
   #Identify mismatches
   dt <- dt[,.(
     #Item is in Original but not Translation
@@ -61,7 +62,10 @@ get_sw_issues_dt <- function(dt,
 }
 
 
+
+
 #' Identifies software-related mismatches between 'Text_Item' and 'Translation'
+#'
 #' Updates column 'Status' and leaves a 'Comment/Note' that explains which issue is identified.
 #'
 #' @param trans.list List. Translations created by `get_translations()` or `update_translation()`
@@ -75,9 +79,11 @@ identify_sw_issues <- function(
     trans.list = list(),
     pattern="%[a-zA-Z0-9_]+%"
 ) {
+#TODO: CHECK HTML-TAGS
 
   #Copy list to avoid replacement in place
   trans.list <- copy(trans.list)
+
   #Identify issues for each translation
   list.issues <- purrr::map(
     .x = names(trans.list),
@@ -96,7 +102,7 @@ identify_sw_issues <- function(
     trans.list[[x]][value.unique %in%  list.issues[[x]]$value.unique,Status:="to update"]
 
     #Get in issues
-    trans.list[[x]] <- merge( trans.list[[x]],list.issues[[x]],by="value.unique",all.x=T)
+    trans.list[[x]] <- merge(trans.list[[x]],list.issues[[x]],by="value.unique",all.x=T)
 
     ###Update Comment###
     #Replace if Comment/Note empty
