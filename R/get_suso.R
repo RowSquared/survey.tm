@@ -1,5 +1,4 @@
 
-
 #' Retrieve translation file from SurSol Designer
 #'
 #'
@@ -21,6 +20,7 @@ get_suso_tfile <- function(
     sheets=NULL
 
 ) {
+  #TODO: CHECK IF 32 BUT WRONG ID.
 
   #CHECK INPUT
   assertthat::assert_that(all(nchar(questionnaire)==32),msg="Questionnaire IDs must be 32 alpha-numeric identifier")
@@ -50,9 +50,9 @@ get_suso_tfile <- function(
 
   # IDENTIFY ALL SHEETS
   sheets.file <- readxl::excel_sheets(tmp.file)
-  # Check if user supplied sheet is actually in the sheets
-  if (!is.null(sheets)) assertthat::assert_that(all(sheets %in% sheets.file),msg=
-                                                  paste(paste(sheets[!sheets %in% sheets.file],sep=","),"is not a sheet in Designer Template file",questionnaire))
+  # Check if user supplied sheet is actually in the sheets. If not provide warning
+  if (!is.null(sheets) & !all(sheets %in% sheets.file) ) warning(paste(paste(sheets[!sheets %in% sheets.file],collapse=", "),
+                                                                      "are no sheet(s) in Designer Template file",questionnaire))
 
   #READ INTO LIST AND SET NAMES
   list <- purrr::map(.x=sheets.file,
@@ -77,13 +77,14 @@ get_suso_tfile <- function(
 #' @importFrom httr GET authenticate
 #' @importFrom readxl excel_sheets
 #' @import data.table
+#' @noRd
 get_sursol_titems_byqx <- function(qxid = NULL,
                                    user = "",
                                    password = "",
                                    sheets = NULL,
                                    types = c(
                                      "Title", "Instruction", "OptionTitle", "ValidationMessage",
-                                     "SpecialValue"
+                                     "SpecialValue","FixedRosterTitle"
                                    )) {
 
 
@@ -146,8 +147,10 @@ get_sursol_titems <- function(questionnaires = NULL,
                               sheets = NULL,
                               types = c(
                                 "Title", "Instruction", "OptionTitle", "ValidationMessage",
-                                "SpecialValue"
+                                "SpecialValue","FixedRosterTitle"
                               )) {
+
+  #TODO: Sheets doesnt seem to work
 
   #Check input
   types <- match.arg(types,several.ok = T)
