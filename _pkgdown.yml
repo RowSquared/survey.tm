@@ -1,0 +1,53 @@
+url: ~
+template:
+  bootstrap: 5
+
+reference:
+
+- title: "Setup"
+- contents:
+  - setup_tsheet
+
+- title: "ODK"
+  desc: >
+    Functions that work with ODK-based questionnaires hosted on Google Sheets
+- subtitle: "Retrieving and transforming questionnaires"
+- contents:
+  - get_odk_wsheet
+  - get_odk_titems
+  - parse_odk_titems
+- subtitle: "Adding translation to questionnaire sheets"
+- contents:
+  - add_translation_odk
+
+- title: "Survey Solutions"
+  desc: >
+    Functions that work with Survey Solutions questionnaires hosted on designer.mysurvey.solutions
+- subtitle: "Retrieving and transforming questionnaires"
+- contents:
+  - get_suso_tfile 
+  - parse_sursol_titems
+- subtitle: "Adding translation to questionnaire sheets"
+- contents:
+  - add_suso_sheet
+  - create_suso_file
+- title: "Translation Processing"
+  desc: >
+    Functions that process translations pulled from Translation Master Sheet and CAPI software
+- contents:
+  - get_translations 
+  - update_translation
+  - write_trans_tsheet
+- title: "Translation Services"
+  desc: >
+    Functions that utilize the DeepL or Google Translate API to provide high-quality machine translation services.
+- contents:
+  - add_deepl_translation
+- contents:
+  - add_gl_translation
+- title: "Misc."
+- contents:
+  - identify_sw_issues
+  - remove_coding
+
+

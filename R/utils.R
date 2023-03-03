@@ -1,20 +1,17 @@
 #' CLEANUP TEXT ITEM - REMOVE ONLY PROPER WHITESPACE TO NOT REMOVE TABS AND NEWLINES
 #'
 #' @importFrom stringr str_to_lower str_remove_all
-#'
+#' @noRd
 create.unique.var <- function(dt, regex = " ",col="value") {
   dt[, value.unique := stringr::str_to_lower(stringr::str_remove_all(get(col), regex))]
 }
 
 
 
-
-
 #' Check if named vector of character type
 #'
 #' @importFrom stringr str_to_lower str_remove_all
-#'
-
+#' @noRd
 is.char.named.vector <- function(vec) {
   check <- is.vector(vec) & is.character(vec) & !is.null(names(vec)) &
     !any(is.na(names(vec))) & !any(names(vec) %in% "")
@@ -23,13 +20,12 @@ is.char.named.vector <- function(vec) {
 }
 
 
-
 #' COLLAPSE dt OF TRANSLATION ITEMS INTO UNIQUE SET OF TRANSLATION ITEMS
 #'
 #' @param dt
 #'
 #' @return data table of unique items
-#'
+#' @noRd
 collapse_titems <- function(dt) {
 
   # COLLAPSE AND REMOVE IDENTIFIER
@@ -73,7 +69,7 @@ collapse_titems <- function(dt) {
 
   #SET ORDER OF APPEARANCE AND REMOVE IDENTIFIER
   setorder(dt, seq.id)
-  dt[, seq.id := NULL]
+  # dt[, seq.id := NULL]
 
   return(dt)
 

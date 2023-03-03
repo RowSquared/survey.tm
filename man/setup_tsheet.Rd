@@ -5,7 +5,7 @@
 \title{Creates new google worksheet using translation template}
 \usage{
 setup_tsheet(
-  name.ssheet = stop("'name.sshet' must be specified"),
+  name.ssheet = stop("'name.ssheet' must be specified"),
   translation.languages = stop("'translation.languages' must be specified")
 )
 }

@@ -3,7 +3,7 @@
 #' @param dt Data table of translations
 #' @inheritParams  add_deepl_translation
 #'
-#'
+#' @noRd
 add_deepl_translation_dt <- function(dt,
                                      source_lang = "English",
                                      target_lang = NULL,

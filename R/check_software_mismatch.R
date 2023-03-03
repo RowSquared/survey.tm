@@ -6,7 +6,7 @@
 #' @param lang name of sheet/language. for message
 #'
 #' @return data table with text items that contain issues
-#'
+#' @noRd
 get_sw_issues_dt <- function(dt,
                            pattern="%[a-zA-Z0-9_]+%",
                            lang=NULL) {

@@ -7,28 +7,25 @@
 create_suso_file(
   trans.list = list(),
   translation = stop("'translation' must be specified"),
-  questionnaire = stop("'questionnaire' must be specified"),
-  user = stop("'user' must be specified"),
-  password = stop("'password' must be specified"),
+  questionnaire.list = list(),
   path = stop("'path' must be specified"),
   sheets = NULL,
+  statuses = c("Machine", "reviewed", "translated"),
   pattern = NULL
 )
 }
 \arguments{
-\item{trans.list}{List. Translations created by \code{get_translations()} or \code{update_translation()}}
+\item{trans.list}{List. Translations created by \code{\link{get_translations}} or \code{\link{update_translation}}}
 
 \item{translation}{Character. Which element of \code{trans.list} to be used}
 
-\item{questionnaire}{Character. Questionnaire ID within Survey Solutions Designer. Usually 32 character id. Can be found in URL when opening the questionnaire: \verb{https://designer.mysurvey.solutions/questionnaire/details/XXXXXXXXXX}}
-
-\item{user}{Character. SuSo Designer User Name}
-
-\item{password}{Character. SuSo Designer Password}
+\item{questionnaire.list}{List of Questionnaire Translation returned by \code{\link{get_suso_tfiles}}}
 
 \item{path}{Character. Writable file path where Translation File should be stored at, including file name and extension}
 
 \item{sheets}{Character vector. For which sheets of questionnaire template file translation will be added. Default all sheets that are found in template file}
+
+\item{statuses}{Character vector. Which items from Translation Google Sheet should be merged?}
 
 \item{pattern}{Regular expression that matches question coding. Should be specified if \code{remove_coding()} was used to process translation file}
 }

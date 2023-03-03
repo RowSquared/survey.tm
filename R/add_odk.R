@@ -21,6 +21,7 @@ add_translation_odk <- function(trans.list = list(),
   # TODO: SPLIT UP? BIG FUNCTION AND HARD TO DIGEST. SEE ADD_SUSO
   #TODO: ADD FILTER WHICH TEXT ITEM STATUSES TO BE ADDED
   #TODO: PRINT WHICH TYPE IS ADDED AS COLUMN
+  #TODO: REDO CODE (e.g. LOOP)
 
   assertthat::assert_that(translation.to.add %in% names(trans.list),
     msg = paste(translation.to.add, "is not an element in transl.list")

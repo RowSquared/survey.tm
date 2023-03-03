@@ -7,11 +7,12 @@
 #' @export
 #'
 setup_tsheet <- function(
-    name.ssheet=stop("'name.sshet' must be specified"),
+    name.ssheet=stop("'name.ssheet' must be specified"),
     translation.languages=stop("'translation.languages' must be specified")
 ) {
 
   #CHECK INPUT
+  message(paste0("Checking if '", name.ssheet, "' does exist already."))
 
   #CHECK IF GOOGLE WORKSHEET NAME ALREADY EXISTS. IF SO, RETURN ERROR OR ASK IF IT SHALL BE DE DELETED WIT USER INPUT
   any.exist.sheets <-  invisible(googlesheets4::gs4_find(order_by = "createdTime desc",name.ssheet))

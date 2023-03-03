@@ -4,12 +4,21 @@
 \alias{add_suso_sheet}
 \title{Add provided user's Translation to a Survey Solutions Translation sheet}
 \usage{
-add_suso_sheet(file = "", sheet = "", translation.file = "", pattern = NULL)
+add_suso_sheet(
+  questionnaire.list = "",
+  sheet = "",
+  translation.dt = "",
+  pattern = NULL
+)
 }
 \arguments{
-\item{file}{Excel file (SuSo Translation File)}
+\item{questionnaire.list}{List of Questionnaire Translation returned by \code{\link{get_suso_tfiles}}}
 
-\item{sheet}{Sheet in \code{file} to which translation should be added}
+\item{sheet}{Sheet in \code{questionnaire.list} to which translation should be added}
+
+\item{pattern}{Regular expression that matches question coding. Should be specified if \code{remove_coding()} was used to process translation file}
+
+\item{data.table}{of translation to be added to Questionnaire}
 }
 \value{
 data table of \code{sheet} with Translation added

@@ -2,7 +2,7 @@
 #'
 #' @param dt Data table of translations
 #' @inheritParams  add_gl_translation
-#'
+#' @noRd
 #'
 add_gl_translate_dt <- function(dt,
                                 source_lang = "English",
@@ -60,6 +60,7 @@ add_gl_translate_dt <- function(dt,
 #' @param trans.list List of translations as returned by [get_translations()] or [update_translations()]
 #' @param languages Languages to be queried. By default uses names of `trans.list`
 #' @param source_lang Source language, that is in which language questionnaire was designed. Default 'English'
+#' @param target_languages Which languages of element names in 'trans.list' should be queried
 #' @param auth Location of service account credential json file. Default in environment variable 'GL_AUTH'. For more details see  \code{vignette("setup", package = "googleLanguageR")}
 
 #' @return List of translations

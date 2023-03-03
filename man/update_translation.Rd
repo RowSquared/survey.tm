@@ -9,7 +9,7 @@ update_translation(curr.trans = list(), new.items = data.table())
 \arguments{
 \item{curr.trans}{List of translations as returned by \code{\link[=get_translations]{get_translations()}}}
 
-\item{new.items}{Data table of questionnaire text items returned by either \code{\link[=parse_odk_titems]{parse_odk_titems()}} or \code{\link[=get_sursol_titems]{get_sursol_titems()}}}
+\item{new.items}{Data table of questionnaire text items returned by either \code{\link[=parse_odk_titems]{parse_odk_titems()}} or \code{\link[=parse_sursol_titems]{parse_sursol_titems()}}}
 }
 \value{
 List of updated translations

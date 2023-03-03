@@ -4,10 +4,14 @@
 \alias{remove_coding}
 \title{Remove the question coding of a text item}
 \usage{
-remove_coding(dt, pattern = "", collapse = TRUE)
+remove_coding(
+  dt,
+  pattern = stop("'pattern' must be specified"),
+  collapse = TRUE
+)
 }
 \arguments{
-\item{dt}{Data table of questionnaire text items returned by either \code{\link[=parse_odk_titems]{parse_odk_titems()}} or \code{\link[=get_sursol_titems]{get_sursol_titems()}}}
+\item{dt}{Data table of questionnaire text items returned by either \code{\link[=parse_odk_titems]{parse_odk_titems()}} or \code{\link[=parse_sursol_titems]{parse_sursol_titems()}}}
 
 \item{pattern}{Regular expression that matches question coding}
 
