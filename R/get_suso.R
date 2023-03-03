@@ -1,18 +1,19 @@
 
 #' Retrieve translation file from SurSol Designer
 #'
+#' @inheritParams get_suso_tfiles
+#' @param questionnaire Questionnaire id within Survey Solutions Designer
 #'
-#' @param qx_id Questionnaire id within Survey Solutions Designer
-#' @param user SuSo Designer User Name
-#' @param password SuSo Designer Password
-#' @param sheets Sheets from Translation to read. Default all
+#' @seealso \code{\link{get_suso_tfiles}}
 #'
 #' @import data.table
 #' @importFrom httr GET authenticate
 #' @importFrom readxl excel_sheets
-
+#'
+#' @noRd
+#'
 #' @return List of sheets in translation file
-#' @export
+
 get_suso_tfile <- function(
     questionnaire="",
     user="",
@@ -20,7 +21,7 @@ get_suso_tfile <- function(
     sheets=NULL
 
 ) {
-  #TODO: CHECK IF 32 BUT WRONG ID.
+  #TODO: Sheets must contain "Translations" or be NULL.
 
   #CHECK INPUT
   assertthat::assert_that(all(nchar(questionnaire)==32),msg="Questionnaire IDs must be 32 alpha-numeric identifier")
@@ -58,122 +59,62 @@ get_suso_tfile <- function(
   list <- purrr::map(.x=sheets.file,
                      .f=~as.data.table(readxl::read_excel(
                        path = tmp.file,
-                       sheet = .x
+                       sheet = .x,
+                       col_types = c("text")
                      )))
+
   list <- setNames(list, c(sheets.file))
+
+  #Place the Translation into list, to allow easier handling of multiple instruments
+  list.final <- list(list)
+  #Name as Questionnaire Title
+  list.final <- setNames(list.final,list[["Translations"]][1,`Original text`] )
+
+  return(list.final)
+
+}
+
+
+
+#' Retrieve mutiple translation files from SurSol Designer
+#'
+#' Wrapper for \code{\link{get_suso_tfile}} to retrieve multiple translation files
+#'
+#' @param questionnaires Vector of Questionnaire id's within Survey Solutions Designer
+#' @param user SuSo Designer User Name
+#' @param password SuSo Designer Password
+#' @param sheets Sheets from Translation to read. Default all
+#'
+#' @import data.table
+#' @importFrom httr GET authenticate
+#' @importFrom readxl excel_sheets
+
+#' @return List of translation file with list of sheets
+#' @export
+#'
+get_suso_tfiles <- function(
+    questionnaires="",
+    user="",
+    password="",
+    sheets=NULL
+
+) {
+
+  #CHECK INPUT
+  assertthat::assert_that(all(nchar(questionnaires)==32),msg="Questionnaire IDs must be 32 alpha-numeric identifier")
+
+
+  #Retrieve Translations & Flatten immediately
+  list <- purrr::map(.x=questionnaires,
+             .f=~get_suso_tfile(.x,
+                                user=user,
+                                password=password,
+                                sheets=sheets)) %>% purrr::flatten()
+
+
 
   return(list)
 
 }
 
 
-#' Get unique Text Items of questionnaire
-#'
-#' @param qxid Id of Questionnaire in SuSo Designer
-#' @param user SuSo Designer User Name
-#' @param password SuSo Designer Password
-#' @param sheets Sheets from Translation to read. Default all
-#' @param types Which type of text items to keep
-#' @importFrom httr GET authenticate
-#' @importFrom readxl excel_sheets
-#' @import data.table
-#' @noRd
-get_sursol_titems_byqx <- function(qxid = NULL,
-                                   user = "",
-                                   password = "",
-                                   sheets = NULL,
-                                   types = c(
-                                     "Title", "Instruction", "OptionTitle", "ValidationMessage",
-                                     "SpecialValue","FixedRosterTitle"
-                                   )) {
-
-
-  #GET AND READ TRANSLATION FILE
-  list <- get_suso_tfile(
-    questionnaire=qxid,
-    user=user,
-    password=password,
-    sheets=sheets)
-
-
-  # READ ALL SHEETS INTO ONE DT- ONLY COLS OF INTEREST
-
-
-  dt <- rbindlist(
-    lapply(list, \(sheet) {
-        sheet[
-        Type %chin% types | is.na(Type),
-        .(
-          type = Type,
-          value = `Original text`
-        )
-      ]
-    })
-  )
-
-  # CREATE UNIQUE VALUE
-  create.unique.var(dt)
-
-  # GET ROW IDENTIFIER
-  dt[, seq.id := 1:.N]
-
-
-  return(dt)
-}
-
-
-
-
-
-#' Get unique Text Items of questionnaire(s) from Survey Solutions
-#'
-#' @param questionnaires Named character vector of instruments to source. Elements must be id of questionnaire. Name is the Title of Questionnaire.
-#' @param user SuSo Designer User Name
-#' @param password SuSo Designer Password
-#' @param sheets Sheets from Translation to read. Default all
-#' @param types Which type of text items to keep
-#'
-#' @import data.table
-#' @importFrom httr GET authenticate
-#' @importFrom readxl excel_sheets
-#' @import data.table
-
-#' @return Data table of unique text items in instrument(s)
-#' @export
-#'
-get_sursol_titems <- function(questionnaires = NULL,
-                              user = "",
-                              password = "",
-                              sheets = NULL,
-                              types = c(
-                                "Title", "Instruction", "OptionTitle", "ValidationMessage",
-                                "SpecialValue","FixedRosterTitle"
-                              )) {
-
-  #TODO: Sheets doesnt seem to work
-
-  #Check input
-  types <- match.arg(types,several.ok = T)
-
-  assertthat::assert_that(is.char.named.vector(questionnaires),
-                          msg = "questionnaires is not named character vector. Use Instrument Name for each element")
-
-  assertthat::assert_that(all(nchar(questionnaires)==32),msg="Questionnaire IDs must be 32 alpha-numeric identifier")
-
-
-  # GET ALL QUESTIONNAIRE ITEMS AND ALL SHEETS IN ONE DT
-  dt <- rbindlist(lapply(questionnaires, \(x) {
-    get_sursol_titems_byqx(
-      qxid = x,
-      user = user,
-      password = password,
-      sheets = sheets,
-      types = types
-    )[, instrt := names(questionnaires)[questionnaires %in% x]]
-  }))
-
-
-  dt <- collapse_titems(dt)
-
-  return(dt)
-}
