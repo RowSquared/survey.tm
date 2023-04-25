@@ -2,22 +2,46 @@
 % Please edit documentation in R/get_suso.R
 \name{get_suso_tfiles}
 \alias{get_suso_tfiles}
-\title{Retrieve mutiple translation files from SurSol Designer}
+\title{Retrieve translation templates from SurSol Designer}
 \usage{
 get_suso_tfiles(questionnaires = "", user = "", password = "", sheets = NULL)
 }
 \arguments{
-\item{questionnaires}{Vector of Questionnaire id's within Survey Solutions Designer}
+\item{questionnaires}{A character vector of questionnaire IDs within Survey Solutions Designer.}
 
-\item{user}{SuSo Designer User Name}
+\item{user}{A character string representing the Survey Solutions Designer username.}
 
-\item{password}{SuSo Designer Password}
+\item{password}{A character string representing the Survey Solutions Designer password.}
 
-\item{sheets}{Sheets from Translation to read. Default all}
+\item{sheets}{A character vector of sheet names from the translation files to read. By default, all sheets are read.}
 }
 \value{
-List of translation file with list of sheets
+Returns a nested list. The top-level elements represent questionnaires, and each contains a list of data.tables corresponding to the sheets within the respective questionnaire.
 }
 \description{
-Wrapper for \code{\link{get_suso_tfile}} to retrieve multiple translation files
+This function retrieves the translation files for (multiple) questionnaires from the \href{https://designer.mysurvey.solutions}{Survey Solutions Designer}.
+}
+\examples{
+\dontrun{
+# Define your Survey Solutions Designer credentials
+
+# Define the questionnaire IDs you want to retrieve translations for
+questionnaires <- c("12345678901234567890123456789012", "23456789012345678901234567890123")
+
+# Retrieve the translation files
+suso_trans_templates <- get_suso_tfiles(
+  questionnaires = questionnaires,
+  user = "your_email@example.com",
+  password =  "your_password",
+  sheets = c("Translations", "Options")
+)
+
+# Access the translations for the first questionnaire
+translations_first_questionnaire <- suso_trans_templates[["NAME OF YOUR QUESTIONNAIRE"]]
+
+# Access the "Translations" sheet for the first questionnaire
+translations_sheet_first_questionnaire <- translations_first_questionnaire[["Translations"]]
+
+}
+
 }

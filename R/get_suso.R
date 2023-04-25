@@ -14,17 +14,10 @@
 #'
 #' @return List of sheets in translation file
 
-get_suso_tfile <- function(
-    questionnaire="",
-    user="",
-    password="",
-    sheets=NULL
-
-) {
-  #TODO: Sheets must contain "Translations" or be NULL.
-
-  #CHECK INPUT
-  assertthat::assert_that(all(nchar(questionnaire)==32),msg="Questionnaire IDs must be 32 alpha-numeric identifier")
+get_suso_tfile <- function(questionnaire = "",
+                           user = "",
+                           password = "",
+                           sheets = NULL) {
 
   # BUILD URL
   url <- paste0("https://designer.mysurvey.solutions/translations/", questionnaire, "/template")
@@ -37,11 +30,12 @@ get_suso_tfile <- function(
       password
     )
   )
-  #Check response
-  if (request$status_code!= 200) {
+  # Check response
+  if (request$status_code != 200) {
     stop(
       paste0(
-        "Survey Solutions returned status code ",  request$status_code,  " when trying to download the instrument.\nCheck the User, Password and questionnaire paramaters provided.")
+        "Survey Solutions returned status code ", request$status_code, " when trying to download the instrument.\nCheck the User, Password and questionnaire paramaters provided."
+      )
     )
   }
 
@@ -52,69 +46,103 @@ get_suso_tfile <- function(
   # IDENTIFY ALL SHEETS
   sheets.file <- readxl::excel_sheets(tmp.file)
   # Check if user supplied sheet is actually in the sheets. If not provide warning
-  if (!is.null(sheets) & !all(sheets %in% sheets.file) ) warning(paste(paste(sheets[!sheets %in% sheets.file],collapse=", "),
-                                                                      "are no sheet(s) in Designer Template file",questionnaire))
+  if (!is.null(sheets) & !all(sheets %in% sheets.file)) {
+    warning(paste(
+      paste(sheets[!sheets %in% sheets.file], collapse = ", "),
+      "are no sheet(s) in Designer Template file", questionnaire
+    ))
+  }
 
-  #READ INTO LIST AND SET NAMES
-  list <- purrr::map(.x=sheets.file,
-                     .f=~as.data.table(readxl::read_excel(
-                       path = tmp.file,
-                       sheet = .x,
-                       col_types = c("text")
-                     )))
+  # READ EACH SHEET INTO LIST AND SET NAMES
+  sheet.list <- purrr::map(
+    .x = sheets.file,
+    .f = ~ as.data.table(readxl::read_excel(
+      path = tmp.file,
+      sheet = .x,
+      col_types = c("text")
+    ))
+  )
 
-  list <- setNames(list, c(sheets.file))
+  sheet.list <- setNames(sheet.list, c(sheets.file))
 
-  #Place the Translation into list, to allow easier handling of multiple instruments
-  list.final <- list(list)
-  #Name as Questionnaire Title
-  list.final <- setNames(list.final,list[["Translations"]][1,`Original text`] )
+  # Place the Translation into list, to allow easier handling of multiple instruments
+  list.final <- list(sheet.list)
+  # Name as Questionnaire Title
+  list.final <- setNames(list.final, sheet.list[["Translations"]][1, `Original text`])
 
   return(list.final)
-
 }
 
 
 
-#' Retrieve mutiple translation files from SurSol Designer
+#' Retrieve translation templates from SurSol Designer
 #'
-#' Wrapper for \code{\link{get_suso_tfile}} to retrieve multiple translation files
+#' This function retrieves the translation files for (multiple) questionnaires from the \href{https://designer.mysurvey.solutions}{Survey Solutions Designer}.
 #'
-#' @param questionnaires Vector of Questionnaire id's within Survey Solutions Designer
-#' @param user SuSo Designer User Name
-#' @param password SuSo Designer Password
-#' @param sheets Sheets from Translation to read. Default all
+#' @param questionnaires A character vector of questionnaire IDs within Survey Solutions Designer.
+#' @param user A character string representing the Survey Solutions Designer username.
+#' @param password A character string representing the Survey Solutions Designer password.
+#' @param sheets A character vector of sheet names from the translation files to read. By default, all sheets are read.
 #'
 #' @import data.table
 #' @importFrom httr GET authenticate
 #' @importFrom readxl excel_sheets
-
-#' @return List of translation file with list of sheets
+#' @importFrom purrr map flatten
+#'
+#' @return Returns a nested list. The top-level elements represent questionnaires, and each contains a list of data.tables corresponding to the sheets within the respective questionnaire.
 #' @export
 #'
-get_suso_tfiles <- function(
-    questionnaires="",
-    user="",
-    password="",
-    sheets=NULL
+#'@examples
+#' \dontrun{
+#' # Define your Survey Solutions Designer credentials
+#'
+#' # Define the questionnaire IDs you want to retrieve translations for
+#' questionnaires <- c("12345678901234567890123456789012", "23456789012345678901234567890123")
+#'
+#' # Retrieve the translation files
+#' suso_trans_templates <- get_suso_tfiles(
+#'   questionnaires = questionnaires,
+#'   user = "your_email@example.com",
+#'   password =  "your_password",
+#'   sheets = c("Translations", "Options")
+#' )
+#'
+#' # Access the translations for the first questionnaire
+#' translations_first_questionnaire <- suso_trans_templates[["NAME OF YOUR QUESTIONNAIRE"]]
+#'
+#' # Access the "Translations" sheet for the first questionnaire
+#' translations_sheet_first_questionnaire <- translations_first_questionnaire[["Translations"]]
+#'
+#'}
+#'
+get_suso_tfiles <- function(questionnaires = "",
+                            user = "",
+                            password = "",
+                            sheets = NULL) {
 
-) {
+  # CHECK INPUT
+  assertthat::assert_that(all(nchar(questionnaires) == 32), msg = "Questionnaire IDs must be 32 alpha-numeric identifier")
+  assertthat::assert_that(nchar(user) > 0, msg = "'user' must not be an empty string.")
+  assertthat::assert_that(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", user), msg = "The 'user' parameter must be a valid email address.")
+  assertthat::assert_that(nchar(password) > 0, msg = "'password' must not be an empty string.")
 
-  #CHECK INPUT
-  assertthat::assert_that(all(nchar(questionnaires)==32),msg="Questionnaire IDs must be 32 alpha-numeric identifier")
-
-
-  #Retrieve Translations & Flatten immediately
-  list <- purrr::map(.x=questionnaires,
-             .f=~get_suso_tfile(.x,
-                                user=user,
-                                password=password,
-                                sheets=sheets)) %>% purrr::flatten()
+  if (!is.null(sheets)) {
+    assertthat::assert_that(is.character(sheets), msg = "'sheets' must be a character vector.")
+    assertthat::assert_that(any(sheets == "Translations"), msg = "The 'sheets' parameter must contain 'Translations' or be NULL.")
+  }
 
 
+  # Retrieve Translations & Flatten immediately
+  translations_list <- purrr::map(
+    .x = questionnaires,
+    .f = ~ get_suso_tfile(.x,
+      user = user,
+      password = password,
+      sheets = sheets
+    )
+  ) %>% purrr::flatten()
 
-  return(list)
 
+
+  return(translations_list)
 }
-
-

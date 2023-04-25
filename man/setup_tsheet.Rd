@@ -22,9 +22,11 @@ Creates a new Google Sheet (based on the \href{https://docs.google.com/spreadshe
 }
 \examples{
 \dontrun{
-# Create a new translation master sheet with two languages (English and Spanish)
-new_sheet <- setup_tsheet(ssheet_name = "Project X: Translation Sheet",
-                          lang_names = c("German", "French"))
+# Create a new translation master sheet with two languages (German and French)
+new_sheet <- setup_tsheet(
+  ssheet_name = "Project X: Translation Sheet",
+  lang_names = c("German", "French")
+)
 
 # The returned 'new_sheet' object contains metadata about the created sheet
 new_sheet$spreadsheet_url # Access the URL of the created sheet
@@ -32,4 +34,5 @@ new_sheet$spreadsheet_url # Access the URL of the created sheet
 # Print all metadata
 new_sheet
 }
+
 }

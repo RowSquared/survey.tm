@@ -46,12 +46,50 @@ setup_tsheet(
 
 ### Workflow
 
+#### Pull the Questionnaire Template from Survey Solutions Designer
+
+To retrieve the current version and text items of the questionnaire(s)
+you’re working with, you can use the `get_suso_tfiles()` function. This
+function downloads the [questionnaire
+templates](https://docs.mysurvey.solutions/questionnaire-designer/toolbar/multilingual-questionnaires/)
+in Excel format from the Survey Solutions Designer and stores them as
+nested lists in your environment. You can specify the questionnaires by
+using their questionnaire ID, which is a 32-character alphanumeric
+identifier.
+
+You can find this ID by logging in to the Survey Solutions Designer and
+accessing your questionnaire. The URL in your browser should look like
+`https://designer.mysurvey.solutions/questionnaire/details/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`,
+where the combination of x’s after `/details/` represents your
+questionnaire ID.
+
+``` r
+
+# Define the questionnaire IDs you want to retrieve translations for
+questionnaires <- c("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6", "b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6a7")
+
+# Retrieve the translation files
+suso_trans_templates <- get_suso_tfiles(
+  questionnaires = questionnaires,
+  user = "your_email@example.com", # Registered with Survey Solutions Designer
+  password = "your_password",
+  sheets = c("Translations", "Options")
+)
+
+# Access the translations for the first questionnaire
+translations_first_questionnaire <- suso_trans_templates[["NAME OF YOUR QUESTIONNAIRE"]]
+# Access the "Translations" sheet for the first questionnaire
+translations_sheet_first_questionnaire <- translations_first_questionnaire[["Translations"]]
+# Note: The last four rows are an example of how to access the returned object "suso_trans_templates". In most cases, you will not need to access the object in this way.
+```
+
 ## TODO
 
 ### General / High-Level
 
 - [ ] Cleanup of function names & argument naming convention to make
   clear between translation and questionnaire
+- [ ] Change package name
 - [ ] Documentation (Functions + Google Translation Sheet)
 - [ ] Unit Tests
 - [ ] ODK Stream
@@ -65,3 +103,9 @@ setup_tsheet(
 ### GoogleAPI/Deepl
 
 - [ ] Move to Deepl2 4 free account
+
+### Get SuSo Designer Template
+
+- [ ] Issue if special unicodes & readxl (e.g with
+  “953faa24e13144ac984e1ad62593aab5”)
+- [ ] CHECK HTML-TAGS
