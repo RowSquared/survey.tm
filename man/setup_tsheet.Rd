@@ -2,21 +2,34 @@
 % Please edit documentation in R/setup.R
 \name{setup_tsheet}
 \alias{setup_tsheet}
-\title{Creates new google worksheet using translation template}
+\title{Creates new 'Translation Master Sheet'}
 \usage{
 setup_tsheet(
-  name.ssheet = stop("'name.ssheet' must be specified"),
-  translation.languages = stop("'translation.languages' must be specified")
+  ssheet_name = stop("'ssheet_name' must be specified"),
+  lang_names = stop("'lang_names' must be specified")
 )
 }
 \arguments{
-\item{name.ssheet}{Character. Name that will be assigned to  Google Worksheet}
+\item{ssheet_name}{Character. The name that will be assigned to the Google Sheet.}
 
-\item{translation.languages}{Character Vector. ISO 639-1 languages for which translation will be needed. Each language becomes one sheet}
+\item{lang_names}{Character Vector. A vector of \href{https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes}{ISO 639} language names for which translation will be needed. Each language becomes one sheet/tab.}
 }
 \value{
-List of metadata on new sheet
+List of metadata on the newly created sheet.
 }
 \description{
-Creates new google worksheet using translation template
+Creates a new Google Sheet (based on the \href{https://docs.google.com/spreadsheets/d/1xLHEDm5bgtv4IHHCbfyMf_sdNsdzz_AUcRrnpb2fXTw}{translation template}) in your Google user account. This new sheet will serve as the main 'Translation Master Sheet' in subsequent workflow.
+}
+\examples{
+\dontrun{
+# Create a new translation master sheet with two languages (English and Spanish)
+new_sheet <- setup_tsheet(ssheet_name = "Project X: Translation Sheet",
+                          lang_names = c("German", "French"))
+
+# The returned 'new_sheet' object contains metadata about the created sheet
+new_sheet$spreadsheet_url # Access the URL of the created sheet
+
+# Print all metadata
+new_sheet
+}
 }

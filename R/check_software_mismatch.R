@@ -79,7 +79,6 @@ identify_sw_issues <- function(
     trans.list = list(),
     pattern="%[a-zA-Z0-9_]+%"
 ) {
-#TODO: CHECK HTML-TAGS
 
   #Copy list to avoid replacement in place
   trans.list <- copy(trans.list)

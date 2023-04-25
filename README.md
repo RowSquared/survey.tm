@@ -33,15 +33,35 @@ need to generate an access token. Follow instructions in console and
 browser.
 
 ``` r
-#Optional: Indicate to `googlesheets4` which mail you will use. Avoids selecting pre-authorised account manually. 
-googlesheets4::gs4_auth(email = "your.email@address.com")
-#Set up sheet, specify: 
+# Optional: Indicate to `googlesheets4` which mail you will use. Avoids selecting pre-authorised account manually.
+# googlesheets4::gs4_auth(email = "your.email@address.com")
+# Set up sheet, specify:
 # - Name to assign to new google worksheet
 # - Translations/Languages needed. Can be one or multiple as in this example. Needs to be ISO 639-1 name.
 setup_tsheet(
-    name.ssheet="Project X: Translation Sheet",
-    translation.languages=c("German","French")
+  ssheet_name = "Project X: Translation Sheet",
+  lang_names = c("German", "French")
 )
 ```
 
 ### Workflow
+
+## TODO
+
+### General / High-Level
+
+- [ ] Cleanup of function names & argument naming convention to make
+  clear between translation and questionnaire
+- [ ] Documentation (Functions + Google Translation Sheet)
+- [ ] Unit Tests
+- [ ] ODK Stream
+- [ ] TODOs in functions (:
+
+### Software Text Mismatch
+
+- [ ] Color coding
+- [ ] CHECK HTML-TAGS
+
+### GoogleAPI/Deepl
+
+- [ ] Move to Deepl2 4 free account

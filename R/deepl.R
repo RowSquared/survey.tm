@@ -87,7 +87,7 @@ add_deepl_translation <- function(trans.list = list(),
                                   target_languages = NULL,
                                   source_lang = "English",
                                   API_key = NULL) {
-  #TODO: HAVE USER DECIDE IF FREE OR PAID API!
+
   # IF LANGUAGES NOT SPECIFIED, ASSUME ALL LANGUAGES IN LIST
   if (is.null(target_languages)) target_languages <- names(trans.list)
   assertthat::assert_that(all(target_languages %in% names(trans.list)), msg = paste(
