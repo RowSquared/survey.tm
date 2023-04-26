@@ -87,7 +87,7 @@ get_suso_tfile <- function(questionnaire = "",
 #' @import data.table
 #' @importFrom httr GET authenticate
 #' @importFrom readxl excel_sheets
-#' @importFrom purrr map flatten
+#' @importFrom purrr map list_flatten
 #'
 #' @return Returns a nested list, called 'Translation Template'. The top-level elements represent questionnaires, and each contains a list of data.tables corresponding to the sheets within the respective questionnaire.
 #' @export
@@ -140,7 +140,8 @@ get_suso_tfiles <- function(questionnaires = "",
       password = password,
       sheets = sheets
     )
-  ) %>% purrr::flatten()
+  )
+  translations_list <- purrr::list_flatten(translations_list)
 
 
 

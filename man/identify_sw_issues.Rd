@@ -7,7 +7,7 @@
 identify_sw_issues(trans.list = list(), pattern = "\%[a-zA-Z0-9_]+\%")
 }
 \arguments{
-\item{trans.list}{List. Translations created by \code{get_translations()} or \code{update_translation()}}
+\item{trans.list}{List. Translations created by \code{get_tms_data()} or \code{update_translation()}}
 
 \item{pattern}{Character. Regular expression that identifies text item in Original/Translation (e.g. text substitution '\%rostertitle\%')}
 

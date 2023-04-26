@@ -52,10 +52,19 @@ parse_suso_titems.by.qx <- function(
 #'
 #' @import data.table
 #' @importFrom readxl excel_sheets
+#' @importFrom purrr map_df
 #' @import data.table
-
 #' @return A data.table containing (unique) text items found across questionnaires in `tmpl_list`.
+#'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' trans_text_items <- parse_suso_titems(
+#' tmpl_list = suso_trans_templates, #Nested list as returned by `get_suso_tfiles()`
+#' collapse = TRUE # Keep only unique text items across questionnaires
+#' )
+#' }
 parse_suso_titems <- function(tmpl_list,
                                 sheets = NULL,
                                 types = c(

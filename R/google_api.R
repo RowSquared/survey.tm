@@ -57,7 +57,7 @@ add_gl_translate_dt <- function(dt,
 #' Query Google Translate API for text items in list of translations that are NA
 #'
 #'
-#' @param trans.list List of translations as returned by [get_translations()] or [update_translations()]
+#' @param trans.list List of translations as returned by [get_tms_data()] or [update_translations()]
 #' @param languages Languages to be queried. By default uses names of `trans.list`
 #' @param source_lang Source language, that is in which language questionnaire was designed. Default 'English'
 #' @param target_languages Which languages of element names in 'trans.list' should be queried

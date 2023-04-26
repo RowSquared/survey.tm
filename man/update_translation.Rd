@@ -7,7 +7,7 @@
 update_translation(curr.trans = list(), new.items = data.table())
 }
 \arguments{
-\item{curr.trans}{List of translations as returned by \code{\link[=get_translations]{get_translations()}}}
+\item{curr.trans}{List of translations as returned by \code{\link[=get_tms_data]{get_tms_data()}}}
 
 \item{new.items}{Data table of questionnaire text items returned by either \code{\link[=parse_odk_titems]{parse_odk_titems()}} or \code{\link[=parse_suso_titems]{parse_suso_titems()}}}
 }

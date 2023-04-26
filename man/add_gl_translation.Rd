@@ -12,7 +12,7 @@ add_gl_translation(
 )
 }
 \arguments{
-\item{trans.list}{List of translations as returned by \code{\link[=get_translations]{get_translations()}} or \code{\link[=update_translations]{update_translations()}}}
+\item{trans.list}{List of translations as returned by \code{\link[=get_tms_data]{get_tms_data()}} or \code{\link[=update_translations]{update_translations()}}}
 
 \item{target_languages}{Which languages of element names in 'trans.list' should be queried}
 

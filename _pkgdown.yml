@@ -6,7 +6,7 @@ reference:
 
 - title: "Setup"
 - contents:
-  - setup_tsheet
+  - setup_tms
 
 - title: "ODK"
   desc: >
@@ -35,7 +35,7 @@ reference:
   desc: >
     Functions that process translations pulled from Translation Master Sheet and CAPI software
 - contents:
-  - get_translations 
+  - get_tms_data 
   - update_translation
   - write_trans_tsheet
 - title: "Translation Services"

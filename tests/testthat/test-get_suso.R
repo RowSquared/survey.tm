@@ -28,9 +28,3 @@ test_that("Test get_suso_tfiles with valid credentials", {
 
 
 
-#GET THE OBJECT FOR LATER USE
-tmpl_list_testthat <- get_suso_tfiles("04b421596f0443e88cd99ec0538d89ff",
-                          user = Sys.getenv("suso_designer_user"),
-                          password = Sys.getenv("suso_designer_pw"),
-                          sheets = NULL
-)

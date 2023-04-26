@@ -25,8 +25,8 @@ devtools::install_github("petbrueck/r2.tms")
 ### Set up
 
 Before working with one or more questionnaires, you need to run once the
-`setup_tsheet()` function to get a google worksheet that will serve as
-the “Translation Master Sheet”.
+`setup_tms()` function to get a google worksheet that will serve as the
+“Translation Master Sheet”.
 
 Please note: If you have not used any functionality of package
 `googlesheets4` before, at first run of any `r2.tms` function, you will
@@ -36,18 +36,16 @@ browser.
 ``` r
 # Optional: Indicate to `googlesheets4` which mail you will use. Avoids selecting pre-authorised account manually.
 # googlesheets4::gs4_auth(email = "your.email@address.com")
-# Set up sheet, specify:
-# - Name to assign to new google worksheet
-# - Translations/Languages needed. Can be one or multiple as in this example. Needs to be ISO 639-1 name.
-setup_tsheet(
-  ssheet_name = "Project X: Translation Sheet",
-  lang_names = c("German", "French")
+
+setup_tms(
+  ssheet_name = "Project X: Translation Sheet", # Name to assign to new google worksheet
+  lang_names = c("German", "French") # Translations/Languages needed. Needs to be ISO 639-1 language name.
 )
 ```
 
 ### Workflow
 
-#### A) Pull the Questionnaire Template
+#### A.1) Pull the Questionnaire Template
 
 <details>
 <summary>
@@ -92,16 +90,16 @@ translations_sheet_first_questionnaire <- translations_first_questionnaire[["Tra
 # Note: The last four rows are an example of how to access the returned object "suso_trans_templates". In most cases, you will not need to access the object in this way.
 ```
 
-#### B) Parse Questionnaire Templates
+##### A.2) Parse Questionnaire Templates
 
 <details>
 <summary>
 Click to see detailed description
 </summary>
 Text items to be translated are currently distributed across
-questionnaires and sheets in the object returned by get_suso_tfiles().
+questionnaires and sheets in the object returned by `get_suso_tfiles()`.
 To aggregate all these items into a single consolidated data.table, use
-the parse_suso_titems() function.
+the `parse_suso_titems()` function.
 </details>
 
 ``` r
@@ -110,6 +108,32 @@ trans_text_items <- parse_suso_titems(
   tmpl_list = suso_trans_templates, #Nested list as returned by `get_suso_tfiles()`
   collapse = TRUE # Keep only unique text items across questionnaires
 )
+```
+
+#### B) Pull ‘Translation Master’ Google Sheet data
+
+<details>
+<summary>
+Click to see detailed description
+</summary>
+
+In order to add translations to the Questionnaire Templates, it’s
+necessary to pull any existing translations (if available) specified by
+the Translator from the ‘Translation Master’ Google Sheet.
+
+`get_tms_data()` is a simple wrapper for `googlesheets4::read_sheet()`
+and returns a list where each element is a sheet in the Google Sheet,
+representing translation data for a specific language.
+
+At first run after `setup_tms()`, all elements of the list returned will
+be empty data.table’s.
+</details>
+
+``` r
+# googlesheets4::gs4_auth(email = "your.email@address.com")
+
+#Pull all columns and rows found in all sheets in 'Translation Master' Google Sheet
+tms_data <- get_tms_data(ss = "GOOGLE-SHEET-IDENTIFIER")
 ```
 
 ## TODO
@@ -123,6 +147,8 @@ trans_text_items <- parse_suso_titems(
 - [ ] Unit Tests
 - [ ] ODK Stream
 - [ ] TODOs in functions (:
+- [ ] devtools::check() tests dont pass locally while devtools::tests()
+  does
 
 ### Software Text Mismatch
 

@@ -68,7 +68,7 @@ get_sw_issues_dt <- function(dt,
 #'
 #' Updates column 'Status' and leaves a 'Comment/Note' that explains which issue is identified.
 #'
-#' @param trans.list List. Translations created by `get_translations()` or `update_translation()`
+#' @param trans.list List. Translations created by `get_tms_data()` or `update_translation()`
 #' @param pattern Character. Regular expression that identifies text item in Original/Translation (e.g. text substitution '%rostertitle%')
 #' @param languages Character Vector. For which sheets/languages shall software-related mismatches be checked?
 #'
