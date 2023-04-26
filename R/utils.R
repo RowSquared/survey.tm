@@ -39,13 +39,13 @@ collapse_titems <- function(dt) {
 
   # KEEP UNIQUE:
   # ALWAYS ACCOUNT FOR SEQUENTIAL ID
-  # FIRST BY INSTRUMENT; VARIABLE AND VALUE TO AVOID HAVING MULTIPLE "label, label, label"
+  # FIRST BY QUESTIONNAIRE; VARIABLE AND VALUE TO AVOID HAVING MULTIPLE "label, label, label"
   dt <- dt[
     , .(
       seq.id = seq.id[c(1)],
       value = value[c(1)]
     ),
-    by = .(instrt, type, value.unique)
+    by = .(questionnaire, type, value.unique)
   ]
 
   # NOW BY TYPE AND VALUE
@@ -53,7 +53,7 @@ collapse_titems <- function(dt) {
     , .(
       seq.id = seq.id[c(1)],
       value = value[c(1)],
-      instrt = paste(instrt, collapse = "\n")
+      questionnaire = paste(questionnaire, collapse = "\n")
     ),
     by = .(type, value.unique)
   ]
@@ -62,7 +62,7 @@ collapse_titems <- function(dt) {
   setorder(dt, value.unique, seq.id)
   dt <- dt[, .(
     seq.id = seq.id[c(1)],
-    instrt = instrt[c(1)],
+    questionnaire = questionnaire[c(1)],
     value = value[c(1)],
     type = paste(type, collapse = "\n")
   ), by = .(value.unique)]

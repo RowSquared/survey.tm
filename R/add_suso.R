@@ -117,7 +117,7 @@ create_suso_file <- function(trans.list = list(),
   # Check that all elements are named & are data.tables
   assertthat::assert_that(all(names(questionnaire.list) != ""), msg="All elements in questionnaire.list must be named.")
   assertthat::assert_that(suppressWarnings(all(lapply(questionnaire.list,is.data.table))),
-                          msg="All elements in questionnaire.list must be data.table. Did you supply a list that contains multiple instruments?")
+                          msg="All elements in questionnaire.list must be data.table. Did you supply a list that contains multiple questionnaires?")
 
 
 

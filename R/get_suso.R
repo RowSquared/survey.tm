@@ -34,7 +34,7 @@ get_suso_tfile <- function(questionnaire = "",
   if (request$status_code != 200) {
     stop(
       paste0(
-        "Survey Solutions returned status code ", request$status_code, " when trying to download the instrument.\nCheck the User, Password and questionnaire paramaters provided."
+        "Survey Solutions returned status code ", request$status_code, " when trying to download the questionnaire.\nCheck the User, Password and questionnaire paramaters provided."
       )
     )
   }
@@ -65,7 +65,7 @@ get_suso_tfile <- function(questionnaire = "",
 
   sheet.list <- setNames(sheet.list, c(sheets.file))
 
-  # Place the Translation into list, to allow easier handling of multiple instruments
+  # Place the Translation into list, to allow easier handling of multiple questionnaires
   list.final <- list(sheet.list)
   # Name as Questionnaire Title
   list.final <- setNames(list.final, sheet.list[["Translations"]][1, `Original text`])
@@ -89,7 +89,7 @@ get_suso_tfile <- function(questionnaire = "",
 #' @importFrom readxl excel_sheets
 #' @importFrom purrr map flatten
 #'
-#' @return Returns a nested list. The top-level elements represent questionnaires, and each contains a list of data.tables corresponding to the sheets within the respective questionnaire.
+#' @return Returns a nested list, called 'Translation Template'. The top-level elements represent questionnaires, and each contains a list of data.tables corresponding to the sheets within the respective questionnaire.
 #' @export
 #'
 #'@examples
@@ -99,15 +99,15 @@ get_suso_tfile <- function(questionnaire = "",
 #' # Define the questionnaire IDs you want to retrieve translations for
 #' questionnaires <- c("12345678901234567890123456789012", "23456789012345678901234567890123")
 #'
-#' # Retrieve the translation files
+#' # Retrieve the translation template files
 #' suso_trans_templates <- get_suso_tfiles(
 #'   questionnaires = questionnaires,
 #'   user = "your_email@example.com",
 #'   password =  "your_password",
-#'   sheets = c("Translations", "Options")
+#'   sheets = c("Translations", "@@_myreusable_category")
 #' )
 #'
-#' # Access the translations for the first questionnaire
+#' # Access the translation template for the first questionnaire
 #' translations_first_questionnaire <- suso_trans_templates[["NAME OF YOUR QUESTIONNAIRE"]]
 #'
 #' # Access the "Translations" sheet for the first questionnaire

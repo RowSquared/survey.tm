@@ -53,7 +53,7 @@ update_translation_lelement <- function(curr.trans,
   dt2 <- new.items[
     !value.unique %chin% as.character(curr.trans$value.unique),
     .(value.unique,
-      `Instrument(s)` = instrt,
+      `Questionnaire(s)` = questionnaire,
       Type = type,
       Text_Item = value
     )

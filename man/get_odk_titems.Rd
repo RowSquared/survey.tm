@@ -12,7 +12,7 @@ get_odk_titems(list, cols = c("label", "hint", "constraint_message"))
 \item{cols}{Columns on sheet(s) to keep for translation item}
 }
 \value{
-data.table of text items along with identifier of chronological order and instrument
+data.table of text items along with identifier of chronological order and questionnaire
 }
 \description{
 Transform list of ODK sheets into data.table of text items that shall be translated

@@ -42,7 +42,7 @@ get_odk_wsheet <- function(gs = "",
 #'
 #' @import data.table
 #'
-#' @return data.table of text items along with identifier of chronological order and instrument
+#' @return data.table of text items along with identifier of chronological order and questionnaire
 #' @export
 #'
 get_odk_titems <- function(list, cols = c("label", "hint", "constraint_message")) {
@@ -73,8 +73,8 @@ get_odk_titems <- function(list, cols = c("label", "hint", "constraint_message")
                               msg=paste("Column names not unique using",paste(cols,collapse=", "), "in list element",names(list)[element],"\nCheck param 'cols'."
                                         ))
 
-      # ADD INSTRUMENT
-      dt[, `:=`(instrt = stringr::str_remove(names(list)[element], paste(paste0("_", c("survey", "choices")), collapse = "|")))]
+      # ADD QUESTIONNAIRE
+      dt[, `:=`(questionnaire = stringr::str_remove(names(list)[element], paste(paste0("_", c("survey", "choices")), collapse = "|")))]
       # ADD SEQUENTIAL ID. BUT FOR NOW BASED ON TYPE OF SHEET. SMALL WORKAROUND TO KEEP CHOICES SEPERATELY. NEEDS REVISION IF SUSO INCLUDED
       if (grepl("_survey", names(list)[element])) {
         dt[, seq.id := 1:.N]
@@ -102,7 +102,7 @@ parse_odk_titems <- function(dt) {
   # TODO: INCLUDE IN get_odk_items? AT LEAST OPTIONAL WITH DEFAULT TRUE
   # MELT INTO LONG
   dt <- melt(dt,
-    id.vars = c("instrt", "seq.id"), variable.name = "type",
+    id.vars = c("questionnaire", "seq.id"), variable.name = "type",
     na.rm = T
   )
 

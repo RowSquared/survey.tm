@@ -16,7 +16,7 @@ get_suso_tfiles(questionnaires = "", user = "", password = "", sheets = NULL)
 \item{sheets}{A character vector of sheet names from the translation files to read. By default, all sheets are read.}
 }
 \value{
-Returns a nested list. The top-level elements represent questionnaires, and each contains a list of data.tables corresponding to the sheets within the respective questionnaire.
+Returns a nested list, called 'Translation Template'. The top-level elements represent questionnaires, and each contains a list of data.tables corresponding to the sheets within the respective questionnaire.
 }
 \description{
 This function retrieves the translation files for (multiple) questionnaires from the \href{https://designer.mysurvey.solutions}{Survey Solutions Designer}.
@@ -28,15 +28,15 @@ This function retrieves the translation files for (multiple) questionnaires from
 # Define the questionnaire IDs you want to retrieve translations for
 questionnaires <- c("12345678901234567890123456789012", "23456789012345678901234567890123")
 
-# Retrieve the translation files
+# Retrieve the translation template files
 suso_trans_templates <- get_suso_tfiles(
   questionnaires = questionnaires,
   user = "your_email@example.com",
   password =  "your_password",
-  sheets = c("Translations", "Options")
+  sheets = c("Translations", "@_myreusable_category")
 )
 
-# Access the translations for the first questionnaire
+# Access the translation template for the first questionnaire
 translations_first_questionnaire <- suso_trans_templates[["NAME OF YOUR QUESTIONNAIRE"]]
 
 # Access the "Translations" sheet for the first questionnaire
