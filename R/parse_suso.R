@@ -1,30 +1,25 @@
 #' Get unique Text Items of one questionnaire
-#'
-#' @param list that contains sheets of one instrument
-#' @param sheets Sheets from Translation to read. Default all
-#' @param types Which type of text items to keep
+#' @inheritParams parse_suso_titems
+#' @param questionnaire_list that contains sheets of one questionnaire
 #' @import data.table
 #' @noRd
-parse_sursol_titems.by.qx <- function(
-    list,
-    instrument=stop("instrument needs to be defined"),
+parse_suso_titems.by.qx <- function(
+    questionnaire_list,
+    questionnaire = stop("questionnaire needs to be defined"),
     sheets = NULL,
     types = c(
       "Title", "Instruction", "OptionTitle", "ValidationMessage",
-      "SpecialValue","FixedRosterTitle"
+      "SpecialValue", "FixedRosterTitle"
     )) {
 
-
-  #Keep only subset of sheets
+  # Keep only subset of sheets
   if (!is.null(sheets)) {
-    sheets.list <- sheets[sheets %in% names(list)]
-    list <- list[c(sheets.list)]
-
+    sheets.list <- sheets[sheets %in% names(questionnaire_list)]
+    questionnaire_list <- questionnaire_list[c(sheets.list)]
   }
-  # READ ALL SHEETS INTO ONE DT- ONLY COLS OF INTEREST
-
+  # READ ALL SHEETS INTO ONE DT- ONLY COLS OF INTEREST OF TYPE OF INTEREST
   dt <- rbindlist(
-    lapply(list, \(sheet) {
+    lapply(questionnaire_list, \(sheet) {
       sheet[
         Type %chin% types | is.na(Type),
         .(
@@ -35,85 +30,90 @@ parse_sursol_titems.by.qx <- function(
     })
   )
 
-  # GET ROW IDENTIFIER
+  # GET ROW IDENTIFIER - USED LATER IN TMS IN CASE NEW ITEMS ARE ADDED IN MIDDLE OF QX
   dt[, seq.id := 1:.N]
 
-  #Assign instrument identifier
-  dt[,instrt:=instrument]
+  # Assign questionnaire identifier
+  dt[, questionnaire := questionnaire]
 
   return(dt)
 }
 
 
-
-
-
-#' Get (unique) Text Items from list of Survey Solutions translation(s) in rectangular format
+#' Parse 'Translation Templates' object into unique text items
 #'
-#' @param translation Named list where each element contains the translation sheets of each instrument
-#' @param sheets Sheets from Translation to read. Default all
-#' @param types Which type of text items to keep
-#' @param collapse Boolean. If TRUE, only 'unique' text items will be returned.
+#' This function processes a nested listed returned by \code{\link{get_suso_tfiles}}.
+#' It identifies all text items across all sheets across all questionnaires found in `tmpl_list`. If `collapse=TRUE` only unique text items will be returned.
+#'
+#' @param tmpl_list A named nested list as returned by \code{\link{get_suso_tfiles}} (Translation Template object)
+#' @param sheets A character vector of sheet names within `tmpl_list` files to be parsed. By default, all sheets are parsed.
+#' @param types  A character vector specifying the types of text items to keep.
+#' @param collapse Boolean. If TRUE, only unique text items will be returned.
 #'
 #' @import data.table
-#' @importFrom httr GET authenticate
 #' @importFrom readxl excel_sheets
 #' @import data.table
 
-#' @return Data table of unique text items in instrument(s)
+#' @return A data.table containing (unique) text items found across questionnaires in `tmpl_list`.
 #' @export
-#'
-parse_sursol_titems <- function(translation,
+parse_suso_titems <- function(tmpl_list,
                                 sheets = NULL,
                                 types = c(
                                   "Title", "Instruction", "OptionTitle", "ValidationMessage",
-                                  "SpecialValue","FixedRosterTitle"
+                                  "SpecialValue", "FixedRosterTitle"
                                 ),
-                                collapse=TRUE) {
-  #TODO: Assert that Translations is in sheets or simply add it?
+                                collapse = TRUE) {
+  # Check input
+  # Types
+  types <- match.arg(types, several.ok = T)
 
-
-  #Check input
-  types <- match.arg(types,several.ok = T)
-
-  assertthat::assert_that(all(!is.null(names(translation))),
-                          msg = "'translation' is not named list. Use Instrument Name for each element")
+  # Translation
+  assertthat::assert_that(
+    all(!is.null(names(tmpl_list))),
+    msg = "'tmpl_list' is not a named list. Use Questionnaire Name for each element"
+  )
 
   # Check  Sheets
-  if (!is.null(sheets) ) {
+  if (!is.null(sheets)) {
+    # Check if sheets is a character vector
+    assertthat::assert_that(
+      is.character(sheets),
+      msg = "'sheets' must be a character vector."
+    )
 
-  # Check if sheets is a character vector
-  if  (!is.character(sheets)) stop("sheets must be NULL or a character vector")
+    # Check if user-supplied sheet is actually in the sheets, if not provide a warning
+    # Get the sheets in tmpl_list list
+    sheets.list <- unlist(lapply(tmpl_list, names))
 
-  #Check if user supplied sheet is actually in the sheets. If not provide warning
-  #Get the sheets in translation list
-  sheets.list <- unlist(lapply(translation, names))
-  #Get which ones are not found
-  sheets.not.found <- sheets[!sapply(sheets, function(name) all(sapply(translation, function(inner_list) name %in% names(inner_list))))]
+    # Get which ones are not found
+    if (length(sheets.not.found) > 0) {
+      warning(paste(
+        paste(sheets.not.found, collapse = ", "),
+        "are sheet(s) not found in all Translation Files"
+      ))
+    }
 
-
-  if (length(sheets.not.found)>0 ) warning(paste(paste(sheets.not.found,collapse=", "),
-                                                                       "are sheet(s) not found in all Translation Files"))
-
-  #If "Translation" not within sheets, add it
-  if (!"Translations" %in% sheets) sheets <- c(sheets,"Translations")
+    # #If "Translation" not within sheets, add it
+    # if (!"Translations" %in% sheets) sheets <- c(sheets,"Translations")
   }
 
-  #Go through all instruments in translation list and bind in one
-  dt <- purrr::map_df(.x=names(translation),
-                      .f=~parse_sursol_titems.by.qx(list=translation[[.x]],
-                                                    instrument=.x,
-                                                    sheets=sheets,
-                                                    types = types)
+  # Go through all questionnaires in tmpl_list list and bind in one
+  dt <- purrr::map_df(
+    .x = names(tmpl_list),
+    .f = ~ parse_suso_titems.by.qx(
+      questionnaire_list = tmpl_list[[.x]],
+      questionnaire = .x,
+      sheets = sheets,
+      types = types
+    )
   )
-  #Convenience, convert to data.table
+  # Convenience, convert to data.table
   dt <- as.data.table(dt)
-
 
   # Cleanup Text item to catch more duplicate text items
   create.unique.var(dt)
 
-  #Collapse if specified
+  # Collapse if specified
   if (collapse) dt <- collapse_titems(dt)
 
   return(dt)

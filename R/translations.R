@@ -82,7 +82,7 @@ update_translation_lelement <- function(curr.trans,
 #' Adds any text item that was not part of translation before
 #'
 #' @param curr.trans List of translations as returned by [get_translations()]
-#' @param new.items Data table of questionnaire text items returned by either [parse_odk_titems()] or [parse_sursol_titems()]
+#' @param new.items Data table of questionnaire text items returned by either [parse_odk_titems()] or [parse_suso_titems()]
 #'
 #' @return List of updated translations
 #'

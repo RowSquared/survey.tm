@@ -11,7 +11,7 @@ remove_coding(
 )
 }
 \arguments{
-\item{dt}{Data table of questionnaire text items returned by either \code{\link[=parse_odk_titems]{parse_odk_titems()}} or \code{\link[=parse_sursol_titems]{parse_sursol_titems()}}}
+\item{dt}{Data table of questionnaire text items returned by either \code{\link[=parse_odk_titems]{parse_odk_titems()}} or \code{\link[=parse_suso_titems]{parse_suso_titems()}}}
 
 \item{pattern}{Regular expression that matches question coding}
 

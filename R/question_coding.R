@@ -6,7 +6,7 @@
 #' Can be used to reduce workload for Translators as one does not need to include Question Coding in Translation (which reduces likelihood of typos/mistakes) and
 #' can further collapse data table by removing potential duplicate text items for which only question coding differs
 #'
-#' @param dt  Data table of questionnaire text items returned by either [parse_odk_titems()] or [parse_sursol_titems()]
+#' @param dt  Data table of questionnaire text items returned by either [parse_odk_titems()] or [parse_suso_titems()]
 #' @param pattern Regular expression that matches question coding
 #' @param collapse boolean to indicate if after removing question coding, the set of translation items should be scanned for/collapsed to unique items
 #'
