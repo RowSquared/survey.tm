@@ -15,7 +15,7 @@ create_suso_file(
 )
 }
 \arguments{
-\item{trans.list}{List. Translations created by \code{\link{get_tms_data}} or \code{\link{update_translation}}}
+\item{trans.list}{List. Translations created by \code{\link{get_tdb_data}} or \code{\link{update_tdb}}}
 
 \item{translation}{Character. Which element of \code{trans.list} to be used}
 

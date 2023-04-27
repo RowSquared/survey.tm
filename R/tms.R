@@ -1,9 +1,9 @@
 #FUNCTIONS TO WORK WITH THE TRANSLATION MASTER SHEET
 
-#' Pull 'Translation Master' Google Sheet
+#' Pull 'Translation Database' Google Sheet
 #'
 #' A simple wrapper for \code{\link[googlesheets4]{read_sheet}}.
-#' Retrieves all data from the 'Translation Master' Google Sheet.
+#' Retrieves all data from the 'Translation Database' Google Sheet.
 #'
 #' @param ss Identifier of a Google Sheet, see [googlesheets4::sheets_id()]
 #' @param sheets Sheets in ss to read. Should be ISO language names. By default reads all sheets found in `ss`
@@ -19,10 +19,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' get_tms_data(ss = "GOOGLE-SHEET-IDENTIFIER")
+#' get_tdb_data(ss = "GOOGLE-SHEET-IDENTIFIER")
 #' }
 
-get_tms_data <- function(ss = "",
+get_tdb_data <- function(ss = "",
                              sheets = NULL) {
 
   # Check Sheets
@@ -32,14 +32,14 @@ get_tms_data <- function(ss = "",
   if (!is.null(sheets)) {
     assertthat::assert_that(all(sheets %in% sheets.ss),
       msg =
-        paste(paste(sheets[!sheets %in% sheets.ss], sep = ","), "is not a sheet in the 'Translation Master' Google Sheet")
+        paste(paste(sheets[!sheets %in% sheets.ss], sep = ","), "is not a sheet in the 'Translation Database' Google Sheet")
     )
   }
 
   # Define sheets. By default all sheets found in google sheet. Read all as character
   if (is.null(sheets)) sheets <- sheets.ss
 
-  tms.list <- purrr::map(
+  tdb.list <- purrr::map(
     .x = sheets,
     .f = ~ data.table::as.data.table(
       googlesheets4::read_sheet(ss,
@@ -49,9 +49,21 @@ get_tms_data <- function(ss = "",
       )
     )
   )
-  tms.list <- setNames(tms.list, c(sheets))
+  tdb.list <- setNames(tdb.list, c(sheets))
 
-  return(tms.list)
+  #Check all Sheets have expected column names
+  required_cols <- c("value.unique", "Questionnaire(s)", "Type", "Text_Item", "Status", "Translation", "Comment/Note")
+  for (i in seq_along(tdb.list)) {
+    names.dt <- names(tdb.list[[i]])
+    assertthat::assert_that(all(required_cols %in% names.dt),
+                            msg=paste0("Sheet ",names(tdb.list)[1]," does not contain expected column(s): ",
+                                       paste(required_cols[!required_cols %in% names.dt],collapse=", "))
+
+                            )
+  }
+
+
+  return(tdb.list)
 }
 
 
@@ -60,7 +72,7 @@ get_tms_data <- function(ss = "",
 #' Write a data table to Translation Sheet
 #' Simple wrapper for [googlesheets4::range_write()]
 #'
-#' @param dt Data table to be written. Usually an element within list of translations returned by `get_tms_data()` or `update_translation()`
+#' @param dt Data table to be written. Usually an element within list of translations returned by `get_tdb_data()` or `update_tdb()`
 #' @param ss Identifier of a Google Sheet, see [googlesheets4::sheets_id()]
 #' @param sheet Name of sheet in `ss`. Usually name of translation which is name of element in list of translations.
 #' @param range Cell Range to write

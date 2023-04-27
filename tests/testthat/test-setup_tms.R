@@ -1,9 +1,9 @@
-test_that("setup_tms creates a new sheet with the specified languages", {
+test_that("setup_tdb creates a new sheet with the specified languages", {
   test_ssheet_name <- "MyTestTranslationSheet"
   test_lang_names <- c("English", "Occitan")
 
   # Create a new sheet
-  new_sheet <- setup_tms(ssheet_name = test_ssheet_name, lang_names = test_lang_names)
+  new_sheet <- setup_tdb(ssheet_name = test_ssheet_name, lang_names = test_lang_names)
 
   # Check if the created sheet has the correct name
   expect_equal(new_sheet$name, test_ssheet_name)

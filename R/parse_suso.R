@@ -40,12 +40,12 @@ parse_suso_titems.by.qx <- function(
 }
 
 
-#' Parse 'Translation Templates' object into unique text items
+#' Parse 'Source Questionnaires' object into unique text items
 #'
 #' This function processes a nested listed returned by \code{\link{get_suso_tfiles}}.
 #' It identifies all text items across all sheets across all questionnaires found in `tmpl_list`. If `collapse=TRUE` only unique text items will be returned.
 #'
-#' @param tmpl_list A named nested list as returned by \code{\link{get_suso_tfiles}} (Translation Template object)
+#' @param tmpl_list A named nested list as returned by \code{\link{get_suso_tfiles}} (Source Questionnaire object)
 #' @param sheets A character vector of sheet names within `tmpl_list` files to be parsed. By default, all sheets are parsed.
 #' @param types  A character vector specifying the types of text items to keep.
 #' @param collapse Boolean. If TRUE, only unique text items will be returned.
@@ -60,7 +60,7 @@ parse_suso_titems.by.qx <- function(
 #'
 #' @examples
 #' \dontrun{
-#' trans_text_items <- parse_suso_titems(
+#' source_titems <- parse_suso_titems(
 #' tmpl_list = suso_trans_templates, #Nested list as returned by `get_suso_tfiles()`
 #' collapse = TRUE # Keep only unique text items across questionnaires
 #' )

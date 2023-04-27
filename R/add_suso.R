@@ -85,7 +85,7 @@ add_suso_sheet <- function(questionnaire.list = "",
 #'
 #' Based on list of translations and Survey Solutions Questionnaire ID, this function will create a .xlsx file on your hard-drive which can be used to be uploaded to the Survey Solutions Designer.
 #'
-#' @param trans.list List. Translations created by \code{\link{get_tms_data}} or \code{\link{update_translation}}
+#' @param trans.list List. Translations created by \code{\link{get_tdb_data}} or \code{\link{update_tdb}}
 #' @param translation Character. Which element of `trans.list` to be used
 #' @param questionnaire.list List of Questionnaire Translation returned by \code{\link{get_suso_tfiles}}
 #' @param path Character. Writable file path where Translation File should be stored at, including file name and extension

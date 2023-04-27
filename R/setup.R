@@ -1,6 +1,6 @@
-#' Creates new 'Translation Master' Google Sheet
+#' Creates new 'Translation Database' Google Sheet
 #'
-#' Creates a new Google Sheet (based on the \href{https://docs.google.com/spreadsheets/d/1xLHEDm5bgtv4IHHCbfyMf_sdNsdzz_AUcRrnpb2fXTw}{translation template}) in your Google user account. This new sheet will serve as the main 'Translation Master' Google Sheet in subsequent workflow.
+#' Creates a new Google Sheet (based on the \href{https://docs.google.com/spreadsheets/d/1xLHEDm5bgtv4IHHCbfyMf_sdNsdzz_AUcRrnpb2fXTw}{translation database template}) in your Google user account. This new sheet will serve as the main 'Translation Master' Google Sheet in subsequent workflow.
 #'
 #' @param ssheet_name Character. The name that will be assigned to the Google Sheet.
 #' @param lang_names Character Vector. A vector of \href{https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes}{ISO 639} language names for which translation will be needed. Each language becomes one sheet/tab.
@@ -11,7 +11,7 @@
 #' @examples
 #' \dontrun{
 #' # Create a new translation master sheet with two languages (German and French)
-#' new_sheet <- setup_tms(
+#' new_sheet <- setup_tdb(
 #'   ssheet_name = "Project X: Translation Sheet",
 #'   lang_names = c("German", "French")
 #' )
@@ -23,7 +23,7 @@
 #' new_sheet
 #' }
 #'
-setup_tms <- function(ssheet_name = stop("'ssheet_name' must be specified"),
+setup_tdb <- function(ssheet_name = stop("'ssheet_name' must be specified"),
                          lang_names = stop("'lang_names' must be specified")) {
 
   # Additional check for input parameters

@@ -8,7 +8,7 @@ Simple wrapper for \code{\link[googlesheets4:range_write]{googlesheets4::range_w
 write_trans_tsheet(dt, ss = "", sheet = "", range = "A2:G", col_names = FALSE)
 }
 \arguments{
-\item{dt}{Data table to be written. Usually an element within list of translations returned by \code{get_tms_data()} or \code{update_translation()}}
+\item{dt}{Data table to be written. Usually an element within list of translations returned by \code{get_tdb_data()} or \code{update_tdb()}}
 
 \item{ss}{Identifier of a Google Sheet, see \code{\link[googlesheets4:sheets_id]{googlesheets4::sheets_id()}}}
 

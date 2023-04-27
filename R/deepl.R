@@ -75,7 +75,7 @@ add_deepl_translation_dt <- function(dt,
 
 #' Query DeepL translation for text items in list of translations that are NA
 #'
-#' @param trans.list List of translations as returned by [get_tms_data()] or [update_translations()]
+#' @param trans.list List of translations as returned by [get_tdb_data()] or [update_tdbs()]
 #' @param target_languages  Languages to be queried. By default uses names of `trans.list`
 #' @param source_lang Source language, that is in which language questionnaire was designed. Default 'English'
 #' @param API_key Authentication Key for DeepL API

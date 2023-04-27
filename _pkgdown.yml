@@ -6,7 +6,7 @@ reference:
 
 - title: "Setup"
 - contents:
-  - setup_tms
+  - setup_tdb
 
 - title: "ODK"
   desc: >
@@ -25,7 +25,7 @@ reference:
     Functions that work with Survey Solutions questionnaires hosted on designer.mysurvey.solutions
 - subtitle: "Retrieving and transforming questionnaires"
 - contents:
-  - get_suso_tfile 
+  - get_suso_tfile
   - parse_suso_titems
 - subtitle: "Adding translation to questionnaire sheets"
 - contents:
@@ -33,10 +33,10 @@ reference:
   - create_suso_file
 - title: "Translation Processing"
   desc: >
-    Functions that process translations pulled from Translation Master Sheet and CAPI software
+    Functions that process translations pulled from Translation Database Sheet and CAPI software
 - contents:
-  - get_tms_data 
-  - update_translation
+  - get_tdb_data
+  - update_tdb
   - write_trans_tsheet
 - title: "Translation Services"
   desc: >

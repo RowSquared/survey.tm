@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse_suso.R
 \name{parse_suso_titems}
 \alias{parse_suso_titems}
-\title{Parse 'Translation Templates' object into unique text items}
+\title{Parse 'Source Questionnaires' object into unique text items}
 \usage{
 parse_suso_titems(
   tmpl_list,
@@ -13,7 +13,7 @@ parse_suso_titems(
 )
 }
 \arguments{
-\item{tmpl_list}{A named nested list as returned by \code{\link{get_suso_tfiles}} (Translation Template object)}
+\item{tmpl_list}{A named nested list as returned by \code{\link{get_suso_tfiles}} (Source Questionnaire object)}
 
 \item{sheets}{A character vector of sheet names within \code{tmpl_list} files to be parsed. By default, all sheets are parsed.}
 
@@ -30,7 +30,7 @@ It identifies all text items across all sheets across all questionnaires found i
 }
 \examples{
 \dontrun{
-trans_text_items <- parse_suso_titems(
+source_titems <- parse_suso_titems(
 tmpl_list = suso_trans_templates, #Nested list as returned by `get_suso_tfiles()`
 collapse = TRUE # Keep only unique text items across questionnaires
 )

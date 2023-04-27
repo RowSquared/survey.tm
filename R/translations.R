@@ -1,16 +1,15 @@
 #' Update translation for one element in list
 #'
-#' @inheritParams  update_translation
+#' @inheritParams  update_tdb
 #' @noRd
-update_translation_lelement <- function(curr.trans,
-                                        new.items) {
-
+update_tdb_lelement <- function(tdb,
+                                        source_titems) {
   # First Scenarion: Text Items exist in current Translation sheet and is found again in Master Questionnaire
-  dt1 <- curr.trans[as.character(value.unique) %chin% new.items$value.unique]
+  dt1 <- tdb[as.character(value.unique) %chin% source_titems$value.unique]
 
   # Second Scenario: New items in Master Questionnaire not found yet in Translation Sheet
-  dt2 <- new.items[
-    !value.unique %chin% as.character(curr.trans$value.unique),
+  dt2 <- source_titems[
+    !value.unique %chin% as.character(tdb$value.unique),
     .(value.unique,
       `Questionnaire(s)` = questionnaire,
       Type = type,
@@ -26,45 +25,64 @@ update_translation_lelement <- function(curr.trans,
   # Set Status to "to translate" if NA
   dt[is.na(Translation), Status := "to translate"]
 
-  #Get in current sequential order, using the Master Questionnaire as reference
-  dt <- merge(dt,new.items[,.(value.unique,seq.id)],by="value.unique",all.x=T)
-  setorder(dt,seq.id)
-  dt[,"seq.id":=NULL]
+  # Get in current sequential order, using the Master Questionnaire as reference
+  dt <- merge(dt, source_titems[, .(value.unique, seq.id)], by = "value.unique", all.x = T)
+  setorder(dt, seq.id)
+  dt[, "seq.id" := NULL]
 
   return(dt)
 }
 
 
-#' Compares current questionnaire file against list of existing translations
+#' Compares 'Source Questionnaire' data against 'Translation Database'
 #'
-#' Removes any text item that no longer is part of the questionnaire(s).
-#' Adds any text item that was not part of translation before
+#' Removes any text item in the translation database object that no longer is part of the source questionnaire(s).
+#' Adds any new text item from source questionnaire(s) not yet found in the database
 #'
-#' @param curr.trans List of translations as returned by [get_tms_data()]
-#' @param new.items Data table of questionnaire text items returned by either [parse_odk_titems()] or [parse_suso_titems()]
+#' @param tdb List of translation database as returned by [get_tdb_data()]
+#' @param source_titems Data table of questionnaire text items returned by either [parse_odk_titems()] or [parse_suso_titems()]
 #'
-#' @return List of updated translations
+#' @return List of updated translation database
 #'
 #' @export
 #'
-update_translation <- function(curr.trans = list(),
-                               new.items = data.table()) {
-  assertthat::assert_that(is.list(curr.trans))
-  assertthat::assert_that(is.data.table(new.items))
+#' @examples
+#' \dontrun{
+#' new_tdb <- update_tdb(
+#' tdb = tdb_data,
+#' source_titems = source_titems
+#' )
+#' }
+
+
+update_tdb <- function(tdb = list(),
+                               source_titems = data.table()) {
+  assertthat::assert_that(is.list(tdb), msg = "'tdb' must be a list.")
+  assertthat::assert_that(is.data.table(source_titems), msg = "'source_titems' must be a data.table.")
+
+
+  # Check if new.items data.table has required columns
+  required_columns <- c("value.unique", "seq.id", "questionnaire", "value", "type")
+  assertthat::assert_that(all(required_columns %in% names(source_titems)),
+    msg = paste(
+      "The 'source_titems' data.table is missing required columns:",
+      paste(required_columns[!required_columns %in% names(source_titems)], collapse = ", ")
+    )
+  )
+
 
   # Identify languages in current list of translations
-  languages <- names(curr.trans)
+  languages <- names(tdb)
 
   # Go through all sheets of current translation and compare against master
   updated.trans.sheets <- purrr::map(
     .x = languages,
-    .f = ~ update_translation_lelement(
-      curr.trans = curr.trans[[.x]],
-      new.items = new.items
+    .f = ~ update_tdb_lelement(
+      tdb = tdb[[.x]],
+      source_titems = source_titems
     )
   )
-  updated.trans.sheets <- setNames(updated.trans.sheets, c(languages))
+  updated.trans.sheets <- stats::setNames(updated.trans.sheets, c(languages))
 
   return(updated.trans.sheets)
 }
-
