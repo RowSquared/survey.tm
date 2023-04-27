@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(r2.tms)
+library(survey.tm)
 
-test_check("r2.tms")
+test_check("survey.tm")

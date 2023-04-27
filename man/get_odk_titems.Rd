@@ -7,7 +7,7 @@
 get_odk_titems(list, cols = c("label", "hint", "constraint_message"))
 }
 \arguments{
-\item{list}{List of sheets (as produced by \link[r2.tms]{get_odk_wsheet}that contain text items}
+\item{list}{List of sheets (as produced by \link[survey.tm]{get_odk_wsheet}that contain text items}
 
 \item{cols}{Columns on sheet(s) to keep for translation item}
 }

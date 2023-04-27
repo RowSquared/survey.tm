@@ -1,5 +1,5 @@
 
-# r2.tms
+# survey.tm
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -9,10 +9,10 @@ TBC.
 
 ## Installation
 
-You can install the development version of r2.tms through
+You can install the development version of survey.tm through
 
 ``` r
-devtools::install_github("petbrueck/r2.tms")
+devtools::install_github("petbrueck/survey.tm")
 ```
 
 ## Pre-requisites
@@ -29,9 +29,9 @@ Before working with one or more questionnaires, you need to run once the
 “Translation Master Sheet”.
 
 Please note: If you have not used any functionality of package
-`googlesheets4` before, at first run of any `r2.tms` function, you will
-need to generate an access token. Follow instructions in console and
-browser.
+`googlesheets4` before, at first run of any `survey.tm` function, you
+will need to generate an access token. Follow instructions in console
+and browser.
 
 ``` r
 # Optional: Indicate to `googlesheets4` which mail you will use. Avoids selecting pre-authorised account manually.

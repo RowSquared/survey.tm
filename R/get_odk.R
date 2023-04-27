@@ -37,7 +37,7 @@ get_odk_wsheet <- function(gs = "",
 
 #' Transform list of ODK sheets into data.table of text items that shall be translated
 #'
-#' @param list List of sheets (as produced by \link[r2.tms]{get_odk_wsheet}that contain text items
+#' @param list List of sheets (as produced by \link[survey.tm]{get_odk_wsheet}that contain text items
 #' @param cols Columns on sheet(s) to keep for translation item
 #'
 #' @import data.table
