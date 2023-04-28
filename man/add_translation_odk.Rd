@@ -5,7 +5,7 @@
 \title{Add translation to ODK Questionnaire File}
 \usage{
 add_translation_odk(
-  trans.list = list(),
+  tdb = list(),
   gs = NULL,
   sheets = c("survey", "choices"),
   translation.to.add = NULL,

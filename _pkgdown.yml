@@ -29,7 +29,7 @@ reference:
   - parse_suso_titems
 - subtitle: "Adding translation to questionnaire sheets"
 - contents:
-  - add_suso_sheet
+  - create_suso_sheet
   - create_suso_file
 - title: "Translation Processing"
   desc: >
@@ -37,7 +37,7 @@ reference:
 - contents:
   - get_tdb_data
   - update_tdb
-  - write_trans_tsheet
+  - write_tdb_data
 - title: "Translation Services"
   desc: >
     Functions that utilize the DeepL or Google Translate API to provide high-quality machine translation services.

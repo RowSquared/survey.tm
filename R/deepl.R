@@ -75,30 +75,30 @@ add_deepl_translation_dt <- function(dt,
 
 #' Query DeepL translation for text items in list of translations that are NA
 #'
-#' @param trans.list List of translations as returned by [get_tdb_data()] or [update_tdbs()]
-#' @param target_languages  Languages to be queried. By default uses names of `trans.list`
+#' @param tdb List of translations as returned by [get_tdb_data()] or [update_tdbs()]
+#' @param target_languages  Languages to be queried. By default uses names of `tdb`
 #' @param source_lang Source language, that is in which language questionnaire was designed. Default 'English'
 #' @param API_key Authentication Key for DeepL API
 #'#'
 #' @return List of translations
 #' @export
 #'
-add_deepl_translation <- function(trans.list = list(),
+add_deepl_translation <- function(tdb = list(),
                                   target_languages = NULL,
                                   source_lang = "English",
                                   API_key = NULL) {
 
   # IF LANGUAGES NOT SPECIFIED, ASSUME ALL LANGUAGES IN LIST
-  if (is.null(target_languages)) target_languages <- names(trans.list)
-  assertthat::assert_that(all(target_languages %in% names(trans.list)), msg = paste(
-    paste(target_languages[!target_languages %in% names(trans.list)], collapse = ","),
-    "are not elements in trans.list. Please check."
+  if (is.null(target_languages)) target_languages <- names(tdb)
+  assertthat::assert_that(all(target_languages %in% names(tdb)), msg = paste(
+    paste(target_languages[!target_languages %in% names(tdb)], collapse = ","),
+    "are not elements in tdb. Please check."
   ))
 
   # GO TRHOUGH ALL target_languages SPECIFIED
   purrr::walk(
     .x = target_languages,
-    .f = ~ add_deepl_translation_dt(trans.list[[.x]],
+    .f = ~ add_deepl_translation_dt(tdb[[.x]],
       source_lang = source_lang,
       target_lang = .x,
       API_key = API_key

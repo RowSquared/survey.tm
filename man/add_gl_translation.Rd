@@ -5,22 +5,22 @@
 \title{Query Google Translate API for text items in list of translations that are NA}
 \usage{
 add_gl_translation(
-  trans.list = list(),
+  tdb = list(),
   target_languages = NULL,
   source_lang = "English",
   auth = Sys.getenv("GL_AUTH")
 )
 }
 \arguments{
-\item{trans.list}{List of translations as returned by \code{\link[=get_tdb_data]{get_tdb_data()}} or \code{\link[=update_tdbs]{update_tdbs()}}}
+\item{tdb}{List of translations as returned by \code{\link[=get_tdb_data]{get_tdb_data()}} or \code{\link[=update_tdbs]{update_tdbs()}}}
 
-\item{target_languages}{Which languages of element names in 'trans.list' should be queried}
+\item{target_languages}{Which languages of element names in 'tdb' should be queried}
 
 \item{source_lang}{Source language, that is in which language questionnaire was designed. Default 'English'}
 
 \item{auth}{Location of service account credential json file. Default in environment variable 'GL_AUTH'. For more details see  \code{vignette("setup", package = "googleLanguageR")}}
 
-\item{languages}{Languages to be queried. By default uses names of \code{trans.list}}
+\item{languages}{Languages to be queried. By default uses names of \code{tdb}}
 }
 \value{
 List of translations

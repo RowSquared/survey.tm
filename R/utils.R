@@ -8,6 +8,26 @@ create.unique.var <- function(dt, regex = " ",col="value") {
 
 
 
+#' Check if Translation Database Object has all required columns
+#' Returns boolean
+#' @noRd
+check.tdb.cols <- function(dt) {
+
+  #Check all Sheets have expected column names
+  required_cols <- c("value.unique", "Questionnaire(s)", "Type", "Text_Item", "Status", "Translation", "Comment/Note")
+
+  names.dt <- names(dt)
+  check <- list()
+  check$result <- all(required_cols %in% names.dt)
+  check$missing.cols <- required_cols[!required_cols %in% names.dt]
+  return(check)
+}
+
+
+
+
+
+
 #' Check if named vector of character type
 #'
 #' @importFrom stringr str_to_lower str_remove_all

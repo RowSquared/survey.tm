@@ -4,10 +4,10 @@
 \alias{identify_sw_issues}
 \title{Identifies software-related mismatches between 'Text_Item' and 'Translation'}
 \usage{
-identify_sw_issues(trans.list = list(), pattern = "\%[a-zA-Z0-9_]+\%")
+identify_sw_issues(tdb = list(), pattern = "\%[a-zA-Z0-9_]+\%")
 }
 \arguments{
-\item{trans.list}{List. Translations created by \code{get_tdb_data()} or \code{update_tdb()}}
+\item{tdb}{List. Translations created by \code{get_tdb_data()} or \code{update_tdb()}}
 
 \item{pattern}{Character. Regular expression that identifies text item in Original/Translation (e.g. text substitution '\%rostertitle\%')}
 

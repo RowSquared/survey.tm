@@ -37,7 +37,7 @@ suso_trans_templates <- get_suso_tfiles(
 )
 
 # Access the 'Source Questionnaire' of the first questionnaire template
-translations_first_questionnaire <- suso_trans_templates[["NAME OF YOUR QUESTIONNAIRE"]]
+translations_first_questionnaire <- suso_trans_templates[["NAME-OF-QUESTIONNAIRE"]]
 
 # Access the "Translations" sheet for the first questionnaire
 translations_sheet_first_questionnaire <- translations_first_questionnaire[["Translations"]]

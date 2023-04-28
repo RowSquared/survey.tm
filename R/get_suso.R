@@ -87,7 +87,7 @@ get_suso_tfile <- function(questionnaire = "",
 #' @import data.table
 #' @importFrom httr GET authenticate
 #' @importFrom readxl excel_sheets
-#' @importFrom purrr map list_flatten
+#' @importFrom purrr map list_flatten flatten
 #'
 #' @return Returns a nested list, called 'Source Questionnaire(s)'. The top-level elements represent questionnaires, and each contains a list of data.tables corresponding to the sheets within the respective questionnaire.
 #' @export
@@ -108,7 +108,7 @@ get_suso_tfile <- function(questionnaire = "",
 #' )
 #'
 #' # Access the 'Source Questionnaire' of the first questionnaire template
-#' translations_first_questionnaire <- suso_trans_templates[["NAME OF YOUR QUESTIONNAIRE"]]
+#' translations_first_questionnaire <- suso_trans_templates[["NAME-OF-QUESTIONNAIRE"]]
 #'
 #' # Access the "Translations" sheet for the first questionnaire
 #' translations_sheet_first_questionnaire <- translations_first_questionnaire[["Translations"]]

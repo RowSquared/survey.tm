@@ -68,7 +68,7 @@ get_sw_issues_dt <- function(dt,
 #'
 #' Updates column 'Status' and leaves a 'Comment/Note' that explains which issue is identified.
 #'
-#' @param trans.list List. Translations created by `get_tdb_data()` or `update_tdb()`
+#' @param tdb List. Translations created by `get_tdb_data()` or `update_tdb()`
 #' @param pattern Character. Regular expression that identifies text item in Original/Translation (e.g. text substitution '%rostertitle%')
 #' @param languages Character Vector. For which sheets/languages shall software-related mismatches be checked?
 #'
@@ -76,48 +76,48 @@ get_sw_issues_dt <- function(dt,
 #' @export
 #'
 identify_sw_issues <- function(
-    trans.list = list(),
+    tdb = list(),
     pattern="%[a-zA-Z0-9_]+%"
 ) {
 
   #Copy list to avoid replacement in place
-  trans.list <- copy(trans.list)
+  tdb <- copy(tdb)
 
   #Identify issues for each translation
   list.issues <- purrr::map(
-    .x = names(trans.list),
+    .x = names(tdb),
     .f = ~ get_sw_issues_dt(new_tdb[[.x]],
                                lang=.x)
   )
-  list.issues <- setNames(list.issues, names(trans.list))
+  list.issues <- setNames(list.issues, names(tdb))
 
   #Update each Translation sheet
-  updated.list <- lapply(names(trans.list), \(x) {
+  updated.list <- lapply(names(tdb), \(x) {
 
     # Get row identifier
-    trans.list[[x]][, seq.id := 1:.N]
+    tdb[[x]][, seq.id := 1:.N]
 
     #Update Status
-    trans.list[[x]][value.unique %in%  list.issues[[x]]$value.unique,Status:="to update"]
+    tdb[[x]][value.unique %in%  list.issues[[x]]$value.unique,Status:="to update"]
 
     #Get in issues
-    trans.list[[x]] <- merge(trans.list[[x]],list.issues[[x]],by="value.unique",all.x=T)
+    tdb[[x]] <- merge(tdb[[x]],list.issues[[x]],by="value.unique",all.x=T)
 
     ###Update Comment###
     #Replace if Comment/Note empty
-    trans.list[[x]][is.na(`Comment/Note`) & !is.na(comment.issue),
+    tdb[[x]][is.na(`Comment/Note`) & !is.na(comment.issue),
           `Comment/Note`:=comment.issue]
 
     #Clear Comment/note if no issue is present any longer (and any software comment in there)
-    trans.list[[x]][grepl("not found in|Count of text substitution",`Comment/Note`)
+    tdb[[x]][grepl("not found in|Count of text substitution",`Comment/Note`)
           & is.na(comment.issue), `Comment/Note`:=NA]
 
     #Back in order as received
-    setorder(trans.list[[x]],seq.id)
-    trans.list[[x]][,c("comment.issue","seq.id"):=NULL]
+    setorder(tdb[[x]],seq.id)
+    tdb[[x]][,c("comment.issue","seq.id"):=NULL]
 
   })
-  updated.list <- setNames(updated.list, names(trans.list))
+  updated.list <- setNames(updated.list, names(tdb))
 
   #Return the list
   return(updated.list)

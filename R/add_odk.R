@@ -1,7 +1,7 @@
 
 #' Add translation to ODK Questionnaire File
 #'
-#' @param trans.list
+#' @param tdb
 #' @param gs Identifier of a Google Sheet (see [googlesheets4::sheets_id()]) that contains ODK questionnaire file
 #' @param sheets
 #' @param translation.to.add
@@ -10,7 +10,7 @@
 #' @return
 #' @export
 #'
-add_translation_odk <- function(trans.list = list(),
+add_translation_odk <- function(tdb = list(),
                                 gs = NULL, # THE QUESTIONNAIRE SHEET OF ODK QX
                                 sheets = c("survey", "choices"), # ON WHICH SHEET IN QX
                                 translation.to.add = NULL, # WHICH TRANSLATION TO BE USED
@@ -23,7 +23,7 @@ add_translation_odk <- function(trans.list = list(),
   #TODO: PRINT WHICH TYPE IS ADDED AS COLUMN
   #TODO: REDO CODE (e.g. LOOP)
 
-  assertthat::assert_that(translation.to.add %in% names(trans.list),
+  assertthat::assert_that(translation.to.add %in% names(tdb),
     msg = paste(translation.to.add, "is not an element in transl.list")
   )
 
@@ -36,7 +36,7 @@ add_translation_odk <- function(trans.list = list(),
   ))
 
   # TAKE TRANSLATION SHEET
-  transsheet <- trans.list[[translation.to.add]]
+  transsheet <- tdb[[translation.to.add]]
 
 
   ## ADD TRANSLATION BY SHEET --------------------------------------------------------
@@ -79,7 +79,7 @@ add_translation_odk <- function(trans.list = list(),
       setorder(qx.sheet, rowid)
 
       # WRITE TO QUESTIONNAIRE FILE
-      write_trans_tsheet(
+      write_tdb_data(
         qx.sheet[, .SD, .SDcols = trans.col],
         gs = gs,
         sheet = sheet,

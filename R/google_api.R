@@ -57,26 +57,26 @@ add_gl_translate_dt <- function(dt,
 #' Query Google Translate API for text items in list of translations that are NA
 #'
 #'
-#' @param trans.list List of translations as returned by [get_tdb_data()] or [update_tdbs()]
-#' @param languages Languages to be queried. By default uses names of `trans.list`
+#' @param tdb List of translations as returned by [get_tdb_data()] or [update_tdbs()]
+#' @param languages Languages to be queried. By default uses names of `tdb`
 #' @param source_lang Source language, that is in which language questionnaire was designed. Default 'English'
-#' @param target_languages Which languages of element names in 'trans.list' should be queried
+#' @param target_languages Which languages of element names in 'tdb' should be queried
 #' @param auth Location of service account credential json file. Default in environment variable 'GL_AUTH'. For more details see  \code{vignette("setup", package = "googleLanguageR")}
 
 #' @return List of translations
 #' @export
 #'
-add_gl_translation <- function(trans.list = list(),
+add_gl_translation <- function(tdb = list(),
                                target_languages = NULL,
                                source_lang = "English",
                                auth = Sys.getenv("GL_AUTH")) {
   # TODO: ACTUALLY HERE ONLY THOSE WHICH ARE NOT IN PARTICULAR STATUS?
 
   # IF LANGUAGES NOT SPECIFIED, ASSUME ALL LANGUAGES IN LIST
-  if (is.null(target_languages)) target_languages <- names(trans.list)
-  assertthat::assert_that(all(target_languages %in% names(trans.list)), msg = paste(
-    paste(target_languages[!target_languages %in% names(trans.list)], collapse = ","),
-    "are not elements in trans.list. Please check."
+  if (is.null(target_languages)) target_languages <- names(tdb)
+  assertthat::assert_that(all(target_languages %in% names(tdb)), msg = paste(
+    paste(target_languages[!target_languages %in% names(tdb)], collapse = ","),
+    "are not elements in tdb. Please check."
   ))
 
   # Authenticate
@@ -87,7 +87,7 @@ add_gl_translation <- function(trans.list = list(),
   # GO TRHOUGH ALL target_languages SPECIFIED
   purrr::walk(
     .x = target_languages,
-    .f = ~ add_gl_translate_dt(trans.list[[.x]],
+    .f = ~ add_gl_translate_dt(tdb[[.x]],
       source_lang = source_lang,
       target_lang = .x
     )

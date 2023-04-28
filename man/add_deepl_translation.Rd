@@ -5,16 +5,16 @@
 \title{Query DeepL translation for text items in list of translations that are NA}
 \usage{
 add_deepl_translation(
-  trans.list = list(),
+  tdb = list(),
   target_languages = NULL,
   source_lang = "English",
   API_key = NULL
 )
 }
 \arguments{
-\item{trans.list}{List of translations as returned by \code{\link[=get_tdb_data]{get_tdb_data()}} or \code{\link[=update_tdbs]{update_tdbs()}}}
+\item{tdb}{List of translations as returned by \code{\link[=get_tdb_data]{get_tdb_data()}} or \code{\link[=update_tdbs]{update_tdbs()}}}
 
-\item{target_languages}{Languages to be queried. By default uses names of \code{trans.list}}
+\item{target_languages}{Languages to be queried. By default uses names of \code{tdb}}
 
 \item{source_lang}{Source language, that is in which language questionnaire was designed. Default 'English'}
 
