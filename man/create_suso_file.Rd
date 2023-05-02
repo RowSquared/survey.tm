@@ -32,15 +32,14 @@ The generated file can be uploaded to the Survey Solutions Designer.
 }
 \examples{
 \dontrun{
-#Take the 'German' Translation from database and merge into the source questionnaire as returned by \code{\link{get_suso_tfiles}}
-#Consider only text items of particular statuses defined by Translator
+# Take the 'German' Translation from database and merge into the source questionnaire as returned by \code{\link{get_suso_tfiles}}
+# Consider only text items of particular statuses defined by Translator
 create_suso_file(
-tdb.language = new_tdb[["German"]],
-source_questionnaire = suso_trans_templates[["NAME-OF-QUESTIONNAIRE"]],
-statuses = c("Machine", "reviewed", "translated"),
-path = "your-path/German_NAME-OF-QUESTIONNAIRE.xlsx"
+  tdb.language = new_tdb[["German"]],
+  source_questionnaire = suso_trans_templates[["NAME-OF-QUESTIONNAIRE"]],
+  statuses = c("Machine", "reviewed", "translated"),
+  path = "your-path/German_NAME-OF-QUESTIONNAIRE.xlsx"
 )
 }
-
 
 }

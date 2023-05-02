@@ -107,7 +107,7 @@ parse_suso_titems <- function(tmpl_list,
   }
 
   # Go through all questionnaires in tmpl_list list and bind in one
-  dt <- purrr::map_df(
+  dt <- rbindlist(purrr::map(
     .x = names(tmpl_list),
     .f = ~ parse_suso_titems.by.qx(
       questionnaire_list = tmpl_list[[.x]],
@@ -115,7 +115,8 @@ parse_suso_titems <- function(tmpl_list,
       sheets = sheets,
       types = types
     )
-  )
+  ))
+
   # Convenience, convert to data.table
   dt <- as.data.table(dt)
 

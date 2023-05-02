@@ -261,6 +261,7 @@ TO BE DOCUMENTED & CLEANED UP
 ``` r
 # Query Google API
 add_gl_translation(new_tdb)
+
 # Query Deepl
 add_deepl_translation(new_tdb,
   API_key = Sys.getenv("deepl_key")
@@ -270,7 +271,6 @@ add_deepl_translation(new_tdb,
 ### Validate Translation
 
 ``` r
-
 new_tdb <- identify_sw_issues(new_tdb)
 ```
 
@@ -296,6 +296,9 @@ new_tdb <- identify_sw_issues(new_tdb)
 - [ ] devtools::check() tests dont pass locally while devtools::tests()
   does
 - [ ] ODK Stream
+- [ ] If new questionnaire added for which text item exist, not
+  reflected in “QUestionnaire(s)” cell (sticks with old questionnaire)
+- [ ] Remove the value.unique in Google Sheet?
 
 ### Software Text Mismatch
 
