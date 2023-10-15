@@ -108,6 +108,8 @@ parse_odk_titems <- function(dt) {
 
   # CLEANUP - REMOVE ONLY PROPER WHITESPACE TO NOT REMOVE TABS AND NEWLINES
   create.unique.var(dt)
+  #Remove '\r\n' if at end of string as it would not be added to Google Sheets
+  create.unique.var(dt, regex="\\\r\\\n$",col="value.unique")
 
   # COLLAPSE
   dt <- collapse_titems(dt)

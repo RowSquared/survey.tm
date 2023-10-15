@@ -122,6 +122,8 @@ parse_suso_titems <- function(tmpl_list,
 
   # Cleanup Text item to catch more duplicate text items
   create.unique.var(dt)
+  #Remove '\r\n' if at end of string as it would not be added to Google Sheets
+  create.unique.var(dt, regex="\\\r\\\n$",col="value.unique")
 
   # Collapse if specified
   if (collapse) dt <- collapse_titems(dt)

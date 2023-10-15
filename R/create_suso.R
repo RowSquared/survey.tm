@@ -28,6 +28,9 @@ create_suso_sheet <- function(source_questionnaire = "",
 
   # CREATE MERGE.VAR
   create.unique.var(qx.tsheet, col = "Original text")
+  #Remove '\r\n' if at end of string as it would not be added to Google Sheets
+  create.unique.var(qx.tsheet, regex="\\\r\\\n$", col = "value.unique")
+
 
   # ADD TRANSLATION TO DT
   qx.tsheet <- merge(
@@ -40,7 +43,7 @@ create_suso_sheet <- function(source_questionnaire = "",
 
 
   # Check for duplicate Option Title
-  if (any(duplicated(qx.tsheet[!is.na(Translation)], by = c("Entity Id", "Type", "Translation")))) {
+  if (any(duplicated(qx.tsheet[!is.na(Translation)& Type == "OptionTitle"], by = c("Entity Id", "Type", "Translation")))) {
     # Identify duplicates
     qx.tsheet[!is.na(Translation) & Type == "OptionTitle", dupl := .N > 1,
       by = c("Entity Id", "Type", "Translation")
