@@ -3,11 +3,17 @@
 #' @inheritParams  update_tdb
 #' @noRd
 update_tdb_lelement <- function(tdb,
-                                        source_titems) {
+                                source_titems) {
   # First Scenarion: Text Items exist in current Translation sheet and is found again in Master Questionnaire
   dt1 <- tdb[as.character(value.unique) %chin% source_titems$value.unique]
+  #If a text item reappears, change status to "to translate" & Leave a note
+  comment <- "Item reappeared in CAPI script."
+  dt1[Status=="outdated" & is.na(`Comment/Note`),
+     `Comment/Note`:=fcase(!is.na(`Comment/Note`),paste0(`Comment/Note`,"\n",comment),
+                           is.na(`Comment/Note`),comment)]
+  dt1[Status=="outdated",Status:="to be checked"]
 
-  # Second Scenario: New items in Master Questionnaire not found yet in Translation Sheet
+  # Second Scenario: New items in Source Questionnaire not found yet in Translation Sheet
   dt2 <- source_titems[
     !value.unique %chin% as.character(tdb$value.unique),
     .(value.unique,
@@ -17,9 +23,14 @@ update_tdb_lelement <- function(tdb,
     )
   ]
 
+  #Third Scenario: Items in Translation are no longer in CAPI Form => Keep but place to new Status
+  #TODO: Write results of update?
+  dt3 <- tdb[!as.character(value.unique) %chin% source_titems$value.unique]
+  dt3[,Status:="outdated"]
+
   # Bind to one
   dt <- rbindlist(list(
-    dt1, dt2
+    dt1, dt2, dt3
   ), fill = TRUE)
 
   # Set Status to "to translate" if NA
@@ -27,7 +38,7 @@ update_tdb_lelement <- function(tdb,
 
   # Get in current sequential order, using the Master Questionnaire as reference
   dt <- merge(dt, source_titems[, .(value.unique, seq.id)], by = "value.unique", all.x = T)
-  setorder(dt, seq.id)
+  setorder(dt, seq.id,na.last = T)
   dt[, "seq.id" := NULL]
 
   return(dt)
