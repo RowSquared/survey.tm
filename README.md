@@ -122,7 +122,8 @@ the `parse_suso_titems()` function.
 #Aggregate and consolidate text items from multiple questionnaires and sheets into a single data.table using parse_suso_titems().
 source_titems <- parse_suso_titems(
   tmpl_list = suso_trans_templates, #Nested list as returned by `get_suso_tfiles()`
-  collapse = TRUE # Keep only unique text items across questionnaires
+  collapse = TRUE, # Keep only unique text items across questionnaires
+  qcode_pattern = "^Q\\d+.\\s" #Remove question coding (e.g. Q1.). Needs to be added later in `create_suso_file`
 )
 ```
 
@@ -243,7 +244,7 @@ one can use to upload to the Survey Solutions Designer.
 create_suso_file(
   tdb.language = new_tdb[["German"]],
   source_questionnaire = suso_trans_templates[["NAME-OF-QUESTIONNAIRE"]],
-  statuses = c("Machine", "reviewed", "translated"),
+  statuses = c("machine", "reviewed", "translated"),
   path = "your-path/German_NAME-OF-QUESTIONNAIRE.xlsx"
 )
 ```
@@ -279,13 +280,11 @@ new_tdb <- identify_sw_issues(new_tdb)
 ### Before sharing with wider audience
 
 - [ ] Revise create_suso_file() (simplify, better documentaton)
-- [ ] question_coding() revise approach/improve docs (as part of
-  parse_xx_titems()?)
 - [ ] identify_sw_issues() revise approach/improve docs
 - [ ] add_deepl_translation() / add_gl_translation() revise
   approach/improve docs
 
-### General / High-Level
+### Misc.
 
 - [ ] Cleanup of function names & argument naming convention to make
   clear between translation and questionnaire
@@ -299,11 +298,8 @@ new_tdb <- identify_sw_issues(new_tdb)
 - [ ] If new questionnaire added for which text item exist, not
   reflected in “QUestionnaire(s)” cell (sticks with old questionnaire)
 - [ ] Remove the value.unique in Google Sheet?
-
-### Software Text Mismatch
-
 - [ ] Color coding
-- [ ] Check HTML-Tags
+- [ ] Rename ‘Type’ if read from a “@@” sheet?
 
 ### GoogleAPI/Deepl
 

@@ -51,11 +51,15 @@ get_suso_tfile <- function(questionnaire = "",
       paste(sheets[!sheets %in% sheets.file], collapse = ", "),
       "are no sheet(s) in Designer Template file", questionnaire
     ))
+    #And keep only those
+    sheets <- sheets[sheets %in% sheets.file]
   }
+
+  if (!is.null(sheets)) sheets.read <- sheets else sheets.read <-  sheets.file
 
   # READ EACH SHEET INTO LIST AND SET NAMES
   sheet.list <- purrr::map(
-    .x = sheets.file,
+    .x = sheets.read,
     .f = ~ as.data.table(readxl::read_excel(
       path = tmp.file,
       sheet = .x,
@@ -63,7 +67,7 @@ get_suso_tfile <- function(questionnaire = "",
     ))
   )
 
-  sheet.list <- setNames(sheet.list, c(sheets.file))
+  sheet.list <- setNames(sheet.list, c(sheets.read))
 
   # Place the Translation into list, to allow easier handling of multiple questionnaires
   list.final <- list(sheet.list)

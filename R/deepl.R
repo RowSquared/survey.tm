@@ -21,6 +21,7 @@ add_deepl_translation_dt <- function(dt,
   # TODO: CHECK IF ONE QUERY RETURNING MULTIPLE LANGUAGES SAVES CHARACTERS?
   # CHECK INPUT
   # Any translation actually missing?
+
   if (nrow(dt[is.na(Translation)]) == 0) {
     message(paste("dt has no row with missing 'Translation'. DeepL will not be queried for", target_lang))
     return(invisible(dt))
@@ -51,7 +52,7 @@ add_deepl_translation_dt <- function(dt,
 
 
   # QUERY FOR MISSING TRANSLATIONS
-  dt[is.na(Translation), Status := "Machine"]
+  dt[is.na(Translation), Status := "machine"]
   dt[is.na(Translation), Translation :=
     deeplr::translate2(
       text = c(Text_Item),
