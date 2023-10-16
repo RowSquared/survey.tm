@@ -9,7 +9,7 @@
 create_suso_sheet <- function(source_questionnaire = "",
                               sheet = "",
                               language.tdb.dt = "",
-                              pattern = NULL) {
+                              qcode_pattern = NULL) {
   # Get Sheet from List
   # TODO: Without copy and in place change?
   qx.tsheet <- copy(source_questionnaire[[sheet]])
@@ -22,9 +22,9 @@ create_suso_sheet <- function(source_questionnaire = "",
 
   # Remove Coding
   # Get col of code itself
-  if (!is.null(pattern)) qx.tsheet[grepl(pattern, `Original text`), coding := stringr::str_extract(`Original text`, pattern)]
+  if (!is.null(qcode_pattern)) qx.tsheet[grepl(qcode_pattern, `Original text`), coding := stringr::str_extract(`Original text`, qcode_pattern)]
   # Remove Col from Original Text
-  if (!is.null(pattern)) qx.tsheet[grepl(pattern, `Original text`), `Original text` := stringr::str_remove(`Original text`, pattern)]
+  if (!is.null(qcode_pattern)) qx.tsheet[grepl(qcode_pattern, `Original text`), `Original text` := stringr::str_remove(`Original text`, qcode_pattern)]
 
   # CREATE MERGE.VAR
   create.unique.var(qx.tsheet, col = "Original text")
@@ -61,7 +61,7 @@ create_suso_sheet <- function(source_questionnaire = "",
 
   # Get back Coding to Original Text and Translation
   # Get col of code itself
-  if (!is.null(pattern)) {
+  if (!is.null(qcode_pattern)) {
     qx.tsheet[!is.na(coding), `:=`
     (
       `Original text` = paste0(coding, `Original text`),
@@ -74,6 +74,8 @@ create_suso_sheet <- function(source_questionnaire = "",
   setorder(qx.tsheet, rowid)
   qx.tsheet[, c("rowid", "value.unique") := NULL]
 
+  #Lastly, remove \n\r as there is conversion issue between GS, R, Excel and SuSo
+  qx.tsheet[grepl("\\\n|\\r",Translation),Translation:=gsub("\\\n|\\\r"," ",Translation)]
 
   # Return
   return(qx.tsheet)
@@ -92,7 +94,7 @@ create_suso_sheet <- function(source_questionnaire = "",
 #' @param source_questionnaire List. 'Questionnaire Template' to which translation shall be added.  Usually an element of list returned by \code{\link{get_suso_tfiles}}
 #' @param path Character. Writable file path where Translation File should be stored at, including file name and extension
 #' @param sheets Character vector. For which sheets of questionnaire template file language will be added. Default all sheets that are found in template file
-#' @param pattern Regular expression that matches question coding. Should be specified if `remove_coding()` was used to process translation file
+#' @param qcode_pattern Regular expression that matches question coding. Should be specified if used in `parse_suso_titems()`.
 #' @param statuses Character vector. Which text items of which statuses from Translation Google Sheet should be merged?
 #'
 #' @importFrom "stats" "setNames"
@@ -102,7 +104,8 @@ create_suso_sheet <- function(source_questionnaire = "",
 
 #' @examples
 #' \dontrun{
-#' # Take the 'German' Translation from database and merge into the source questionnaire as returned by \code{\link{get_suso_tfiles}}
+#' # Take the 'German' Translation from database and merge into the source
+#' questionnaire as returned by \code{\link{get_suso_tfiles}}
 #' # Consider only text items of particular statuses defined by Translator
 #' create_suso_file(
 #'   tdb.language = new_tdb[["German"]],
@@ -116,8 +119,8 @@ create_suso_file <- function(tdb.language,
                              source_questionnaire = list(),
                              path = stop("'path' must be specified"),
                              sheets = NULL,
-                             statuses = c("Machine", "reviewed", "translated"),
-                             pattern = NULL) {
+                             statuses = c("machine", "reviewed", "translated"),
+                             qcode_pattern = NULL) {
   # TODO: CHECK IF ALL ITEMS HAVE NOW TRANSLATION. IF NOT, MAYBE FLAG THAT PATTERN IS NOT SUPPLIED?
   # TODO: ASSERTS ASSERTS! Source Questionnaire needs to be SurSol Standard; translation database check;
 
@@ -188,7 +191,7 @@ create_suso_file <- function(tdb.language,
       source_questionnaire = source_questionnaire,
       sheet = .x,
       language.tdb.dt = language.tdb.dt,
-      pattern = pattern
+      qcode_pattern = qcode_pattern
     )
   )
 

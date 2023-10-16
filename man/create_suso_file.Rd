@@ -9,8 +9,8 @@ create_suso_file(
   source_questionnaire = list(),
   path = stop("'path' must be specified"),
   sheets = NULL,
-  statuses = c("Machine", "reviewed", "translated"),
-  pattern = NULL
+  statuses = c("machine", "reviewed", "translated"),
+  qcode_pattern = NULL
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ create_suso_file(
 
 \item{statuses}{Character vector. Which text items of which statuses from Translation Google Sheet should be merged?}
 
-\item{pattern}{Regular expression that matches question coding. Should be specified if \code{remove_coding()} was used to process translation file}
+\item{qcode_pattern}{Regular expression that matches question coding. Should be specified if used in \code{parse_suso_titems()}.}
 }
 \description{
 This function creates an .xlsx file based on the 'Translation Database' list and Survey Solutions source questionnaire.
@@ -32,7 +32,8 @@ The generated file can be uploaded to the Survey Solutions Designer.
 }
 \examples{
 \dontrun{
-# Take the 'German' Translation from database and merge into the source questionnaire as returned by \code{\link{get_suso_tfiles}}
+# Take the 'German' Translation from database and merge into the source
+questionnaire as returned by \code{\link{get_suso_tfiles}}
 # Consider only text items of particular statuses defined by Translator
 create_suso_file(
   tdb.language = new_tdb[["German"]],

@@ -8,7 +8,7 @@ create_suso_sheet(
   source_questionnaire = "",
   sheet = "",
   language.tdb.dt = "",
-  pattern = NULL
+  qcode_pattern = NULL
 )
 }
 \arguments{
@@ -16,7 +16,7 @@ create_suso_sheet(
 
 \item{sheet}{Sheet in \code{source_questionnaire} to which translation should be added}
 
-\item{pattern}{Regular expression that matches question coding. Should be specified if \code{remove_coding()} was used to process translation file}
+\item{qcode_pattern}{Regular expression that matches question coding. Should be specified if used in \code{parse_suso_titems()}.}
 
 \item{data.table}{of translation to be added to Questionnaire}
 }

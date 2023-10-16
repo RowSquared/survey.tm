@@ -9,7 +9,8 @@ parse_suso_titems(
   sheets = NULL,
   types = c("Title", "Instruction", "OptionTitle", "ValidationMessage", "SpecialValue",
     "FixedRosterTitle"),
-  collapse = TRUE
+  collapse = TRUE,
+  qcode_pattern = NULL
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ parse_suso_titems(
 \item{types}{A character vector specifying the types of text items to keep.}
 
 \item{collapse}{Boolean. If TRUE, only unique text items will be returned.}
+
+\item{qcode_pattern}{Optional. Regex pattern to remove question codes, e.g., "Q1." in "Q1. How old are you?". Default is NULL, keeping texts unmodified.}
 }
 \value{
 A data.table containing (unique) text items found across questionnaires in \code{tmpl_list}.

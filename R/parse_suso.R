@@ -49,7 +49,7 @@ parse_suso_titems.by.qx <- function(
 #' @param sheets A character vector of sheet names within `tmpl_list` files to be parsed. By default, all sheets are parsed.
 #' @param types  A character vector specifying the types of text items to keep.
 #' @param collapse Boolean. If TRUE, only unique text items will be returned.
-#'
+#' @param qcode_pattern Optional. Regex pattern to remove question codes, e.g., "Q1." in "Q1. How old are you?". Default is NULL, keeping texts unmodified.
 #' @import data.table
 #' @importFrom readxl excel_sheets
 #' @importFrom purrr map_df
@@ -71,10 +71,13 @@ parse_suso_titems <- function(tmpl_list,
                                   "Title", "Instruction", "OptionTitle", "ValidationMessage",
                                   "SpecialValue", "FixedRosterTitle"
                                 ),
-                                collapse = TRUE) {
+                              collapse = TRUE,
+                              qcode_pattern=NULL
+                              ) {
   # Check input
   # Types
   types <- match.arg(types, several.ok = T)
+
 
   # Translation
   assertthat::assert_that(
@@ -93,7 +96,7 @@ parse_suso_titems <- function(tmpl_list,
     # Check if user-supplied sheet is actually in the sheets, if not provide a warning
     # Get the sheets in tmpl_list list
     sheets.list <- unlist(lapply(tmpl_list, names))
-
+    sheets.not.found <- sheets[!sheets %in% sheets.list]
     # Get which ones are not found
     if (length(sheets.not.found) > 0) {
       warning(paste(
@@ -105,6 +108,22 @@ parse_suso_titems <- function(tmpl_list,
     # #If "Translation" not within sheets, add it
     # if (!"Translations" %in% sheets) sheets <- c(sheets,"Translations")
   }
+
+  #Question Code Pattern
+  if (!is.null(qcode_pattern)) {
+    # Check if it's a character string
+    if (!is.character(qcode_pattern) || length(qcode_pattern) != 1) {
+      stop("qcode_pattern should be a single character string.")
+    }
+
+    # Test if it's a valid regex
+    tryCatch({
+      grepl(qcode_pattern, "")
+    }, error = function(e) {
+      stop("Invalid regular expression provided in qcode_pattern.")
+    })
+  }
+
 
   # Go through all questionnaires in tmpl_list list and bind in one
   dt <- rbindlist(purrr::map(
@@ -124,6 +143,10 @@ parse_suso_titems <- function(tmpl_list,
   create.unique.var(dt)
   #Remove '\r\n' if at end of string as it would not be added to Google Sheets
   create.unique.var(dt, regex="\\\r\\\n$",col="value.unique")
+
+  #Remove Coding
+  if (!is.null(qcode_pattern)) dt <- remove_coding(dt,
+                      pattern=qcode_pattern)
 
   # Collapse if specified
   if (collapse) dt <- collapse_titems(dt)
