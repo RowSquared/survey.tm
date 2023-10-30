@@ -81,7 +81,7 @@ add_translation_odk <- function(tdb = list(),
       # WRITE TO QUESTIONNAIRE FILE
       write_tdb_data(
         qx.sheet[, .SD, .SDcols = trans.col],
-        gs = gs,
+        ss = ss,
         sheet = sheet,
         range = googlesheets4::cell_cols(col.start),
         col_names = TRUE

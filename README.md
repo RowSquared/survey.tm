@@ -1,26 +1,48 @@
 
 # survey.tm
 
-A collection of functions that aims to streamline the management and
-updating of translations in multilingual surveys using CAPI software.
+A collection of functions that significantly eases and robustifies the
+management and updating of translations in multilingual surveys using
+CAPI software, even when questionnaires undergo changes or have multiple
+translations.
 
 The package automatically extracts text items from survey
 questionnaires, consolidates them, and cross-references them with an
-existing translation database hosted on Google Sheets, ensuring that
-translations stay up-to-date and synchronized with the latest version of
-the questionnaire(s).
+existing translation database hosted on Google Sheets. This process
+ensures that translations stay up-to-date and synchronized with the
+latest version of the questionnaire(s), thereby reducing manual work,
+simplifying the translation management, minimizing mistakes, and
+enhancing consistency.
 
 The ‘Translation Database’, which is a Google Sheet, serves as the
 central hub where translators can add translations to text items of
-respective questionnaires, offering a simple and intuitive user
-interface that also allows them to track their progress and flag text
-items for future review or revision.
+respective questionnaires. It offers a simple and intuitive user
+interface that’s good not only for managing the translation tool but
+also for translators. It’s easily scalable to multiple languages,
+enabling translators to track their progress, flag text items for future
+review or revision, and making the translation of similar types of
+surveys faster and more consistent. With a setup time of just 5 minutes,
+this package is designed to save you hours in translation management.
+
+## Prerequisites
+
+- R installed on your machine. If not, download and install R from
+  [here](https://cran.r-project.org/)
+- A valid Google account for accessing [Google
+  Sheets](https://www.google.com/sheets/about/).
+- A CAPI questionnaire within [Survey
+  Solutions](https://designer.mysurvey.solutions/questionnaire/my).
+
+Once you have the prerequisites ready, proceed with the installation of
+`survey.tm` as outlined below.
 
 ## Installation
 
 You can install the development version of survey.tm through
 
 ``` r
+# If you don't have `devtools` installed, uncomment the line below to install it:
+# install.packages("devtools")
 devtools::install_github("petbrueck/survey.tm")
 ```
 
@@ -96,12 +118,6 @@ suso_trans_templates <- get_suso_tfiles(
   user = "your_email@example.com", # Registered with Survey Solutions Designer
   password = "your_password"
   )
-
-# Access the 'Source Questionnaire' of the first questionnaire template
-translations_first_questionnaire <- suso_trans_templates[["NAME-OF-QUESTIONNAIRE"]]
-# Access the "Translations" sheet for the first questionnaire
-translations_sheet_first_questionnaire <- translations_first_questionnaire[["Translations"]]
-# Note: The last four rows are an example of how to access the returned object "suso_trans_templates". In most cases, you will not need to access the object in this way.
 ```
 
 #### 1.2 Parse Questionnaire Templates
@@ -164,13 +180,14 @@ Compares ‘Source Questionnaire’ text items (object returned by
 `parse_odk_titems()` or `parse_suso_titems()`) against the ‘Translation
 Database’ list returned by `get_tdb_data()`.
 
-Removes any text item in any sheet in the translation database object
-that no longer is part of the source questionnaire(s). Adds any new text
-item from source questionnaire(s) not yet found in the database.
+Adds any new text item from source questionnaire(s) not yet found in the
+database. Text items in any sheet in the translation database object
+that no longer is part of the source questionnaire(s) does remain in the
+object but status is changed to `outdated`.
 
 List returned will be used for subsequent processes, including creating
-‘Translated Questionnaires’ for uplöad to CAPI system as well as pushed
-to the ‘Translation Database’
+‘Translated Questionnaires’ for upload to CAPI system and/or pushed to
+the ‘Translation Database’
 
 </details>
 
@@ -211,15 +228,6 @@ write_tdb_data(new_tdb[["German"]],
     ss = "GOOGLE-SHEET-IDENTIFIER",
     sheet = "German"
   )
-
-#Or write all languages found in 'Translation Database' object to the Google Sheet
-purrr::walk(
-  .x = names(new_tdb),
-  .f = ~ write_tdb_data(new_tdb[[.x]],
-    ss = "GOOGLE-SHEET-IDENTIFIER",
-    sheet = .x
-  )
-)
 ```
 
 #### 2.2 Create ‘Translation File’ for upload to CAPI software
@@ -280,15 +288,30 @@ new_tdb <- identify_sw_issues(new_tdb)
 ### Before sharing with wider audience
 
 - [ ] Revise create_suso_file() (simplify, better documentaton)
-- [ ] identify_sw_issues() revise approach/improve docs
-- [ ] add_deepl_translation() / add_gl_translation() revise
-  approach/improve docs
+- [ ] identify_sw_issues() double check approach & improve docs
+- [ ] add_deepl_translation() / add_gl_translation() revise approach &
+  improve docs
+- [ ] Add a sample-project using openly shared google sheet/qnrs?
+- [ ] A main wrapper function?
+- [ ] setup_tsheet: no longer checking if exists!
+- [ ] Add similarity score
+
+### Documentation
+
+- [ ] Basic Workflow, maybe make this more user focused, e.g. split what
+  they need to do, and what the package does in the background
+- [ ] Documentation (Functions + Google Translation Sheet)
+- [ ] STress that multiple sheets for separate language, but contain all
+  the same (if no manual tweaks are done by user)
+- [ ] Add note on managing secrets in doc where credentials are asked
 
 ### Misc.
 
+- [ ] move to R2 repo
+- [ ] Add a sheet on translation instructions
+- [ ] `get_suso_tfiles`: print feedback to user
 - [ ] Cleanup of function names & argument naming convention to make
   clear between translation and questionnaire
-- [ ] Documentation (Functions + Google Translation Sheet)
 - [ ] Unit Tests
 - [ ] pkgdown
 - [ ] TODOs in functions (:
@@ -300,6 +323,7 @@ new_tdb <- identify_sw_issues(new_tdb)
 - [ ] Remove the value.unique in Google Sheet?
 - [ ] Color coding
 - [ ] Rename ‘Type’ if read from a “@@” sheet?
+- [ ] move these todos into github issues =)
 
 ### GoogleAPI/Deepl
 
@@ -309,3 +333,7 @@ new_tdb <- identify_sw_issues(new_tdb)
 
 - [ ] Issue if special unicodes & readxl (e.g with
   “953faa24e13144ac984e1ad62593aab5”)
+
+### Long-term
+
+- [ ] allow local qnr template file to be read instead of pulled?
