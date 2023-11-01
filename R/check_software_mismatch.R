@@ -135,7 +135,7 @@ get_txt_sub_issue_dt <- function(dt,
 #' @return List of translations as supplied by user, with software mismatches flagged
 #' @export
 #'
-identify_sw_issues <- function(
+syntax_check <- function(
     tdb = list(),
     pattern="%[a-zA-Z0-9_]+%"
 ) {

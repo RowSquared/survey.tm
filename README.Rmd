@@ -44,19 +44,22 @@ devtools::install_github("petbrueck/survey.tm")
 
 ## Set up
 
-Before working with one or more questionnaires for a data collection project, you need to run the `setup_tdb()` function **once** to get a google worksheet that will serve as the "Translation Database Sheet". 
+Before working with one or more questionnaires for a data collection project, you need to run the `setup_tdb()` function **once**(!) to get a google worksheet that will serve as the "Translation Database Sheet". 
 
 It is usually recommended to have one "Translation Management" Project (i.e. Google Sheet) for one project (which itself can consist of multiple Questionnaires and languages). 
 
-Please note: To work with [Google Sheets](https://www.google.com/sheets/about/), you must have a valid Google account. If you have not used any functionality of package `googlesheets4` before, you will need to generate an access token. Follow instructions in console and browser after you ran `setup_tdb()`.
+Please note: If you have not used any functionality of package `googlesheets4` before, you will need to generate an access token. Follow instructions in console and browser after you ran `setup_tdb()`.
 
 ```  {r setup, eval=FALSE}
-# Optional: Indicate to `googlesheets4` which mail you will use. Avoids selecting pre-authorised account manually.
+# Optional: Indicate to `googlesheets4` which email you will use. This avoids selecting a pre-authorised account manually.
 # googlesheets4::gs4_auth(email = "your.email@address.com")
-setup_tdb(
-  ssheet_name = "Project X: Translation Sheet", # Name to assign to new google worksheet
-  lang_names = c("German", "French") # Translations/Languages needed. Needs to be ISO 639-1 language name.
-)
+
+
+# Run the code below once(!). Comment out (or remove) it afterwards.
+# setup_tdb(
+#   ssheet_name = "Project X: Translation Sheet", # Name to assign to new google worksheet
+#   lang_names = c("German", "French") # Translations/Languages needed. Needs to be ISO 639-1 language name.
+# )
 ```
 
 
@@ -225,8 +228,25 @@ create_suso_file(
 ## Utility Functions
 In addition to the basic workflow functions, there are/will be a number of additional wrappers that help in translation as well as validating the translation. 
 
+### Identifying Software-Related Mismatches in Translations
+
+The `syntax_check` function serves to identify software-related mismatches between the 'Text_Item' and 'Translation' columns of a given translation data table. These mismatches could arise due to:
+
+1. **HTML-tag issues**: Mismatches in HTML tags or their count between the 'Text_Item' and 'Translation' columns.
+2. **Text Substitution issues**: Discrepancies in text substitutions between the 'Text_Item' and 'Translation' columns. For instance, if a text substitution like `%rostertitle%` is present in the 'Text_Item' but missing in the 'Translation'.
+
+
+``` r
+new_tdb <- syntax_check(
+  tdb=new_tdb, # Your list of translations (usually created by `get_tdb_data()` or `update_tdb()`).
+  pattern = "%[a-zA-Z0-9_]+%" # Regular expression that identifies text items in 'Text_Item' and 'Translation'. The default pattern is `%[a-zA-Z0-9_]+%`, which matches substitutions like `%rostertitle%`.
+)
+```
+
 ### Query Translations 
+
 TO BE DOCUMENTED & CLEANED UP 
+
 ```  {r query_api, eval=FALSE}
 # Query Google API
 add_gl_translation(new_tdb)
@@ -239,13 +259,6 @@ add_deepl_translation(new_tdb,
 ```
 
 
-### Validate Translation
-
-```  {r validate, eval=FALSE}
-new_tdb <- identify_sw_issues(new_tdb)
-```
-
-
 
 ## TODO
 
@@ -254,7 +267,6 @@ new_tdb <- identify_sw_issues(new_tdb)
 
 
 - [ ] Revise create_suso_file() (simplify, better documentaton)
-- [ ] identify_sw_issues() double check approach & improve docs
 - [ ] add_deepl_translation() / add_gl_translation() revise approach & improve docs
 - [ ] Add a sample-project using openly shared  google sheet/qnrs?
 - [ ] A main wrapper function?
@@ -284,6 +296,7 @@ new_tdb <- identify_sw_issues(new_tdb)
 - [ ] Color coding
 - [ ] Rename 'Type' if read from a "@@" sheet? 
 - [ ] move these todos into github issues =) 
+- [ ] "Remove '\r\n' if at end of string": Also remove multiple of those \r\n combos
 
 ### GoogleAPI/Deepl
 - [ ] Move to Deepl2 4 free account 

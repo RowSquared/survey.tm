@@ -47,7 +47,7 @@ reference:
   - add_gl_translation
 - title: "Misc."
 - contents:
-  - identify_sw_issues
+  - syntax_check
   - remove_coding
 
 
