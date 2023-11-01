@@ -29,7 +29,7 @@ create_suso_sheet <- function(source_questionnaire = "",
   # CREATE MERGE.VAR
   create.unique.var(qx.tsheet, col = "Original text")
   #Remove '\r\n' if at end of string as it would not be added to Google Sheets
-  create.unique.var(qx.tsheet, regex="\\\r\\\n$", col = "value.unique")
+  create.unique.var(qx.tsheet, regex="((\\\r\\\n)+)$", col = "value.unique")
 
 
   # ADD TRANSLATION TO DT

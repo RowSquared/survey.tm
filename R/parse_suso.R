@@ -30,6 +30,9 @@ parse_suso_titems.by.qx <- function(
     })
   )
 
+  #Set NA Type to "OptionTitle as it is read from "@@_sheets" (Unless "OptionTitle" is not in types specified)
+  if ("OptionTitle" %in% types) dt[is.na(type),type:="OptionTitle"]
+
   # GET ROW IDENTIFIER - USED LATER IN TMS IN CASE NEW ITEMS ARE ADDED IN MIDDLE OF QX
   dt[, seq.id := 1:.N]
 
@@ -142,7 +145,7 @@ parse_suso_titems <- function(tmpl_list,
   # Cleanup Text item to catch more duplicate text items
   create.unique.var(dt)
   #Remove '\r\n' if at end of string as it would not be added to Google Sheets
-  create.unique.var(dt, regex="\\\r\\\n$",col="value.unique")
+  create.unique.var(dt, regex="((\\\r\\\n)+)$",col="value.unique")
 
   #Remove Coding
   if (!is.null(qcode_pattern)) dt <- remove_coding(dt,

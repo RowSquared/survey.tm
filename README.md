@@ -305,7 +305,6 @@ add_deepl_translation(new_tdb,
 - [ ] Revise create_suso_file() (simplify, better documentaton)
 - [ ] add_deepl_translation() / add_gl_translation() revise approach &
   improve docs
-- [ ] Add a sample-project using openly shared google sheet/qnrs?
 - [ ] A main wrapper function?
 - [ ] setup_tsheet: no longer checking if exists!
 - [ ] Add similarity score
@@ -314,13 +313,13 @@ add_deepl_translation(new_tdb,
 
 - [ ] Basic Workflow, maybe make this more user focused, e.g. split what
   they need to do, and what the package does in the background
-- [ ] Documentation (Functions + Google Translation Sheet)
 - [ ] STress that multiple sheets for separate language, but contain all
   the same (if no manual tweaks are done by user)
 - [ ] Add note on managing secrets in doc where credentials are asked
 
 ### Misc.
 
+- [ ] Add a sample-project using openly shared google sheet/qnrs?
 - [ ] move to R2 repo
 - [ ] Add a sheet on translation instructions
 - [ ] `get_suso_tfiles`: print feedback to user
@@ -329,17 +328,11 @@ add_deepl_translation(new_tdb,
 - [ ] Unit Tests
 - [ ] pkgdown
 - [ ] TODOs in functions (:
-- [ ] devtools::check() tests dont pass locally while devtools::tests()
-  does
-- [ ] ODK Stream
 - [ ] If new questionnaire added for which text item exist, not
   reflected in “QUestionnaire(s)” cell (sticks with old questionnaire)
 - [ ] Remove the value.unique in Google Sheet?
 - [ ] Color coding
-- [ ] Rename ‘Type’ if read from a “@@” sheet?
 - [ ] move these todos into github issues =)
-- [ ] “Remove ‘’ if at end of string”: Also remove multiple of those
-  combos
 
 ### GoogleAPI/Deepl
 
@@ -353,3 +346,4 @@ add_deepl_translation(new_tdb,
 ### Long-term
 
 - [ ] allow local qnr template file to be read instead of pulled?
+- [ ] ODK Stream
