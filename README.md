@@ -48,17 +48,20 @@ devtools::install_github("petbrueck/survey.tm")
 
 ## Set up
 
-Before working with one or more questionnaires for a data collection
-project, you need to run the `setup_tdb()` function **once**(!) to get a
-google worksheet that will serve as the “Translation Database Sheet”.
+To prepare for working with one or more questionnaires in a data
+collection project, you have to set up your “Translation Database
+Sheet”. Typically, one “Translation Database Sheet” is recommended per
+project, even if the project involves multiple questionnaires and
+languages. You have two options to set it up:
 
-It is usually recommended to have one “Translation Management” Project
-(i.e. Google Sheet) for one project (which itself can consist of
-multiple Questionnaires and languages).
+### Option 1: Use `setup_tdb()` Function
 
-Please note: If you have not used any functionality of package
-`googlesheets4` before, you will need to generate an access token.
-Follow instructions in console and browser after you ran `setup_tdb()`.
+Run the `setup_tdb()` function **once**(!) to generate a Google
+worksheet that will act as the “Translation Database Sheet”.
+
+Note: If you haven’t used the `googlesheets4` package before, you’ll
+need to generate an access token. Follow the instructions in the console
+and browser after running `setup_tdb()`.
 
 ``` r
 # Optional: Indicate to `googlesheets4` which email you will use. This avoids selecting a pre-authorised account manually.
@@ -71,6 +74,17 @@ Follow instructions in console and browser after you ran `setup_tdb()`.
 #   lang_names = c("German", "French") # Translations/Languages needed. Needs to be ISO 639-1 language name.
 # )
 ```
+
+### Option 2: Use a Template Sheet
+
+Alternatively, you can [create a copy of this template
+sheet](https://docs.google.com/spreadsheets/d/1xLHEDm5bgtv4IHHCbfyMf_sdNsdzz_AUcRrnpb2fXTw)
+and manually set it up:
+
+1.  **Rename**: After copying, rename the existing sheet to correspond
+    with the language you’re working on (e.g., “German”).
+2.  **Add Sheets**: If you’re working with multiple languages, add more
+    sheets as needed and name them accordingly.
 
 ## Basic Workflow
 

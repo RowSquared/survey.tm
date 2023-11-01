@@ -36,16 +36,6 @@ setup_tdb <- function(ssheet_name = stop("'ssheet_name' must be specified"),
     msg = "'lang_names' must be a character vector."
   )
 
-  # CHECK Google File
-  message(paste0("Checking if '", ssheet_name, "' does exist already."))
-
-  # CHECK IF GOOGLE WORKSHEET NAME ALREADY EXISTS.
-  any.exist.sheets <- invisible(googlesheets4::gs4_find(order_by = "createdTime desc", pattern = ssheet_name))
-  # IF SO, RETURN ERROR OR ASK IF IT SHALL BE DE DELETED WIT USER INPUT
-  n.rows <- nrow(any.exist.sheets)
-  if (n.rows > 0) {
-    stop(paste("There are", n.rows, "spreadsheet(s) with the name", ssheet_name, "already. \n  Please use a different name or delete the existing Google Sheet(s)"))
-  }
 
   # Language specified
   # Check if specified languages are valid ISO 639-1 codes
@@ -56,6 +46,17 @@ setup_tdb <- function(ssheet_name = stop("'ssheet_name' must be specified"),
     )
   }
 
+
+  # CHECK Google File
+  message(paste0("Checking if '", ssheet_name, "' does exist already."))
+
+  # CHECK IF GOOGLE WORKSHEET NAME ALREADY EXISTS.
+  # any.exist.sheets <- invisible(googlesheets4::gs4_find(order_by = "createdTime desc", pattern = ssheet_name))
+  # # IF SO, RETURN ERROR OR ASK IF IT SHALL BE DE DELETED WIT USER INPUT
+  # n.rows <- nrow(any.exist.sheets)
+  # if (n.rows > 0) {
+  #   stop(paste("There are", n.rows, "spreadsheet(s) with the name", ssheet_name, "already. \n  Please use a different name or delete the existing Google Sheet(s)"))
+  # }
 
 
   # CREATE NEW SHEET.
