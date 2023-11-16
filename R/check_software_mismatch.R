@@ -13,45 +13,68 @@ get_htmltag_issue_dt <- function(dt,
   extract_tags <- function(text) {
     unlist(regmatches(text, gregexpr(html_tag_pattern, text)))
   }
+
   # Count html tags
   count_tags <- function(text) {
     tags <- extract_tags(text)
     table(tags)
   }
-  #Run it
+  # Run it
   dt[, Text_Item_Tags := lapply(Text_Item, count_tags)]
   dt[, Translation_Tags := lapply(Translation, count_tags)]
-
-
   # Comparison function
   compare_tags <- function(tags1, tags2) {
-    all(sort(names(tags1)) == sort(names(tags2)) &
-          all(tags1[sort(names(tags1))] == tags2[sort(names(tags2))]))
+    # If both lists are empty, they are equivalent
+    if (length(tags1) == 0 && length(tags2) == 0) {
+      return(TRUE)
+    }
+
+    # If one list is empty but the other is not, they are not equivalent
+    if (length(tags1) == 0 || length(tags2) == 0) {
+      return(FALSE)
+    }
+
+    # Convert to named vectors (if they are not already)
+    tags1 <- as.vector(tags1)
+    names(tags1) <- names(tags1)
+    tags2 <- as.vector(tags2)
+    names(tags2) <- names(tags2)
+
+    # Sort by names
+    # tags1 <- tags1[order(names(tags1))]
+    # tags2 <- tags2[order(names(tags2))]
+
+    # Check if they have the same names and the same counts
+    identical(tags1, tags2)
   }
-
   # Apply the comparison function to each row
-  dt[, Tags_Equivalent := mapply(compare_tags, Text_Item_Tags, Translation_Tags)]
+  dt[, Tags_Equivalent := mapply(compare_tags, tags1=Text_Item_Tags,
+                                                            tags2=Translation_Tags)]
 
-  #Keep rows with issues and apply a comment
+
+  # Keep rows with issues and apply a comment
   # Convert the two list column to a character column
-  paste.list <- function(tags) paste(paste(names(tags), tags, sep="="), collapse="; ")
-  dt[Tags_Equivalent==FALSE,
-       comment.issue :=
+  paste.list <- function(tags) paste(paste(names(tags), tags, sep = "="), collapse = "; ")
+  dt[
+    Tags_Equivalent == FALSE,
+    comment.issue :=
+      paste0(
+        "Difference in count of html-tag:\n",
+        # Original/Text_Item
+        "Text_Item:", sapply(Text_Item_Tags, \(x) paste.list(x)),
+        "\n", "Translation:",
+        sapply(Translation_Tags, \(x) paste.list(x))
+      )
+  ]
+  # Keep cols & rows of interest (Just value.unique and comment.issue). Will be processed in parent function.
+  dt <- dt[Tags_Equivalent == FALSE, .(
+    value.unique,
+    comment.issue
+  )]
 
-         paste0("Difference in count of html-tag:\n",
-           #Original/Text_Item
-           "Text_Item:",sapply(Text_Item_Tags, \(x) paste.list(x)),
-                "\n","Translation:",
-                sapply(Translation_Tags, \(x) paste.list(x)))
 
-    ]
-  #Keep cols & rows of interest (Just value.unique and comment.issue). Will be processed in parent function.
-   dt <- dt[Tags_Equivalent==FALSE,.(value.unique,
-                                  comment.issue)]
-
-
-  #Print results
-  message(paste(nrow(dt),"text items with html-tag issues for language",paste0("'",lang,"'")))
+  # Print results
+  message(paste(nrow(dt), "text items with html-tag issues for language", paste0("'", lang, "'")))
 
   return(dt)
 }
@@ -70,7 +93,6 @@ get_htmltag_issue_dt <- function(dt,
 get_txt_sub_issue_dt <- function(dt,
                            pattern="%[a-zA-Z0-9_]+%",
                            lang=NULL) {
-
   #Extract the text items per pattern into list column
   dt <- dt[grepl(pattern,Text_Item)|grepl(pattern,Translation),
            .(orig=stringr::str_extract_all(Text_Item,pattern),
@@ -139,25 +161,24 @@ syntax_check <- function(
     tdb = list(),
     pattern="%[a-zA-Z0-9_]+%"
 ) {
-  # tdb <- new_tdb
-  #Copy list to avoid replacement in place
-  tdb <- copy(tdb)
+  # Copy list to avoid replacement in place
+  tdb.fun <- copy(tdb)
 
   #Identify Text Substitution issues for each translation - But the one in Status "outdated"
   list.txtsub.issues <- purrr::map(
     .x = names(tdb),
-    .f = ~ get_txt_sub_issue_dt(new_tdb[[.x]][!Status %chin% c("outdated")],
+    .f = ~ get_txt_sub_issue_dt(tdb.fun[[.x]][!Status %chin% c("outdated") & !is.na(Translation)],
                                lang=.x)
   )
-  list.txtsub.issues <- setNames(list.txtsub.issues, names(tdb))
+  list.txtsub.issues <- setNames(list.txtsub.issues, names(tdb.fun))
 
   #Identify html-tag issues
   list.html.issues <- purrr::map(
-    .x = names(tdb),
-    .f = ~ get_htmltag_issue_dt(new_tdb[[.x]][!Status %chin% c("outdated")],
+    .x = names(tdb.fun),
+    .f = ~ get_htmltag_issue_dt(tdb.fun[[.x]][!Status %chin% c("outdated") & !is.na(Translation)],
                                 lang=.x)
   )
-  list.html.issues <- setNames(list.html.issues, names(tdb))
+  list.html.issues <- setNames(list.html.issues, names(tdb.fun))
 
   #Bind both list of issues into one list
   full.list.issues <- lapply(names(list.txtsub.issues), function(name) {
@@ -169,34 +190,39 @@ syntax_check <- function(
   names(full.list.issues) <- names(list.txtsub.issues)
 
   #Update each Translation sheet
-  updated.list <- lapply(names(tdb), \(x) {
+  updated.list <- lapply(names(tdb.fun), \(x) {
 
     # Get row identifier
-    tdb[[x]][, seq.id := 1:.N]
+    tdb.fun[[x]][, seq.id := 1:.N]
 
     #Update Status
-    tdb[[x]][value.unique %in%  full.list.issues[[x]]$value.unique,Status:="to be checked"]
+    tdb.fun[[x]][value.unique %in%  full.list.issues[[x]]$value.unique,Status:="to be checked"]
 
     #Get in issues
-    tdb[[x]] <- merge(tdb[[x]],full.list.issues[[x]],by="value.unique",all.x=T)
+    tdb.fun[[x]] <- merge(tdb.fun[[x]],full.list.issues[[x]],by="value.unique",all.x=T)
 
     ###Update Comment###
     #Replace if Comment/Note empty
-    tdb[[x]][is.na(`Comment/Note`) & !is.na(comment.issue),
+    tdb.fun[[x]][is.na(`Comment/Note`) & !is.na(comment.issue),
           `Comment/Note`:=comment.issue]
 
+    #If not empty & no SW issue just yet, add to existing comment
+    tdb.fun[[x]][!is.na(`Comment/Note`) & !is.na(comment.issue) & !grepl("count of html|not found in|Count of text substitution",`Comment/Note`),
+             `Comment/Note`:=paste0(`Comment/Note`,"\n\n",comment.issue)]
+
     #Clear Comment/note if no issue is present any longer (and any software comment in there)
-    tdb[[x]][grepl("not found in|Count of text substitution",`Comment/Note`)
+    tdb.fun[[x]][grepl("count of html|not found in|Count of text substitution",`Comment/Note`)
           & is.na(comment.issue), `Comment/Note`:=NA]
 
+
     #Back in order as received
-    setorder(tdb[[x]],seq.id)
-    tdb[[x]][,c("comment.issue","seq.id"):=NULL]
+    setorder(tdb.fun[[x]],seq.id)
+    tdb.fun[[x]][,c("comment.issue","seq.id"):=NULL]
 
   })
-  updated.list <- setNames(updated.list, names(tdb))
+  updated.list <- setNames(updated.list, names(tdb.fun))
 
-  #Return the list
+  #Return
   return(updated.list)
 
 }

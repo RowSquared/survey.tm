@@ -108,6 +108,9 @@ write_tdb_data <- function(dt,
                            sheet = "",
                            range = "A2:G",
                            col_names = FALSE) {
+
+  #TODO: For now ignores if user made any colorder changes to dt after pulling from GS. Would break all.
+
   # Check input
   assertthat::assert_that(is.data.table(dt), msg = "'dt' must be a data.table.")
   #Got all Cols?
@@ -123,6 +126,9 @@ write_tdb_data <- function(dt,
   assertthat::assert_that(is.character(range) && nchar(range) > 0, msg = "'range' must be a non-empty character string.")
   assertthat::assert_that(is.logical(col_names) && length(col_names) == 1, msg = "'col_names' must be a single logical value.")
 
+  #Dynamically check how many cols there to update the range
+  end.col <- letters[ncol(dt)]
+  range <- paste("A2",end.col,sep=":")
   googlesheets4::range_write(
     ss = ss,
     data = dt,

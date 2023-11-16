@@ -124,7 +124,7 @@ questionnaire ID.
 ``` r
 #One needs to pull the Questionnaire Template(s) ('Translation File') from the Survey Solutions Designer
 
-# Define the questionnaire IDs you want to retrieve translations for
+# Define the questionnaire IDs you want to retrieve translations for.
 questionnaires <- c("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6", "b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6a7")
 
 # Retrieve the 'Source Questionnaire' template files
@@ -262,7 +262,7 @@ one can use to upload to the Survey Solutions Designer.
 </details>
 
 ``` r
-# Take the 'German' Translation from database and merge into the source questionnaire as returned by \code{\link{get_suso_tfiles}}
+# Take the 'German' Translation from database and merge into the source questionnaire as returned by `get_suso_tfiles()`}
 # Consider only text items of particular statuses defined by Translator
 create_suso_file(
   tdb.language = new_tdb[["German"]],
@@ -320,14 +320,14 @@ add_deepl_translation(new_tdb,
 - [ ] add_deepl_translation() / add_gl_translation() revise approach &
   improve docs
 - [ ] A main wrapper function?
-- [ ] setup_tsheet: no longer checking if exists!
-- [ ] Add similarity score
+- [ ] Improve similarity score function
+- [ ] Simplify / merge functions? e.g. 1.1 & 1.2
 
 ### Documentation
 
 - [ ] Basic Workflow, maybe make this more user focused, e.g. split what
   they need to do, and what the package does in the background
-- [ ] STress that multiple sheets for separate language, but contain all
+- [ ] Stress that multiple sheets for separate language, but contain all
   the same (if no manual tweaks are done by user)
 - [ ] Add note on managing secrets in doc where credentials are asked
 
@@ -345,8 +345,9 @@ add_deepl_translation(new_tdb,
 - [ ] If new questionnaire added for which text item exist, not
   reflected in “QUestionnaire(s)” cell (sticks with old questionnaire)
 - [ ] Remove the value.unique in Google Sheet?
-- [ ] Color coding
 - [ ] move these todos into github issues =)
+- [ ] Color coding as dedicated function? Not really like it. It is a
+  one liner. Add to doc as an example?
 
 ### GoogleAPI/Deepl
 
