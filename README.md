@@ -274,9 +274,9 @@ create_suso_file(
 
 ## Utility Functions
 
-In addition to the basic workflow functions, there are/will be a number
-of additional wrappers that help in translation as well as validating
-the translation.
+In addition to the basic workflow functions, there are a number of
+additional wrappers that help in translation as well as validating the
+translation.
 
 ### Identifying Software-Related Mismatches in Translations
 
@@ -300,15 +300,33 @@ new_tdb <- syntax_check(
 
 ### Query Translations
 
-TO BE DOCUMENTED & CLEANED UP
+Quickly translate missing ‘Translation’ items using API providers:
+
+#### Google Translate API
+
+Simple wrapper for the Google Translate API, utilizing the
+[`googleLanguageR`](https://CRAN.R-project.org/package=googleLanguageR)
+package. For more details on setting up Google Translate API and
+obtaining authentication details, visit [Google Cloud
+Translation](https://cloud.google.com/translate/docs/setup).
 
 ``` r
 # Query Google API
-add_gl_translation(new_tdb)
+batchTranslate_GApi(new_tdb,
+                    auth="my_path/my_service_account_key.json")
+```
 
-# Query Deepl
-add_deepl_translation(new_tdb,
-  API_key = Sys.getenv("deepl_key")
+#### DeepL
+
+Simple wrapper for the DeepL API, utilizing the
+[`deeplr`](https://github.com/zumbov2/deeplr#readme) package. For more
+details on setting up Google Translate API and obtaining authentication
+details, visit [Google Cloud
+Translation](https://cloud.google.com/translate/docs/setup).
+
+``` r
+batchTranslate_Deepl2(new_tdb,
+  API_key = my_api_key
 )
 ```
 
@@ -317,11 +335,7 @@ add_deepl_translation(new_tdb,
 ### Before sharing with wider audience
 
 - [ ] Revise create_suso_file() (simplify, better documentaton)
-- [ ] add_deepl_translation() / add_gl_translation() revise approach &
-  improve docs
 - [ ] A main wrapper function?
-- [ ] Improve similarity score function
-- [ ] Simplify / merge functions? e.g. 1.1 & 1.2
 
 ### Documentation
 
@@ -341,6 +355,7 @@ add_deepl_translation(new_tdb,
   clear between translation and questionnaire
 - [ ] Unit Tests
 - [ ] pkgdown
+- [ ] Improve similarity score function
 - [ ] TODOs in functions (:
 - [ ] If new questionnaire added for which text item exist, not
   reflected in “QUestionnaire(s)” cell (sticks with old questionnaire)

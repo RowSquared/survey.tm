@@ -42,9 +42,9 @@ reference:
   desc: >
     Functions that utilize the DeepL or Google Translate API to provide high-quality machine translation services.
 - contents:
-  - add_deepl_translation
+  - batchTranslate_Deepl2
 - contents:
-  - add_gl_translation
+  - batchTranslate_GApi
 - title: "Misc."
 - contents:
   - syntax_check
