@@ -61,9 +61,9 @@ get_htmltag_issue_dt <- function(dt,
       paste0(
         "Difference in count of html-tag:\n",
         # Original/Text_Item
-        "Text_Item:", sapply(Text_Item_Tags, \(x) paste.list(x)),
+        "Text_Item:", sapply(Text_Item_Tags, function(x) paste.list(x)),
         "\n", "Translation:",
-        sapply(Translation_Tags, \(x) paste.list(x))
+        sapply(Translation_Tags, function(x) paste.list(x))
       )
   ]
   # Keep cols & rows of interest (Just value.unique and comment.issue). Will be processed in parent function.
@@ -190,7 +190,7 @@ syntax_check <- function(
   names(full.list.issues) <- names(list.txtsub.issues)
 
   #Update each Translation sheet
-  updated.list <- lapply(names(tdb.fun), \(x) {
+  updated.list <- lapply(names(tdb.fun), function(x) {
 
     # Get row identifier
     tdb.fun[[x]][, seq.id := 1:.N]

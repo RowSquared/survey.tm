@@ -32,8 +32,9 @@ to extend support to ODK-based software in the future.
 
 ## Prerequisites
 
-- R installed on your machine. If not, download and install R from
-  [here](https://cran.r-project.org/)
+- R version 4.0.0 or higher must be installed on your machine. If you do
+  not have it, you can download and install the latest version of R from
+  [CRAN](https://cran.r-project.org/).
 - A valid Google account for accessing [Google
   Sheets](https://www.google.com/sheets/about/).
 - A CAPI questionnaire within [Survey

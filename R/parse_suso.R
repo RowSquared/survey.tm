@@ -19,7 +19,7 @@ parse_suso_titems.by.qx <- function(
   }
   # READ ALL SHEETS INTO ONE DT- ONLY COLS OF INTEREST OF TYPE OF INTEREST
   dt <- rbindlist(
-    lapply(questionnaire_list, \(sheet) {
+    lapply(questionnaire_list, function(sheet) {
       sheet[
         Type %chin% types | is.na(Type),
         .(
