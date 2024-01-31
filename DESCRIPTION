@@ -1,7 +1,7 @@
 Package: survey.tm
 Type: Package
 Title: Rowsquared's 'Translation Management System'
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: person("Peter", "Brueckmann", email = "peter.brueckmann@rowsquared.com", 
   role = c("aut", "cre"))
 Description: System to facilitate translation processes of survey/census questionnaires. It usually pulls data from a questionnaire template, cleans up text items and pushes them to a translation sheet. Subsequently, added translation is pushed back to a questionnaire file to be uploaded to the survey software.
