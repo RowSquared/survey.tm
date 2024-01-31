@@ -49,7 +49,7 @@ You can install the development version of survey.tm through
 ``` r
 # If you don't have `devtools` installed, uncomment the line below to install it:
 # install.packages("devtools")
-devtools::install_github("RowSquared/survey.tm")
+devtools::install_github("RowSquared/survey.tm", ref = "main")
 ```
 
 ## Set up
@@ -131,7 +131,7 @@ questionnaire ID.
 #One needs to pull the Questionnaire Template(s) ('Translation File') from the Survey Solutions Designer
 
 # Define the questionnaire IDs you want to retrieve translations for.
-questionnaires <- c("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6", "b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6a7")
+questionnaires <- c("9e37f1c59e1c47039167928481cf42d2", "702bef443dfb4fc8bd8c754612590875")
 
 # Retrieve the 'Source Questionnaire' template files
 suso_trans_templates <- get_suso_tfiles(
@@ -317,8 +317,6 @@ new_tdb <- syntax_check(
   tdb=new_tdb, # Your list of translations (usually created by `get_tdb_data()` or `update_tdb()`).
   pattern = "%[a-zA-Z0-9_]+%" # Regular expression that identifies text items in 'Text_Item' and 'Translation'. The default pattern is `%[a-zA-Z0-9_]+%`, which matches substitutions like `%rostertitle%`.
 )
-
-
 ```
 
 ### Query Translations
@@ -354,13 +352,10 @@ batchTranslate_Deepl2(new_tdb,
 
 ## TODO
 
-### Before sharing with wider audience
-
 - [ ] A main wrapper function?
 
 ### Misc.
 
-- [ ] move to R2 repo
 - [ ] html-tag check: Have only those tags that are different added to
   comment.
 - [ ] html-tag check: check again with heavy formatting,

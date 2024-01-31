@@ -39,7 +39,7 @@ You can install the development version of survey.tm through
 ``` r
 # If you don't have `devtools` installed, uncomment the line below to install it:
 # install.packages("devtools")
-devtools::install_github("RowSquared/survey.tm")
+devtools::install_github("RowSquared/survey.tm", ref = "main")
 ```
 
 
