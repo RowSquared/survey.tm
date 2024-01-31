@@ -12,7 +12,7 @@ create_suso_sheet(
 )
 }
 \arguments{
-\item{source_questionnaire}{List. 'Questionnaire Template' to which translation shall be added.  Usually an element of list returned by \code{\link{get_suso_tfiles}}}
+\item{source_questionnaire}{data.table. 'Questionnaire Template' to which translation shall be added.  Usually an element of list returned by \code{\link{get_suso_tfiles}}}
 
 \item{sheet}{Sheet in \code{source_questionnaire} to which translation should be added}
 

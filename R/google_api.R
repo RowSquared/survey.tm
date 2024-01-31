@@ -1,7 +1,7 @@
 #' Add Google API  translation to data table. I.e. for an element of list of translations in tdb
 #'
 #' @param dt Data table of translations
-#' @inheritParams  add_gl_translation
+#' @inheritParams  batchTranslate_GApi
 #' @noRd
 #'
 add_gl_translate_dt <- function(dt,
@@ -54,23 +54,34 @@ add_gl_translate_dt <- function(dt,
 
 
 
-#' Query Google Translate API for text items in list of translations that are NA
+#' Batch Translate Text Items Using Google Translate API
 #'
+#' This function `batchTranslate_GApi` interfaces with the Google Translate API to process a list of data tables (`tdb`), each containing text items for translation. It queries the Google Translate API for translations of text items that are missing (NA) in the 'Translation' column. The function is adaptable to multiple target languages and works on each data table in the list based on specified languages.
 #'
-#' @param tdb List of translations as returned by [get_tdb_data()] or [update_tdbs()]
-#' @param languages Languages to be queried. By default uses names of `tdb`
-#' @param source_lang Source language, that is in which language questionnaire was designed. Default 'English'
-#' @param target_languages Which languages of element names in 'tdb' should be queried
-#' @param auth Location of service account credential json file. Default in environment variable 'GL_AUTH'. For more details see  \code{vignette("setup", package = "googleLanguageR")}
-
-#' @return List of translations
+#' @param tdb List of translations as returned by [get_tdb_data()] or [update_tdbs()]. This list should contain data tables with text items ready for translation.
+#' @param target_languages Languages to be queried for translation. By default, if not specified, the function uses the names of the data tables in `tdb` as target languages. Specify target languages as a vector of language names or codes supported by Google Translate.
+#' @param source_lang Source language, indicating the original language of the text items. The default is 'English'. Accurate specification is crucial for effective translations.
+#' @param auth Authentication details for Google Translate API. This can be specified as the location of the service account credential JSON file. The default is obtained from the environment variable 'GL_AUTH'. For more details on setting up authentication, see [Google Translate API Setup](https://cloud.google.com/translate/docs/setup).
+#'
+#' @return Returns a modified list of data tables (`tdb`) where the text items have been translated to the specified target languages. Each data table in the list will have updated translations for the previously missing items.
 #' @export
 #'
-add_gl_translation <- function(tdb = list(),
+#' @examples
+#' \dontrun{
+
+#' # Example usage (assuming 'tdb' is a predefined list of data tables):
+#' translated_tdb <- batchTranslate_GApi(tdb, target_languages = c("German", "French"), auth = my_auth_file)
+#' }
+#'
+#' @seealso
+#' `gl_translate` in the `googleLanguageR` package for details on the underlying translation function.
+#' `get_tdb_data()` and `update_tdbs()` for functions generating the input list of data tables.
+#'
+#'
+batchTranslate_GApi <- function(tdb = list(),
                                target_languages = NULL,
                                source_lang = "English",
                                auth = Sys.getenv("GL_AUTH")) {
-  # TODO: ACTUALLY HERE ONLY THOSE WHICH ARE NOT IN PARTICULAR STATUS?
 
   # IF LANGUAGES NOT SPECIFIED, ASSUME ALL LANGUAGES IN LIST
   if (is.null(target_languages)) target_languages <- names(tdb)

@@ -23,6 +23,27 @@ check.tdb.cols <- function(dt) {
 }
 
 
+#' Check if Survey Solutions Questionnaire Template Object has the exact required columns
+#' Returns boolean
+#' @noRd
+check_susotemplate_cols <- function(dt) {
+  # Define the exact required columns
+  required_cols <- c("Entity Id", "Variable", "Type", "Index", "Original text", "Translation")
+
+  # Get the names of the columns in the data table
+  names_dt <- names(dt)
+
+  # Check if the data table has exactly the required columns
+  result <- identical(sort(names_dt), sort(required_cols))
+
+  # Create a list to store the result and any discrepancies
+  check <- list()
+  check$result <- result
+  check$extra_cols <- setdiff(names_dt, required_cols)
+  check$missing_cols <- setdiff(required_cols, names_dt)
+
+  return(check)
+}
 
 
 

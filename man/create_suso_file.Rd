@@ -16,7 +16,7 @@ create_suso_file(
 \arguments{
 \item{tdb.language}{data.table. Element (Language) of 'Translation Database' object returned by \code{\link{get_tdb_data}} or \code{\link{update_tdb}}}
 
-\item{source_questionnaire}{List. 'Questionnaire Template' to which translation shall be added.  Usually an element of list returned by \code{\link{get_suso_tfiles}}}
+\item{source_questionnaire}{data.table. 'Questionnaire Template' to which translation shall be added.  Usually an element of list returned by \code{\link{get_suso_tfiles}}}
 
 \item{path}{Character. Writable file path where Translation File should be stored at, including file name and extension}
 

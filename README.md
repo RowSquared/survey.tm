@@ -14,15 +14,21 @@ latest version of the questionnaire(s), thereby reducing manual work,
 simplifying the translation management, minimizing mistakes, and
 enhancing consistency.
 
-The ‘Translation Database’, which is a Google Sheet, serves as the
-central hub where translators can add translations to text items of
-respective questionnaires. It offers a simple and intuitive user
-interface that’s good not only for managing the translation tool but
-also for translators. It’s easily scalable to multiple languages,
-enabling translators to track their progress, flag text items for future
-review or revision, and making the translation of similar types of
-surveys faster and more consistent. With a setup time of just 5 minutes,
-this package is designed to save you hours in translation management.
+The ‘Translation Database’, which is a Google Sheet (see example
+[here](https://docs.google.com/spreadsheets/d/1qnLflfVEpCm2sRIIv2NXrBRZikkiUp7JRW0zujChq5E/edit?usp=sharing)),
+serves as the central hub where translators can add translations to text
+items of respective questionnaires. It offers a simple and intuitive
+user interface that’s good not only for managing the translation tool
+but also for translators. It’s easily scalable to multiple languages and
+questionnaires, enabling translators to track their progress, flag text
+items for future review or revision, and making the translation of
+similar types of surveys faster and more consistent. With a setup time
+of just 5 minutes, this package is designed to save you hours in
+translation management.
+
+Please note: Currently, the package is focused on the [Survey
+Solutions](https://mysurvey.solutions/en/) software system, with plans
+to extend support to ODK-based software in the future.
 
 ## Prerequisites
 
@@ -264,12 +270,27 @@ one can use to upload to the Survey Solutions Designer.
 ``` r
 # Take the 'German' Translation from database and merge into the source questionnaire as returned by `get_suso_tfiles()`}
 # Consider only text items of particular statuses defined by Translator
+#Attention: If you used parameter qcode_pattern at `parse_suso_titems()`, you should specify here again to ensure strings are merged correctly
 create_suso_file(
   tdb.language = new_tdb[["German"]],
   source_questionnaire = suso_trans_templates[["NAME-OF-QUESTIONNAIRE"]],
   statuses = c("machine", "reviewed", "translated"),
+  qcode_pattern = "^Q\\d+.\\s",
   path = "your-path/German_NAME-OF-QUESTIONNAIRE.xlsx"
 )
+
+# Or loop through all source questionnaires pulled via `get_suso_tfiles()`and create a file for each language sheet on 'Translation Database'
+#languages <- names(new_tdb)
+#questionnaires <- names(suso_trans_templates)
+#purrr::walk(languages, ~{
+#  lang <- .x
+#  purrr::walk(questionnaires, ~create_suso_file(
+#    tdb.language = new_tdb[[lang]],
+#    source_questionnaire = suso_trans_templates[[.x]],
+#    statuses = c("machine", "reviewed", "translated"),
+#    path = paste0("your-path/", lang, "_", .x, ".xlsx")
+#  ))
+#})
 ```
 
 ## Utility Functions
@@ -296,6 +317,8 @@ new_tdb <- syntax_check(
   tdb=new_tdb, # Your list of translations (usually created by `get_tdb_data()` or `update_tdb()`).
   pattern = "%[a-zA-Z0-9_]+%" # Regular expression that identifies text items in 'Text_Item' and 'Translation'. The default pattern is `%[a-zA-Z0-9_]+%`, which matches substitutions like `%rostertitle%`.
 )
+
+
 ```
 
 ### Query Translations
@@ -320,9 +343,8 @@ batchTranslate_GApi(new_tdb,
 
 Simple wrapper for the DeepL API, utilizing the
 [`deeplr`](https://github.com/zumbov2/deeplr#readme) package. For more
-details on setting up Google Translate API and obtaining authentication
-details, visit [Google Cloud
-Translation](https://cloud.google.com/translate/docs/setup).
+details on setting up the API, visit [DeepL
+API](https://www.deepl.com/pro/change-plan#developer).
 
 ``` r
 batchTranslate_Deepl2(new_tdb,
@@ -334,22 +356,18 @@ batchTranslate_Deepl2(new_tdb,
 
 ### Before sharing with wider audience
 
-- [ ] Revise create_suso_file() (simplify, better documentaton)
 - [ ] A main wrapper function?
-
-### Documentation
-
-- [ ] Basic Workflow, maybe make this more user focused, e.g. split what
-  they need to do, and what the package does in the background
-- [ ] Stress that multiple sheets for separate language, but contain all
-  the same (if no manual tweaks are done by user)
-- [ ] Add note on managing secrets in doc where credentials are asked
 
 ### Misc.
 
-- [ ] Add a sample-project using openly shared google sheet/qnrs?
 - [ ] move to R2 repo
-- [ ] Add a sheet on translation instructions
+- [ ] html-tag check: Have only those tags that are different added to
+  comment.
+- [ ] html-tag check: check again with heavy formatting,
+  e.g. ‘953faa24e13144ac984e1ad62593aab5’
+- [ ] Add a sheet on translation instructions. Also stress that multiple
+  sheets for separate language, but contain all the same (if no manual
+  tweaks are done by user)
 - [ ] `get_suso_tfiles`: print feedback to user
 - [ ] Cleanup of function names & argument naming convention to make
   clear between translation and questionnaire
@@ -360,17 +378,13 @@ batchTranslate_Deepl2(new_tdb,
 - [ ] If new questionnaire added for which text item exist, not
   reflected in “QUestionnaire(s)” cell (sticks with old questionnaire)
 - [ ] Remove the value.unique in Google Sheet?
-- [ ] move these todos into github issues =)
-- [ ] Color coding as dedicated function? Not really like it. It is a
-  one liner. Add to doc as an example?
-
-### GoogleAPI/Deepl
-
-- [ ] Move to Deepl2 4 free account
+- [ ] move these todos into github issues (:
+- [ ] Color coding as dedicated function? Not really? It is a one liner.
+  Add to doc as an example?
 
 ### Get SuSo Designer Template
 
-- [ ] Issue if special unicodes & readxl (e.g with
+- [ ] Confirm issue if special unicodes & readxl (e.g with
   “953faa24e13144ac984e1ad62593aab5”)
 
 ### Long-term

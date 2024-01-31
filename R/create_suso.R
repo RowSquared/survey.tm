@@ -11,11 +11,35 @@ create_suso_sheet <- function(source_questionnaire = "",
                               language.tdb.dt = "",
                               qcode_pattern = NULL) {
   # Get Sheet from List
-  # TODO: Without copy and in place change?
   qx.tsheet <- copy(source_questionnaire[[sheet]])
 
-  # Get names for later
+
+  #Got all cols?
+  check.cols <- check_susotemplate_cols(qx.tsheet)
+  # Assuming check.cols is the result from the check_tdb_exact_cols function
+
+  # Check if there are missing columns and assert accordingly
+  if (!identical(check.cols$missing_cols, character(0))) {
+    assertthat::assert_that(FALSE,
+                            msg = paste0(
+                              "Sheet '", sheet, "' is missing expected column(s): ",
+                              paste(check.cols$missing_cols, collapse = ", ")
+                            ))
+  }
+
+  # Check if there are extra columns and assert accordingly
+  if (!identical(check.cols$extra_cols, character(0))) {
+    assertthat::assert_that(FALSE,
+                            msg = paste0(
+                              "Sheet '", sheet, "' has extra unexpected column(s): ",
+                              paste(check.cols$extra_cols, collapse = ", ")
+                            ))
+  }
+
+
+  # Get column names for later
   names.sheet <- names(qx.tsheet)
+
 
   # GET NEW ROW IDENTIFIER IN QUESTIONNAIRE SHEET
   qx.tsheet[, rowid := 1:.N]
@@ -91,7 +115,7 @@ create_suso_sheet <- function(source_questionnaire = "",
 #' The generated file can be uploaded to the Survey Solutions Designer.
 #'
 #' @param tdb.language data.table. Element (Language) of 'Translation Database' object returned by \code{\link{get_tdb_data}} or \code{\link{update_tdb}}
-#' @param source_questionnaire List. 'Questionnaire Template' to which translation shall be added.  Usually an element of list returned by \code{\link{get_suso_tfiles}}
+#' @param source_questionnaire data.table. 'Questionnaire Template' to which translation shall be added.  Usually an element of list returned by \code{\link{get_suso_tfiles}}
 #' @param path Character. Writable file path where Translation File should be stored at, including file name and extension
 #' @param sheets Character vector. For which sheets of questionnaire template file language will be added. Default all sheets that are found in template file
 #' @param qcode_pattern Regular expression that matches question coding. Should be specified if used in `parse_suso_titems()`.
@@ -121,8 +145,6 @@ create_suso_file <- function(tdb.language,
                              sheets = NULL,
                              statuses = c("machine", "reviewed", "translated"),
                              qcode_pattern = NULL) {
-  # TODO: CHECK IF ALL ITEMS HAVE NOW TRANSLATION. IF NOT, MAYBE FLAG THAT PATTERN IS NOT SUPPLIED?
-  # TODO: ASSERTS ASSERTS! Source Questionnaire needs to be SurSol Standard; translation database check;
 
   # CHECK INPUT -------------------------------------------------------------
 
@@ -138,12 +160,14 @@ create_suso_file <- function(tdb.language,
       paste(check.cols$missing.cols, collapse = ", ")
     )
   )
+  #Validate SuSo source_questionnaire
 
-  # Validate source_questionnaire input
+  # Validate sSuSoource_questionnaire input
   assertthat::assert_that(all(names(source_questionnaire) != ""), msg = "All elements in source_questionnaire must be named.")
   assertthat::assert_that(suppressWarnings(all(lapply(source_questionnaire, is.data.table))),
     msg = "All elements in source_questionnaire must be data.table. Did you supply a list that contains multiple questionnaires?"
   )
+
 
   # Validate path input
   assertthat::assert_that(grepl(".xlsx$", path), msg = "'path' must have .xlsx file extension")
@@ -176,7 +200,7 @@ create_suso_file <- function(tdb.language,
     return()
   }
 
-  # Print to console
+  # Print to console first status
   message(paste0(
     "Translated Text Items with Status(es): ",
     paste(paste0("'", unique(language.tdb.dt$Status), "'"), collapse = ", "),
@@ -197,6 +221,14 @@ create_suso_file <- function(tdb.language,
 
 
   workbook <- stats::setNames(workbook, c(sheets))
+
+  # Quickly display if there are still missing 'translations'
+  for (name in names(workbook)) {
+    data_table <- workbook[[name]]
+    na_count <- sum(is.na(data_table$Translation))
+    if (na_count>0) message(sprintf("Sheet %s has %d rows of missing 'Translation'", name, na_count))
+  }
+
 
   # Write the Workbook!
   writexl::write_xlsx(
