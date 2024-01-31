@@ -88,7 +88,7 @@ batchTranslate_Deepl2_dt <- function(dt,
 #' @param API_key Authentication Key for the DeepL API. Ensure that this key is valid for the free account of DeepL if using functions specific to that account type. For information on obtaining an API key, visit [DeepL API](https://www.deepl.com/en/pro-api?utm_campaign=Google_EMEA_EN_Search_B_Brand_Conversion&utm_term=deepl%20api%20key&utm_source=adwords&utm_medium=ppc&gad_source=1).
 #'
 #' @return Returns a modified list of data tables (`tdb`) where the text items have been translated as per the specified target languages. Each data table in the list will have updated translations where previously missing.
-#'
+#' @export
 #' @examples
 #' \dontrun{
 #' # Example usage (assuming 'tdb' is a predefined list of data tables and 'API_key' is set):
