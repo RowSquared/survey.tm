@@ -26,6 +26,6 @@ Imports:
     stats,
     stringr,
     writexl,
-    purrr
+    purrr (>= 0.3.0)
 Depends: 
     R (>= 4.0)
