@@ -313,7 +313,6 @@ batchTranslate_Deepl2(new_tdb,
 - [ ] A main wrapper function?
 
 ### Misc.
-- [ ] move to R2 repo 
 - [ ] html-tag check: Have only those tags that are different added to comment. 
 - [ ] html-tag check: check again with heavy formatting, e.g. '953faa24e13144ac984e1ad62593aab5'
 - [ ] Add a sheet on translation instructions. Also stress that multiple sheets for separate language, but contain all the same (if no manual tweaks are done by user)
