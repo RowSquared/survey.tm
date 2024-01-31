@@ -12,7 +12,7 @@ batchTranslate_Deepl2(
 )
 }
 \arguments{
-\item{tdb}{List of translations as returned by \code{\link[=get_tdb_data]{get_tdb_data()}} or \code{\link[=update_tdbs]{update_tdbs()}}. This list should contain data tables with text items to be translated.}
+\item{tdb}{List of translations as returned by \code{\link[=get_tdb_data]{get_tdb_data()}} or \code{\link[=update_tdb]{update_tdb()}}. This list should contain data tables with text items to be translated.}
 
 \item{target_languages}{Languages to be queried for translation. By default, the function uses the names of the data tables in \code{tdb} as the target languages. If specified, it should be a vector of language names or codes that are supported by DeepL.}
 
@@ -39,5 +39,5 @@ translated_tdb <- batchTranslate_Deepl2(tdb, target_languages = c("German", "Fre
 }
 \seealso{
 \code{translate2} in the \code{deeplr} package for details on the underlying translation function.
-\code{get_tdb_data()} and \code{update_tdbs()} for functions generating the input list of data tables.
+\code{get_tdb_data()} and \code{update_tdb()} for functions generating the input list of data tables.
 }

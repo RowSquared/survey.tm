@@ -82,7 +82,7 @@ batchTranslate_Deepl2_dt <- function(dt,
 #' It processes a list of data tables, each representing a set of translations, and queries the DeepL API for translations of text items that are missing (NA) in column 'Translation'.
 #' The function is designed to handle multiple languages and can process each data table in the list according to the specified target languages.
 #'
-#' @param tdb List of translations as returned by [get_tdb_data()] or [update_tdbs()]. This list should contain data tables with text items to be translated.
+#' @param tdb List of translations as returned by [get_tdb_data()] or [update_tdb()]. This list should contain data tables with text items to be translated.
 #' @param target_languages Languages to be queried for translation. By default, the function uses the names of the data tables in `tdb` as the target languages. If specified, it should be a vector of language names or codes that are supported by DeepL.
 #' @param source_lang Source language, indicating the language in which the questionnaire or text items were originally designed. The default is 'English'. It's important to specify this accurately to ensure correct translations.
 #' @param API_key Authentication Key for the DeepL API. Ensure that this key is valid for the free account of DeepL if using functions specific to that account type. For information on obtaining an API key, visit [DeepL API](https://www.deepl.com/en/pro-api?utm_campaign=Google_EMEA_EN_Search_B_Brand_Conversion&utm_term=deepl%20api%20key&utm_source=adwords&utm_medium=ppc&gad_source=1).
@@ -96,7 +96,7 @@ batchTranslate_Deepl2_dt <- function(dt,
 #' }
 #' @seealso
 #' `translate2` in the `deeplr` package for details on the underlying translation function.
-#' `get_tdb_data()` and `update_tdbs()` for functions generating the input list of data tables.
+#' `get_tdb_data()` and `update_tdb()` for functions generating the input list of data tables.
 #'
 batchTranslate_Deepl2 <- function(tdb = list(),
                                   target_languages = NULL,

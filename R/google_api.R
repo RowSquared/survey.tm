@@ -58,7 +58,7 @@ add_gl_translate_dt <- function(dt,
 #'
 #' This function `batchTranslate_GApi` interfaces with the Google Translate API to process a list of data tables (`tdb`), each containing text items for translation. It queries the Google Translate API for translations of text items that are missing (NA) in the 'Translation' column. The function is adaptable to multiple target languages and works on each data table in the list based on specified languages.
 #'
-#' @param tdb List of translations as returned by [get_tdb_data()] or [update_tdbs()]. This list should contain data tables with text items ready for translation.
+#' @param tdb List of translations as returned by [get_tdb_data()] or [update_tdb()]. This list should contain data tables with text items ready for translation.
 #' @param target_languages Languages to be queried for translation. By default, if not specified, the function uses the names of the data tables in `tdb` as target languages. Specify target languages as a vector of language names or codes supported by Google Translate.
 #' @param source_lang Source language, indicating the original language of the text items. The default is 'English'. Accurate specification is crucial for effective translations.
 #' @param auth Authentication details for Google Translate API. This can be specified as the location of the service account credential JSON file. The default is obtained from the environment variable 'GL_AUTH'. For more details on setting up authentication, see [Google Translate API Setup](https://cloud.google.com/translate/docs/setup).
@@ -75,7 +75,7 @@ add_gl_translate_dt <- function(dt,
 #'
 #' @seealso
 #' `gl_translate` in the `googleLanguageR` package for details on the underlying translation function.
-#' `get_tdb_data()` and `update_tdbs()` for functions generating the input list of data tables.
+#' `get_tdb_data()` and `update_tdb()` for functions generating the input list of data tables.
 #'
 #'
 batchTranslate_GApi <- function(tdb = list(),

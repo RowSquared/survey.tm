@@ -6,7 +6,6 @@
 #' @param sheets Character vector of sheets to be read from `gs`
 #'
 #' @return List of data.tables which are the respective sheets of worksheet
-#' @export
 #'
 get_odk_wsheet <- function(gs = "",
                            sheets = c("survey", "choices")) {
@@ -43,7 +42,6 @@ get_odk_wsheet <- function(gs = "",
 #' @import data.table
 #'
 #' @return data.table of text items along with identifier of chronological order and questionnaire
-#' @export
 #'
 get_odk_titems <- function(list, cols = c("label", "hint", "constraint_message")) {
   # CHECK INPUT
@@ -96,7 +94,6 @@ get_odk_titems <- function(list, cols = c("label", "hint", "constraint_message")
 #
 #' @import data.table
 #' @return Data table
-#' @export
 #'
 parse_odk_titems <- function(dt) {
   # TODO: INCLUDE IN get_odk_items? AT LEAST OPTIONAL WITH DEFAULT TRUE

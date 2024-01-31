@@ -12,7 +12,7 @@ batchTranslate_GApi(
 )
 }
 \arguments{
-\item{tdb}{List of translations as returned by \code{\link[=get_tdb_data]{get_tdb_data()}} or \code{\link[=update_tdbs]{update_tdbs()}}. This list should contain data tables with text items ready for translation.}
+\item{tdb}{List of translations as returned by \code{\link[=get_tdb_data]{get_tdb_data()}} or \code{\link[=update_tdb]{update_tdb()}}. This list should contain data tables with text items ready for translation.}
 
 \item{target_languages}{Languages to be queried for translation. By default, if not specified, the function uses the names of the data tables in \code{tdb} as target languages. Specify target languages as a vector of language names or codes supported by Google Translate.}
 
@@ -35,5 +35,5 @@ translated_tdb <- batchTranslate_GApi(tdb, target_languages = c("German", "Frenc
 }
 \seealso{
 \code{gl_translate} in the \code{googleLanguageR} package for details on the underlying translation function.
-\code{get_tdb_data()} and \code{update_tdbs()} for functions generating the input list of data tables.
+\code{get_tdb_data()} and \code{update_tdb()} for functions generating the input list of data tables.
 }

@@ -13,9 +13,15 @@ add_translation_odk(
 )
 }
 \arguments{
+\item{tdb}{TODO}
+
 \item{gs}{Identifier of a Google Sheet (see \code{\link[googlesheets4:sheets_id]{googlesheets4::sheets_id()}}) that contains ODK questionnaire file}
 
-\item{types}{}
+\item{sheets}{TODO}
+
+\item{translation.to.add}{TODO}
+
+\item{types}{TODO}
 }
 \description{
 Add translation to ODK Questionnaire File

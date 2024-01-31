@@ -1,14 +1,12 @@
 
 #' Add translation to ODK Questionnaire File
 #'
-#' @param tdb
+#' @param tdb TODO
 #' @param gs Identifier of a Google Sheet (see [googlesheets4::sheets_id()]) that contains ODK questionnaire file
-#' @param sheets
-#' @param translation.to.add
-#' @param types
+#' @param sheets TODO
+#' @param translation.to.add TODO
+#' @param types TODO
 #'
-#' @return
-#' @export
 #'
 add_translation_odk <- function(tdb = list(),
                                 gs = NULL, # THE QUESTIONNAIRE SHEET OF ODK QX
