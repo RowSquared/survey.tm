@@ -2,20 +2,33 @@
 % Please edit documentation in R/syntax_check.R
 \name{syntax_check}
 \alias{syntax_check}
-\title{Identifies software-related mismatches between 'Text_Item' and 'Translation'}
+\title{Identify Software-Related Mismatches in Translations}
 \usage{
 syntax_check(tdb = list(), pattern = "\%[a-zA-Z0-9_]+\%")
 }
 \arguments{
-\item{tdb}{List. Translations created by \code{get_tdb_data()} or \code{update_tdb()}}
+\item{tdb}{List of translations as created by \code{get_tdb_data()} or \code{update_tdb()}, where each list element
+represents a language sheet in the Translation Database.}
 
-\item{pattern}{Character. Regular expression that identifies text item in Original/Translation (e.g. text substitution '\%rostertitle\%')}
-
-\item{languages}{Character Vector. For which sheets/languages shall software-related mismatches be checked?}
+\item{pattern}{Character string representing the regular expression used to identify text substitution tokens in the Original/Translation text.
+Defaults to matching tokens like \verb{\%rostertitle\%}.}
 }
 \value{
-List of translations as supplied by user, with software mismatches flagged
+Returns a list of translations, similar in structure to the input \code{tdb}, but with the 'Status'
+column updated for entries with identified mismatches and a 'Comment/Note' added to explain the issue.
 }
 \description{
-Updates column 'Status' and leaves a 'Comment/Note' that explains which issue is identified.
+This function detects and flags software-related mismatches between 'Text_Item' and 'Translation'
+columns in a given translation data table. Upon identification, the function updates the 'Status' column to "to be checked" for affected text items
+and adds a comment/note explaining the specific issue detected.
+}
+\details{
+It focuses on identifying two main types of issues:
+\itemize{
+\item \strong{HTML-tag issues:} Mismatches in HTML tags or their counts between 'Text_Item' and 'Translation'.
+This includes any differences in the opening and closing tags or in the number of specific tags used.
+\item \strong{Text Substitution issues:} Discrepancies in text substitutions between 'Text_Item' and 'Translation'.
+For example, if a text substitution token like \verb{\%rostertitle\%} exists in 'Text_Item' but is missing
+in the 'Translation', it flags these items for review.
+}
 }

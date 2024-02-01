@@ -146,15 +146,30 @@ get_txt_sub_issue_dt <- function(dt,
 
 
 
-#' Identifies software-related mismatches between 'Text_Item' and 'Translation'
+#' Identify Software-Related Mismatches in Translations
 #'
-#' Updates column 'Status' and leaves a 'Comment/Note' that explains which issue is identified.
+#' This function detects and flags software-related mismatches between 'Text_Item' and 'Translation'
+#' columns in a given translation data table. Upon identification, the function updates the 'Status' column to "to be checked" for affected text items
+#' and adds a comment/note explaining the specific issue detected.
 #'
-#' @param tdb List. Translations created by `get_tdb_data()` or `update_tdb()`
-#' @param pattern Character. Regular expression that identifies text item in Original/Translation (e.g. text substitution '%rostertitle%')
-#' @param languages Character Vector. For which sheets/languages shall software-related mismatches be checked?
+#' It focuses on identifying two main types of issues:
 #'
-#' @return List of translations as supplied by user, with software mismatches flagged
+#' - **HTML-tag issues:** Mismatches in HTML tags or their counts between 'Text_Item' and 'Translation'.
+#'   This includes any differences in the opening and closing tags or in the number of specific tags used.
+#'
+#' - **Text Substitution issues:** Discrepancies in text substitutions between 'Text_Item' and 'Translation'.
+#'   For example, if a text substitution token like `%rostertitle%` exists in 'Text_Item' but is missing
+#'   in the 'Translation', it flags these items for review.
+#'
+#'
+#' @param tdb List of translations as created by `get_tdb_data()` or `update_tdb()`, where each list element
+#'   represents a language sheet in the Translation Database.
+#' @param pattern Character string representing the regular expression used to identify text substitution tokens in the Original/Translation text.
+#'  Defaults to matching tokens like `%rostertitle%`.
+#'
+#' @return Returns a list of translations, similar in structure to the input `tdb`, but with the 'Status'
+#'   column updated for entries with identified mismatches and a 'Comment/Note' added to explain the issue.
+#'
 #' @export
 #'
 syntax_check <- function(
