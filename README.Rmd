@@ -1,5 +1,8 @@
 ---
-output: github_document
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
 ---
 
 
@@ -14,14 +17,18 @@ knitr::opts_chunk$set(
 
 # survey.tm
 
+`survey.tm` streamlines the process of managing and updating translations for multilingual surveys, significantly easing the task for users to maintain accuracy and consistency across multiple languages, especially when questionnaires undergo changes. Tailored specifically for use with CAPI, software, this R package automates the extraction and synchronization of survey text items with a central translation database hosted on Google Sheets. Designed to handle the complexities of dynamic survey environments, `survey.tm` ensures that translations remain synchronized with the latest versions of questionnaires, reducing manual work, minimizing errors, and enhancing overall consistency.
 
-A collection of functions that significantly eases and robustifies the management and updating of translations in multilingual surveys using CAPI software, even when questionnaires undergo changes or have multiple translations.
 
-The package automatically extracts text items from survey questionnaires, consolidates them, and cross-references them with an existing translation database hosted on Google Sheets. This process ensures that translations stay up-to-date and synchronized with the latest version of the questionnaire(s), thereby reducing manual work, simplifying the translation management, minimizing mistakes, and enhancing consistency.
+Key features include:
 
-The 'Translation Database', which is a Google Sheet (see example [here](https://docs.google.com/spreadsheets/d/1qnLflfVEpCm2sRIIv2NXrBRZikkiUp7JRW0zujChq5E/edit?usp=sharing)), serves as the central hub where translators can add translations to text items of respective questionnaires. It offers a simple and intuitive user interface that's good not only for managing the translation tool but also for translators. It's easily scalable to multiple languages and questionnaires, enabling translators to track their progress, flag text items for future review or revision, and making the translation of similar types of surveys faster and more consistent. With a setup time of just 5 minutes, this package is designed to save you hours in translation management.
+- **Automated Synchronization**: Automatically extracts and consolidates survey text items, ensuring translations are always up-to-date with the latest questionnaire versions.
+- **Centralized Translation Management**: Utilizes a Google Sheets-based 'Translation Database' for easy and intuitive management of translations by multiple translators. See example [here](https://docs.google.com/spreadsheets/d/1qnLflfVEpCm2sRIIv2NXrBRZikkiUp7JRW0zujChq5E/edit?usp=sharing).
+- **Efficiency and Consistency**: Minimizes manual work, reduces errors, and enhances consistency across translations, saving hours in translation management.
+- **Quick Setup**: Designed for a setup time of just 5 minutes, it's scalable across multiple languages and questionnaires.
 
-Please note: Currently, the package is focused on the [Survey Solutions](https://mysurvey.solutions/en/) software system, with plans to extend support to ODK-based software in the future.
+Initially tailored for [Survey Solutions](https://mysurvey.solutions/en/) with future plans to support ODK-based systems, **survey.tm** is an essential tool for anyone conducting multilingual surveys seeking to improve their translation workflow.
+
 
 ## Prerequisites
 
@@ -43,46 +50,136 @@ devtools::install_github("RowSquared/survey.tm", ref = "main")
 ```
 
 
-## Set up
+## Setup and Quick Start Guide 
 
+### Set up
 
-To prepare for working with one or more questionnaires in a data collection project, you have to set up your "Translation Database Sheet". Typically, one "Translation Database Sheet" is recommended per project, even if the project involves multiple questionnaires and languages. You have two options to set it up: 
+To start using `survey.tm` for a data collection project, set up a "Translation Database Sheet" on Google Sheets. A single sheet is recommended per project, regardless of the number of questionnaires or languages involved. There are two setup options: 
 
+#### Option 1: Use `setup_tdb()` Function
 
-### Option 1: Use `setup_tdb()` Function
+Run setup_tdb() **once**(!) to create a "Translation Database Sheet":
 
 Run the `setup_tdb()` function **once**(!) to generate a Google worksheet that will act as the "Translation Database Sheet". 
 
-
-Note: If you haven't used the `googlesheets4` package before, you'll need to generate an access token. Follow the instructions in the console and browser after running `setup_tdb()`.
-
 ```  {r setup, eval=FALSE}
-# Optional: Indicate to `googlesheets4` which email you will use. This avoids selecting a pre-authorised account manually.
+# First-time `googlesheets4` users need to authenticate. Follow the on-screen instructions.
 # googlesheets4::gs4_auth(email = "your.email@address.com")
 
+#library(survey.tm)
 
-# Run the code below once(!). Comment out (or remove) it afterwards.
+# Create the translation database sheet. Run once, then comment out or remove.
 # setup_tdb(
 #   ssheet_name = "Project X: Translation Sheet", # Name to assign to new google worksheet
 #   lang_names = c("German", "French") # Translations/Languages needed. Needs to be ISO 639-1 language name.
 # )
 ```
 
+#### Option 2: Use a Template Sheet
 
-### Option 2: Use a Template Sheet
-
-Alternatively, you can [create a copy of this template sheet](https://docs.google.com/spreadsheets/d/1xLHEDm5bgtv4IHHCbfyMf_sdNsdzz_AUcRrnpb2fXTw) and manually set it up:
-
-1. **Rename**: After copying, rename the existing sheet to correspond with the language you're working on (e.g., "German").
-2. **Add Sheets**: If you're working with multiple languages, add more sheets as needed and name them accordingly.
+1. [Create a copy of this template sheet](https://docs.google.com/spreadsheets/d/1xLHEDm5bgtv4IHHCbfyMf_sdNsdzz_AUcRrnpb2fXTw)
+2. **Rename** the sheet for your target language (e.g., "German").
+3. **Add more sheets** for additional languages as needed, naming each one appropriately.
 
 
+After setting up your "Translation Database Sheet" using either option, ensure you copy and save the Google Sheet ID for future use in the workflow.
 
 
-## Basic Workflow
+### Quick Start
 
-To get started with the essential features of the 'Translation Management', follow the basic steps outlined below, which will guide you through the necessary steps for a smooth ride. 
+After setting up your "Translation Database Sheet", you can jump straight into using survey.tm for your project. Below is a quick start code snippet that encapsulates the essential steps of the translation management workflow. Simply copy and paste the following code into your R environment to begin. It's recommended to examine each object after each step to gain insight into the process and understand the changes taking place.
 
+```{r quick_start_ov, eval=FALSE}
+library(survey.tm)
+
+# Optional: Authenticate with Google Sheets (required once per session)
+# googlesheets4::gs4_auth(email = "your.email@address.com")
+
+# Define your project's Translation Database Sheet ID
+translation_db_id = "your_google_sheet_id"
+
+# Specify the Survey Solutions questionnaire IDs you're working with
+# Locate your questionnaire ID in Survey Solutions by navigating to your 
+# questionnaire's details page. The ID appears in the URL as
+#https://designer.mysurvey.solutions/questionnaire/details/<questionnaire_id>
+questionnaire_ids = c("questionnaire1_id", "questionnaire2_id")
+
+
+#Step 1: Pull (& compare) all data sources ---- 
+
+#Step 1.1: Retrieve the 'Source Questionnaire' template files from Survey Solutions
+suso_trans_templates <- get_suso_tfiles(
+  questionnaires = questionnaire_ids,
+  user = "your_email@example.com", # Registered with Survey Solutions Designer
+  password = "your_password"
+  )
+
+#Step 1.2: Aggregate and consolidate text items from multiple questionnaires and sheets into one data.table
+source_titems <- parse_suso_titems(
+  tmpl_list = suso_trans_templates, #Nested list as returned by `get_suso_tfiles()`
+  collapse = TRUE # Keep only unique text items across questionnaires
+)
+
+#Step 1.3: Pull 'Translation Database' Google Sheet data
+#Pull all columns and rows found in all sheets in 'Translation Database' Google Sheet
+tdb_data <- get_tdb_data(ss = translation_db_id)
+#Please note: At first run, all elements of the list returned will be empty data.table's (as there is not data in the Google Sheet..)
+
+#Step 1.4: Update the 'Translation Database' object based on the text items in current version of 'Source Questionnaire(s)'
+# It basically removes/changes statuses of any text item in the translation database object that no longer is part of the source questionnaire(s). 
+#Adds any new text item from source questionnaire(s) not yet found in the database
+new_tdb <- update_tdb(
+  tdb = tdb_data,
+  source_titems = source_titems
+)
+
+#Optional Step 1.5: Query API Translation Services for items without any translation
+#Currently DeepL and Google API supported
+# batchTranslate_Deepl2(new_tdb,
+#   API_key = my_api_key
+# )
+
+#Optional Step 1.6: Check translation for software-related issues
+new_tdb <- syntax_check(
+  tdb=new_tdb,
+  pattern = "%[a-zA-Z0-9_]+%" # Regex that identifies text substitutions in 'Text_Item' and 'Translation'. The default pattern is `%[a-zA-Z0-9_]+%`, which matches substitutions like `%rostertitle%`.
+)
+
+
+#Step 2: Update the Translation Database ---- 
+# Write one particular (updated) language to the 'Translation Database' Google Sheet
+write_tdb_data(new_tdb[["German"]],
+    ss = translation_db_id,
+    sheet = "German"
+  )
+
+#Or write all languages found in 'Translation Database' object to the Google Sheet
+# purrr::walk(
+#   .x = names(new_tdb),
+#   .f = ~ write_tdb_data(new_tdb[[.x]],
+#                         ss = ss,
+#                         sheet = .x
+#   )
+# )
+
+
+#Step 3: Generate outputs for CAPI program ---- 
+
+# Take the 'German' Translation from database and merge into the source questionnaire as returned by `get_suso_tfiles()`}
+# Consider only text items of particular statuses defined by Translator
+create_suso_file(
+  tdb.language = new_tdb[["German"]],
+  source_questionnaire = suso_trans_templates[["NAME-OF-QUESTIONNAIRE"]],
+  statuses = c("machine", "reviewed", "translated"),
+  path = "your-path/German_NAME-OF-QUESTIONNAIRE.xlsx"
+)
+
+
+``` 
+
+
+
+## Workflow Details
 
 ### Step 1: <span style="font-weight: normal"> Pull all data sources</span>
 
@@ -106,11 +203,12 @@ You can find this ID by logging in to the Survey Solutions Designer and accessin
 #One needs to pull the Questionnaire Template(s) ('Translation File') from the Survey Solutions Designer
 
 # Define the questionnaire IDs you want to retrieve translations for.
-questionnaires <- c("9e37f1c59e1c47039167928481cf42d2", "702bef443dfb4fc8bd8c754612590875")
+questionnaire_ids <- c("9e37f1c59e1c47039167928481cf42d2", "702bef443dfb4fc8bd8c754612590875")
 
 # Retrieve the 'Source Questionnaire' template files
 suso_trans_templates <- get_suso_tfiles(
-  questionnaires = questionnaires,
+  questionnaires = questionnaire_ids,
+  sheets=NULL, #If you want to read only specific sheets (like sheets 'Translations' without any reusable categories which is stored on seperate sheet)
   user = "your_email@example.com", # Registered with Survey Solutions Designer
   password = "your_password"
   )
@@ -170,7 +268,7 @@ tdb_data <- get_tdb_data(ss = "GOOGLE-SHEET-IDENTIFIER")
 Click to see detailed description
 </summary>
 
-Compares 'Source Questionnaire' text items (object returned by `parse_odk_titems()` or `parse_suso_titems()`) against the 'Translation Database' list returned by `get_tdb_data()`.
+Compares 'Source Questionnaire' text items (object returned by parse_suso_titems()`) against the 'Translation Database' list returned by `get_tdb_data()`.
 
 Adds any new text item from source questionnaire(s) not yet found in the database. Text items in any sheet in the translation database object that no longer is part of the source questionnaire(s) does remain in the object but status is changed to `outdated`.
 
@@ -187,11 +285,7 @@ new_tdb <- update_tdb(
 
 ```  
 
-### Step 2: <span style="font-weight: normal"> Generate outputs for CAPI program and update the Translation Database</span>
-
-
-#### 2.1 Push new 'Translation Database' to Google Sheet
-
+### Step 2: <span style="font-weight: normal"> Update the Translation Database</span>
 
 <details>
 <summary>
@@ -201,8 +295,8 @@ Click to see detailed description
 Object `new_tdb` contains the most recent text items from the source questionnaire along with the previously added translations (if any) for all languages in the 'Translation Database'. As a next step, one should update the Google Worksheet 'Database' so that Translators can continue working on the most recent version of the questionnaire(s). To this end, use `write_tdb_data()` which writes one language from `new_tdb` object to one particular sheet in the Google Worksheet.  
 
 Please note: It is advisable to coordinate with the Translator(s) to not overwrite translations that she is adding to the Database sheet while you are about to push new ones. 
-
 </details>
+
 
 ```  {r write_tdb_data, eval=FALSE}
 #Write one particular (updated) language to the 'Translation Database' Google Sheet
@@ -211,11 +305,21 @@ write_tdb_data(new_tdb[["German"]],
     sheet = "German"
   )
 
+#Or write all languages found in 'Translation Database' object to the Google Sheet
+# purrr::walk(
+#   .x = names(new_tdb),
+#   .f = ~ write_tdb_data(new_tdb[[.x]],
+#                         ss = ss,
+#                         sheet = .x
+#   )
+# )
+
+
 ```  
 
 
-#### 2.2 Create 'Translation File' for upload to CAPI software
 
+### Step 3: <span style="font-weight: normal"> Generate outputs for CAPI program</span>
 
 <details>
 <summary>
@@ -225,7 +329,6 @@ Click to see detailed description
 Using object `new_tdb`, one can now add the most recent translation to a questionnaire source template (as returned by `get_suso_tfiles()`) of your choice. 
 
 To this end, use `create_suso_file()` which will write a .xlsx file that one can use to upload to the Survey Solutions Designer. 
-
 </details>
 
 ```  {r create_suso_file, eval=FALSE}
@@ -308,31 +411,5 @@ batchTranslate_Deepl2(new_tdb,
 
 
 
-## TODO
-
-- [ ] A main wrapper function?
-
-### Misc.
-- [ ] html-tag check: Have only those tags that are different added to comment. 
-- [ ] html-tag check: check again with heavy formatting, e.g. '953faa24e13144ac984e1ad62593aab5'
-- [ ] Add a sheet on translation instructions. Also stress that multiple sheets for separate language, but contain all the same (if no manual tweaks are done by user)
-- [ ] `get_suso_tfiles`: print feedback to user
-- [ ] Cleanup of function names & argument naming convention to make clear between translation and questionnaire
-- [ ] Unit Tests
-- [ ] pkgdown
-- [ ] Improve similarity score function
-- [ ] TODOs in functions (: 
-- [ ] If new questionnaire added for which text item exist, not reflected in "QUestionnaire(s)" cell (sticks with old questionnaire)
-- [ ] Remove the value.unique in Google Sheet? 
-- [ ] move these todos into github issues (: 
-- [ ] Color coding as dedicated function? Not really?  It is a one liner. Add to doc as an example?
-
-
-### Get SuSo Designer Template 
-- [ ] Confirm issue if special unicodes & readxl (e.g with "953faa24e13144ac984e1ad62593aab5")
-
-### Long-term 
-- [ ] allow local qnr template file to be read instead of pulled? 
-- [ ] ODK Stream
 
 
